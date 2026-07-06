@@ -1,0 +1,6 @@
+# FIXED
+
+gmp_src_mgr/gmp_src/ctl_dp_gfm_droop.obj: ../gmp_src_mgr/gmp_src/ctl_dp_gfm_droop.c
+
+../gmp_src_mgr/gmp_src/ctl_dp_gfm_droop.c:
+

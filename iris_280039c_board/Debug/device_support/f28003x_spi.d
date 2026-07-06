@@ -1,0 +1,213 @@
+# FIXED
+
+device_support/f28003x_spi.obj: ../device_support/f28003x_spi.c
+device_support/f28003x_spi.obj: D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_device.h
+device_support/f28003x_spi.obj: D:/software/ti/ccs1281/ccs/tools/compiler/ti-cgt-c2000_22.6.1.LTS/include/assert.h
+device_support/f28003x_spi.obj: D:/software/ti/ccs1281/ccs/tools/compiler/ti-cgt-c2000_22.6.1.LTS/include/_ti_config.h
+device_support/f28003x_spi.obj: D:/software/ti/ccs1281/ccs/tools/compiler/ti-cgt-c2000_22.6.1.LTS/include/linkage.h
+device_support/f28003x_spi.obj: D:/software/ti/ccs1281/ccs/tools/compiler/ti-cgt-c2000_22.6.1.LTS/include/stdarg.h
+device_support/f28003x_spi.obj: D:/software/ti/ccs1281/ccs/tools/compiler/ti-cgt-c2000_22.6.1.LTS/include/sys/_types.h
+device_support/f28003x_spi.obj: D:/software/ti/ccs1281/ccs/tools/compiler/ti-cgt-c2000_22.6.1.LTS/include/sys/cdefs.h
+device_support/f28003x_spi.obj: D:/software/ti/ccs1281/ccs/tools/compiler/ti-cgt-c2000_22.6.1.LTS/include/machine/_types.h
+device_support/f28003x_spi.obj: D:/software/ti/ccs1281/ccs/tools/compiler/ti-cgt-c2000_22.6.1.LTS/include/stdbool.h
+device_support/f28003x_spi.obj: D:/software/ti/ccs1281/ccs/tools/compiler/ti-cgt-c2000_22.6.1.LTS/include/stddef.h
+device_support/f28003x_spi.obj: D:/software/ti/ccs1281/ccs/tools/compiler/ti-cgt-c2000_22.6.1.LTS/include/stdint.h
+device_support/f28003x_spi.obj: D:/software/ti/ccs1281/ccs/tools/compiler/ti-cgt-c2000_22.6.1.LTS/include/_stdint40.h
+device_support/f28003x_spi.obj: D:/software/ti/ccs1281/ccs/tools/compiler/ti-cgt-c2000_22.6.1.LTS/include/sys/stdint.h
+device_support/f28003x_spi.obj: D:/software/ti/ccs1281/ccs/tools/compiler/ti-cgt-c2000_22.6.1.LTS/include/machine/_stdint.h
+device_support/f28003x_spi.obj: D:/software/ti/ccs1281/ccs/tools/compiler/ti-cgt-c2000_22.6.1.LTS/include/sys/_stdint.h
+device_support/f28003x_spi.obj: D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_adc.h
+device_support/f28003x_spi.obj: D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_aes.h
+device_support/f28003x_spi.obj: D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_aes_ss.h
+device_support/f28003x_spi.obj: D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_analogsubsys.h
+device_support/f28003x_spi.obj: D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_bgcrc.h
+device_support/f28003x_spi.obj: D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_cla.h
+device_support/f28003x_spi.obj: D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_clb.h
+device_support/f28003x_spi.obj: D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_clbxbar.h
+device_support/f28003x_spi.obj: D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_cmpss.h
+device_support/f28003x_spi.obj: D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_cputimer.h
+device_support/f28003x_spi.obj: D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_dac.h
+device_support/f28003x_spi.obj: D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_dcsm.h
+device_support/f28003x_spi.obj: D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_dma.h
+device_support/f28003x_spi.obj: D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_ecap.h
+device_support/f28003x_spi.obj: D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_epg.h
+device_support/f28003x_spi.obj: D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_epwm.h
+device_support/f28003x_spi.obj: D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_epwm_xbar.h
+device_support/f28003x_spi.obj: D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_eqep.h
+device_support/f28003x_spi.obj: D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_erad.h
+device_support/f28003x_spi.obj: D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_flash.h
+device_support/f28003x_spi.obj: D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_fsi.h
+device_support/f28003x_spi.obj: D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_gpio.h
+device_support/f28003x_spi.obj: D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_hic.h
+device_support/f28003x_spi.obj: D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_i2c.h
+device_support/f28003x_spi.obj: D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_input_xbar.h
+device_support/f28003x_spi.obj: D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_memconfig.h
+device_support/f28003x_spi.obj: D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_nmiintrupt.h
+device_support/f28003x_spi.obj: D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_otp.h
+device_support/f28003x_spi.obj: D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_output_xbar.h
+device_support/f28003x_spi.obj: D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_piectrl.h
+device_support/f28003x_spi.obj: D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_pievect.h
+device_support/f28003x_spi.obj: D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_pmbus.h
+device_support/f28003x_spi.obj: D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_sci.h
+device_support/f28003x_spi.obj: D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_sdfm.h
+device_support/f28003x_spi.obj: D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_spi.h
+device_support/f28003x_spi.obj: D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_sysctrl.h
+device_support/f28003x_spi.obj: D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_wwd.h
+device_support/f28003x_spi.obj: D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_xbar.h
+device_support/f28003x_spi.obj: D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_xint.h
+device_support/f28003x_spi.obj: D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_tempsensorconv.h
+device_support/f28003x_spi.obj: D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_can.h
+device_support/f28003x_spi.obj: D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_dcc.h
+device_support/f28003x_spi.obj: D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_lin.h
+device_support/f28003x_spi.obj: D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_mcan.h
+device_support/f28003x_spi.obj: D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/common/include/f28003x_examples.h
+device_support/f28003x_spi.obj: D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/common/include/f28003x_globalprototypes.h
+device_support/f28003x_spi.obj: D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/common/include/f28003x_adc_defines.h
+device_support/f28003x_spi.obj: D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/common/include/f28003x_cputimervars.h
+device_support/f28003x_spi.obj: D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/common/include/f28003x_gpio_defines.h
+device_support/f28003x_spi.obj: D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/common/include/f28003x_pie_defines.h
+device_support/f28003x_spi.obj: D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/common/include/f28003x_sysctrl_defines.h
+device_support/f28003x_spi.obj: D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/common/include/f28003x_dma_defines.h
+device_support/f28003x_spi.obj: D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/common/include/f28003x_epwm_defines.h
+device_support/f28003x_spi.obj: D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/common/include/f28003x_defaultisr.h
+
+../device_support/f28003x_spi.c:
+
+D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_device.h:
+
+D:/software/ti/ccs1281/ccs/tools/compiler/ti-cgt-c2000_22.6.1.LTS/include/assert.h:
+
+D:/software/ti/ccs1281/ccs/tools/compiler/ti-cgt-c2000_22.6.1.LTS/include/_ti_config.h:
+
+D:/software/ti/ccs1281/ccs/tools/compiler/ti-cgt-c2000_22.6.1.LTS/include/linkage.h:
+
+D:/software/ti/ccs1281/ccs/tools/compiler/ti-cgt-c2000_22.6.1.LTS/include/stdarg.h:
+
+D:/software/ti/ccs1281/ccs/tools/compiler/ti-cgt-c2000_22.6.1.LTS/include/sys/_types.h:
+
+D:/software/ti/ccs1281/ccs/tools/compiler/ti-cgt-c2000_22.6.1.LTS/include/sys/cdefs.h:
+
+D:/software/ti/ccs1281/ccs/tools/compiler/ti-cgt-c2000_22.6.1.LTS/include/machine/_types.h:
+
+D:/software/ti/ccs1281/ccs/tools/compiler/ti-cgt-c2000_22.6.1.LTS/include/stdbool.h:
+
+D:/software/ti/ccs1281/ccs/tools/compiler/ti-cgt-c2000_22.6.1.LTS/include/stddef.h:
+
+D:/software/ti/ccs1281/ccs/tools/compiler/ti-cgt-c2000_22.6.1.LTS/include/stdint.h:
+
+D:/software/ti/ccs1281/ccs/tools/compiler/ti-cgt-c2000_22.6.1.LTS/include/_stdint40.h:
+
+D:/software/ti/ccs1281/ccs/tools/compiler/ti-cgt-c2000_22.6.1.LTS/include/sys/stdint.h:
+
+D:/software/ti/ccs1281/ccs/tools/compiler/ti-cgt-c2000_22.6.1.LTS/include/machine/_stdint.h:
+
+D:/software/ti/ccs1281/ccs/tools/compiler/ti-cgt-c2000_22.6.1.LTS/include/sys/_stdint.h:
+
+D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_adc.h:
+
+D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_aes.h:
+
+D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_aes_ss.h:
+
+D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_analogsubsys.h:
+
+D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_bgcrc.h:
+
+D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_cla.h:
+
+D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_clb.h:
+
+D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_clbxbar.h:
+
+D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_cmpss.h:
+
+D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_cputimer.h:
+
+D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_dac.h:
+
+D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_dcsm.h:
+
+D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_dma.h:
+
+D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_ecap.h:
+
+D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_epg.h:
+
+D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_epwm.h:
+
+D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_epwm_xbar.h:
+
+D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_eqep.h:
+
+D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_erad.h:
+
+D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_flash.h:
+
+D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_fsi.h:
+
+D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_gpio.h:
+
+D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_hic.h:
+
+D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_i2c.h:
+
+D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_input_xbar.h:
+
+D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_memconfig.h:
+
+D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_nmiintrupt.h:
+
+D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_otp.h:
+
+D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_output_xbar.h:
+
+D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_piectrl.h:
+
+D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_pievect.h:
+
+D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_pmbus.h:
+
+D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_sci.h:
+
+D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_sdfm.h:
+
+D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_spi.h:
+
+D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_sysctrl.h:
+
+D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_wwd.h:
+
+D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_xbar.h:
+
+D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_xint.h:
+
+D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_tempsensorconv.h:
+
+D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_can.h:
+
+D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_dcc.h:
+
+D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_lin.h:
+
+D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/headers/include/f28003x_mcan.h:
+
+D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/common/include/f28003x_examples.h:
+
+D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/common/include/f28003x_globalprototypes.h:
+
+D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/common/include/f28003x_adc_defines.h:
+
+D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/common/include/f28003x_cputimervars.h:
+
+D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/common/include/f28003x_gpio_defines.h:
+
+D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/common/include/f28003x_pie_defines.h:
+
+D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/common/include/f28003x_sysctrl_defines.h:
+
+D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/common/include/f28003x_dma_defines.h:
+
+D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/common/include/f28003x_epwm_defines.h:
+
+D:/software/ti/c2000/C2000Ware_5_04_00_00/device_support/f28003x/common/include/f28003x_defaultisr.h:
+
