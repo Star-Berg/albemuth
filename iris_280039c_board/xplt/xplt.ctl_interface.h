@@ -34,11 +34,34 @@ GMP_STATIC_INLINE uint16_t psu_dac_pu_to_code(ctrl_gt command_pu)
     return (uint16_t)(command * (parameter_gt)PSU_DAC_MAX_CODE + 0.5f);
 }
 
+// Apply a positive-domain linear calibration without creating an offset at ADC zero.
+GMP_STATIC_INLINE ctrl_gt psu_calibrate_measurement(
+    ctrl_gt sample,
+    parameter_gt slope,
+    parameter_gt bias)
+{
+    ctrl_gt calibrated;
+
+    if (sample <= float2ctrl(0.0f))
+    {
+        return float2ctrl(0.0f);
+    }
+
+    calibrated =
+        ctl_mul(sample, float2ctrl(slope)) +
+        float2ctrl(bias);
+
+    return (calibrated > float2ctrl(0.0f)) ?
+        calibrated : float2ctrl(0.0f);
+}
+
 // Read ADC samples at the beginning of every control interrupt.
 GMP_STATIC_INLINE void ctl_input_callback(void)
 {
     adc_gt voltage_raw;
     adc_gt current_raw;
+    ctrl_gt voltage_sample;
+    ctrl_gt current_sample;
 
     voltage_raw = ADC_readResult(
         PSU_VFU_RESULT_BASE,
@@ -48,15 +71,27 @@ GMP_STATIC_INLINE void ctl_input_callback(void)
         PSU_VFI_RESULT_BASE,
         PSU_VFI_SOC);
 
-    psu_ctrl.voltage_meas_v =
+    voltage_sample =
         ctl_step_adc_channel(
             &psu_voltage_fb_adc,
             voltage_raw);
 
-    psu_ctrl.current_meas_a =
+    current_sample =
         ctl_step_adc_channel(
             &psu_current_fb_adc,
             current_raw);
+
+    psu_ctrl.voltage_meas_v =
+        psu_calibrate_measurement(
+            voltage_sample,
+            PSU_VOLTAGE_MEAS_CAL_SLOPE,
+            PSU_VOLTAGE_MEAS_CAL_BIAS_V);
+
+    psu_ctrl.current_meas_a =
+        psu_calibrate_measurement(
+            current_sample,
+            PSU_CURRENT_MEAS_CAL_SLOPE,
+            PSU_CURRENT_MEAS_CAL_BIAS_A);
 }
 
 // Write the two analog references and the output switch command.

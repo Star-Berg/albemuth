@@ -249,11 +249,12 @@
 // Output voltage feedback: Vfu = Vo * 100k / (300k + 100k) = Vo / 4.
 #define PSU_VOLTAGE_FB_RATIO                  (0.25f)
 
-// Voltage set-to-DAC calibration from bench data:
-// calibrated set voltage = requested voltage * slope + bias.
-// Set slope to 1.0f and bias to 0.0f to restore the original behavior.
-#define PSU_VOLTAGE_OUTPUT_CAL_SLOPE          (1.011f)
-#define PSU_VOLTAGE_OUTPUT_CAL_BIAS_V         (0.0f)
+// ADC measurement correction: physical value = raw value * slope + bias.
+// A zero raw sample remains zero; the bias is applied only to positive samples.
+#define PSU_VOLTAGE_MEAS_CAL_SLOPE            (1.0621702f)
+#define PSU_VOLTAGE_MEAS_CAL_BIAS_V           (0.0414826f)
+#define PSU_CURRENT_MEAS_CAL_SLOPE            (0.9970769f)
+#define PSU_CURRENT_MEAS_CAL_BIAS_A            (0.0037433f)
 
 // Current feedback: Vfi = Io * Rshunt * amplifier gain.
 #define PSU_CURRENT_SHUNT_OHM                 (1.0f)
@@ -287,7 +288,7 @@
 #define PSU_ALARM_LED_OFF_LEVEL               (1U)
 
 //=================================================================================================
-// User settings and automatic CV/CC operation
+// User settings and three-mode CV/CC operation
 
 // Voltage setting: 0.0 to 10.0 V, stored in 0.1 V units.
 #define PSU_VOLTAGE_SET_MIN_DV                (0U)
@@ -299,15 +300,22 @@
 #define PSU_CURRENT_SET_MAX_MA                (100U)
 #define PSU_DEFAULT_CURRENT_SET_MA            (50U)
 
-// The analog minimum-selector performs the real CV/CC transition.
-// Software detects the active loop for display and indicators only.
+// Selected operating mode: 0 = fixed CV, 1 = fixed CC, 2 = AUTO.
+// AUTO is the default so the original CV/CC transition behavior is preserved.
+#define PSU_DEFAULT_OPERATING_MODE            (2U)
+
+// The analog minimum-selector performs the physical CV/CC handover in all modes.
+// Software detects the active loop and decides whether the handover is normal or a fault.
 #define PSU_MODE_CC_ENTER_CURRENT_MARGIN_A    (0.002f)
 #define PSU_MODE_CC_EXIT_CURRENT_MARGIN_A     (0.005f)
 #define PSU_MODE_CC_ENTER_VOLTAGE_DROP_V      (0.10f)
 #define PSU_MODE_CC_EXIT_VOLTAGE_DROP_V       (0.03f)
 #define PSU_MODE_DETECT_CYCLES                (20U)
 
-// Independent over-current trip. Normal 50 mA CC operation is not a fault.
+// In fixed CV or fixed CC mode, a sustained loop handover causes a latched alarm.
+#define PSU_MODE_LIMIT_TRIP_CYCLES            (20U)
+
+// Independent hard over-current trip applies in CV, CC and AUTO modes.
 #define PSU_OVERCURRENT_TRIP_A                (0.103f)
 #define PSU_OVERCURRENT_TRIP_CYCLES           (20U)
 
@@ -316,7 +324,7 @@
 
 // HT16K33 key IDs are determined by the key-matrix wiring, not by the printed
 // SW number. These values follow the verified reference-board mapping.
-// Physical SW1-SW11: 1,2,3,4,5,6,7,8,9,0,decimal point.
+// Numeric and decimal keys.
 #define PSU_KEY_DIGIT_1_ID                    (15U)
 #define PSU_KEY_DIGIT_2_ID                    (14U)
 #define PSU_KEY_DIGIT_3_ID                    (22U)
@@ -329,14 +337,14 @@
 #define PSU_KEY_DIGIT_0_ID                    (2U)
 #define PSU_KEY_DECIMAL_ID                    (1U)
 
-// Remaining physical keys, in order SW12-SW18.
-#define PSU_KEY_CONFIRM_ID                    (9U)  // SW12: confirm numeric input
-#define PSU_KEY_EDIT_TOGGLE_ID                (7U)  // SW13: select voltage/current
-#define PSU_KEY_OUTPUT_ID                     (16U)  // SW14: output on/off or clear fault
-#define PSU_KEY_STEP_TOGGLE_ID                (20U)  // SW15: fine/coarse encoder step
-#define PSU_KEY_CLEAR_ID                      (21U)  // SW16: clear current entry
-#define PSU_KEY_BACKSPACE_ID                  (8U)  // SW17: delete last input character
-#define PSU_KEY_CANCEL_ID                     (3U)  // SW18: cancel current entry
+// Functional keys according to the verified physical keyboard labels.
+#define PSU_KEY_CONFIRM_ID                    (9U)  // SW2: confirm numeric input
+#define PSU_KEY_MODE_TOGGLE_ID                (7U)  // SW9: cycle CV/CC/AUTO
+#define PSU_KEY_OUTPUT_ID                     (16U) // SW14: output on/off or clear fault
+#define PSU_KEY_CLEAR_CANCEL_ID               (21U) // SW10: cancel and clear current entry
+#define PSU_KEY_BACKSPACE_ID                  (8U)  // SW1: delete last input character
+#define PSU_KEY_EDIT_TOGGLE_ID                (3U)  // SW5: select voltage/current
+#define PSU_KEY_STEP_TOGGLE_ID                (20U) // SW18: fine/coarse encoder step
 
 #define PSU_KEY_TASK_PERIOD_MS                (50U)
 #define PSU_KEY_RELEASE_TICKS                 (4U)

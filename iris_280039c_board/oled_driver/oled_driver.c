@@ -7,6 +7,10 @@
 #include <core/pm/function_scheduler.h>
 
 #define TIMEOUT_SET 40
+#define OLED_WIDTH 128U
+#define OLED_PAGE_COUNT 8U
+#define OLED_FIRST_CHAR ((uint8_t)' ')
+#define OLED_LAST_CHAR ((uint8_t)'~')
 
 
 /**
@@ -36,6 +40,11 @@ void oled_set_position(uint8_t x, uint8_t y_page)
 {
     const time_gt timeout_ticks = TIMEOUT_SET;
     static data_gt pos_cmds[4];
+
+    if ((x >= OLED_WIDTH) || (y_page >= OLED_PAGE_COUNT))
+    {
+        return;
+    }
 
     pos_cmds[0] = 0x00;                           /* Control Byte: Following are commands */
     pos_cmds[1] = (data_gt)(0xB0 + y_page);       /* Set Target Page Address */
@@ -131,7 +140,7 @@ void oled_show_char(uint8_t x, uint8_t y_page, uint8_t chr)
     uint16_t i;
 
     const time_gt timeout_ticks = TIMEOUT_SET;
-    uint8_t c_offset = chr - ' '; /* Calculate ASCII matrix offset index */
+    uint8_t c_offset;
 
     /*
      * Temporary transmit buffer for the data stream.
@@ -141,15 +150,19 @@ void oled_show_char(uint8_t x, uint8_t y_page, uint8_t chr)
     static data_gt tx_payload[9];
     tx_payload[0] = 0x40; /* Control Byte: Following stream is graphic display RAM data */
 
-    /* Auto wrap text boundaries just like your official code */
-    if (x > 128 - 1)
+    if ((chr < OLED_FIRST_CHAR) || (chr > OLED_LAST_CHAR))
     {
-        x = 0;
-        y_page = y_page + 2;
+        chr = (uint8_t)'?';
     }
+    c_offset = chr - OLED_FIRST_CHAR;
 
     if (FONT_SIZE == 16)
     {
+        if ((x > (OLED_WIDTH - 8U)) || (y_page >= (OLED_PAGE_COUNT - 1U)))
+        {
+            return;
+        }
+
         uint16_t font_index = (uint16_t)c_offset * 16U;
 
         /* 1. Render Upper Half (8 pixels high, 8 pixels wide) */
@@ -171,6 +184,11 @@ void oled_show_char(uint8_t x, uint8_t y_page, uint8_t chr)
     }
     else
     {
+        if ((x > (OLED_WIDTH - 6U)) || (y_page >= OLED_PAGE_COUNT))
+        {
+            return;
+        }
+
         /* Render Small Font (8 pixels high, 6 pixels wide) */
         oled_set_position(x, y_page);
         for (i = 0; i < 6; i++)
@@ -189,17 +207,23 @@ void oled_show_char(uint8_t x, uint8_t y_page, uint8_t chr)
 void oled_show_str(uint8_t x, uint8_t y_page, const char *str)
 {
     uint16_t j = 0;
+    const uint8_t char_width = (FONT_SIZE == 16) ? 8U : 6U;
+    const uint8_t page_height = (FONT_SIZE == 16) ? 2U : 1U;
 
-    while (str[j] != '\0')
+    if (str == NULL)
+    {
+        return;
+    }
+
+    while ((str[j] != '\0') && (y_page < OLED_PAGE_COUNT))
     {
         oled_show_char(x, y_page, (uint8_t)str[j]);
 
-        /* Advance x by 8 pixels (width of F8X16 or font boundary spacing) */
-        x += 8;
-        if (x > 120)
+        x = (uint8_t)(x + char_width);
+        if (x > (OLED_WIDTH - char_width))
         {
             x = 0;
-            y_page += 2; /* Move down 2 pages for the 16-pixel high font height wrap */
+            y_page = (uint8_t)(y_page + page_height);
         }
         j++;
     }
@@ -214,11 +238,16 @@ void oled_show_str(uint8_t x, uint8_t y_page, const char *str)
  * @param  y1: Ending page coordinate (1 to 8).
  * @param  BMP: Array containing the raw monochrome picture dot matrix data.
  */
-void oled_show_bmp(unsigned char x0, unsigned char y0, unsigned char x1, unsigned char y1, unsigned char BMP[])
+void oled_show_bmp(
+    uint8_t x0,
+    uint8_t y0,
+    uint8_t x1,
+    uint8_t y1,
+    const uint8_t* bmp)
 {
     const time_gt timeout_ticks = TIMEOUT_SET;
     unsigned int bmp_idx = 0;
-    unsigned char y_page;
+    uint8_t y_page;
     uint16_t x;
 
     /*
@@ -229,9 +258,23 @@ void oled_show_bmp(unsigned char x0, unsigned char y0, unsigned char x1, unsigne
     static data_gt page_payload[129];
     page_payload[0] = 0x40; /* Control Byte: Following stream is graphic display RAM data */
 
-    /* Calculate horizontal segment width per burst */
-    uint16_t chunk_width = (uint16_t)(x1 - x0);
-    if (chunk_width > 128) chunk_width = 128;
+    uint16_t chunk_width;
+
+    if ((bmp == NULL) || (x0 >= x1) || (x0 >= OLED_WIDTH) ||
+        (y0 >= y1) || (y0 >= OLED_PAGE_COUNT))
+    {
+        return;
+    }
+
+    if (x1 > OLED_WIDTH)
+    {
+        x1 = OLED_WIDTH;
+    }
+    if (y1 > OLED_PAGE_COUNT)
+    {
+        y1 = OLED_PAGE_COUNT;
+    }
+    chunk_width = (uint16_t)(x1 - x0);
 
     /* Loop through each targeted vertical page row sequentially */
     for (y_page = y0; y_page < y1; y_page++)
@@ -242,7 +285,7 @@ void oled_show_bmp(unsigned char x0, unsigned char y0, unsigned char x1, unsigne
         /* 2. Assemble the current page row's pixel dataset into our linear buffer */
         for (x = 0; x < chunk_width; x++)
         {
-            page_payload[x + 1] = (data_gt)BMP[bmp_idx++];
+            page_payload[x + 1] = (data_gt)bmp[bmp_idx++];
         }
 
         /*
@@ -281,8 +324,8 @@ void oled_init(void)
 
     OLED_WR_Byte(0x81, OLED_CMD); //--set contrast control register
     OLED_WR_Byte(0xCF, OLED_CMD); // Set SEG Output Current Brightness
-    OLED_WR_Byte(0xA1, OLED_CMD); //--Set SEG/Column Mapping     0xa0左右反置 0xa1正常
-    OLED_WR_Byte(0xC8, OLED_CMD); //Set COM/Row Scan Direction   0xc0上下反置 0xc8正常
+    OLED_WR_Byte(0xA1, OLED_CMD); //--Set SEG/Column Mapping     0xa0宸﹀彸鍙嶇疆 0xa1姝ｅ父
+    OLED_WR_Byte(0xC8, OLED_CMD); //Set COM/Row Scan Direction   0xc0涓婁笅鍙嶇疆 0xc8姝ｅ父
 
     DEVICE_DELAY_US(200U);
 
@@ -321,11 +364,5 @@ void oled_init(void)
 
     DEVICE_DELAY_US(200U);
 
-    OLED_WR_Byte(0xAF, OLED_CMD); /*display ON*/
-    oled_clear();
-    oled_set_position(0, 0);
-
-    oled_show_str(0,0,"OLED TEST");
-    oled_show_str(0,4,"2026/07/01");
 }
 

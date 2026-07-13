@@ -41,9 +41,13 @@ void ctl_init_psu(
     hpsu->voltage_meas_v = float2ctrl(0.0f);
     hpsu->current_meas_a = float2ctrl(0.0f);
 
+    hpsu->operating_mode =
+        (psu_operating_mode_t)PSU_DEFAULT_OPERATING_MODE;
     hpsu->mode = PSU_MODE_CV;
     hpsu->mode_enter_cc_counter = 0U;
     hpsu->mode_exit_cc_counter = 0U;
+    hpsu->mode_limit_trip_cycles = PSU_MODE_LIMIT_TRIP_CYCLES;
+    hpsu->mode_violation_counter = 0U;
 
     hpsu->overcurrent_counter = 0U;
     hpsu->fault_latched = 0;
@@ -83,6 +87,7 @@ void ctl_init_psu_mode_detection(
     hpsu->mode_detect_cycles = (detect_cycles == 0U) ? 1U : detect_cycles;
     hpsu->mode_enter_cc_counter = 0U;
     hpsu->mode_exit_cc_counter = 0U;
+    hpsu->mode_violation_counter = 0U;
     hpsu->mode = PSU_MODE_CV;
 }
 
@@ -146,8 +151,10 @@ void clear_all_controllers(void)
     psu_ctrl.output_enable = 0;
     psu_ctrl.output_delay_counter = 0U;
     psu_ctrl.overcurrent_counter = 0U;
+    psu_ctrl.mode = PSU_MODE_CV;
     psu_ctrl.mode_enter_cc_counter = 0U;
     psu_ctrl.mode_exit_cc_counter = 0U;
+    psu_ctrl.mode_violation_counter = 0U;
 }
 
 void ctl_mainloop(void)

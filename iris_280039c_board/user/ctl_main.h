@@ -19,9 +19,16 @@ extern "C"
 
 typedef enum _tag_psu_mode_t
 {
-    PSU_MODE_CV = 0,     //!< Voltage loop is controlling the output.
-    PSU_MODE_CC = 1      //!< Current loop is controlling the output.
+    PSU_MODE_CV = 0,     //!< Voltage loop is currently controlling the output.
+    PSU_MODE_CC = 1      //!< Current loop is currently controlling the output.
 } psu_mode_t;
+
+typedef enum _tag_psu_operating_mode_t
+{
+    PSU_OPERATING_MODE_CV = 0,    //!< Fixed CV mode; entering CC is a fault.
+    PSU_OPERATING_MODE_CC = 1,    //!< Fixed CC mode; entering CV is a fault.
+    PSU_OPERATING_MODE_AUTO = 2   //!< Automatic CV/CC transition; no mode alarm.
+} psu_operating_mode_t;
 
 typedef enum _tag_psu_edit_target_t
 {
@@ -32,7 +39,9 @@ typedef enum _tag_psu_edit_target_t
 typedef enum _tag_psu_fault_code_t
 {
     PSU_FAULT_NONE = 0,
-    PSU_FAULT_OVERCURRENT = 1
+    PSU_FAULT_HARD_OVERCURRENT = 1,
+    PSU_FAULT_CV_OVERCURRENT = 2,
+    PSU_FAULT_CC_OVERVOLTAGE = 3
 } psu_fault_code_t;
 
 //=================================================================================================
@@ -59,7 +68,8 @@ typedef struct _tag_ctl_psu_t
     ctrl_gt voltage_meas_v;
     ctrl_gt current_meas_a;
 
-    // Automatically detected active analog loop.
+    // User-selected operating mode and automatically detected active analog loop.
+    volatile psu_operating_mode_t operating_mode;
     volatile psu_mode_t mode;
     ctrl_gt mode_cc_enter_current_margin_a;
     ctrl_gt mode_cc_exit_current_margin_a;
@@ -69,7 +79,11 @@ typedef struct _tag_ctl_psu_t
     uint16_t mode_enter_cc_counter;
     uint16_t mode_exit_cc_counter;
 
-    // Independent software over-current protection.
+    // Fixed-mode limit protection. AUTO mode does not use this counter.
+    uint16_t mode_limit_trip_cycles;
+    uint16_t mode_violation_counter;
+
+    // Independent hard over-current protection.
     ctrl_gt overcurrent_trip_a;
     uint16_t overcurrent_trip_cycles;
     uint16_t overcurrent_counter;
@@ -179,6 +193,57 @@ GMP_STATIC_INLINE void ctl_toggle_psu_edit_target(ctl_psu_t* hpsu)
             PSU_EDIT_CURRENT : PSU_EDIT_VOLTAGE);
 }
 
+GMP_STATIC_INLINE psu_operating_mode_t ctl_get_psu_operating_mode(
+    const ctl_psu_t* hpsu)
+{
+    return hpsu->operating_mode;
+}
+
+GMP_STATIC_INLINE fast_gt ctl_set_psu_operating_mode(
+    ctl_psu_t* hpsu,
+    psu_operating_mode_t operating_mode)
+{
+    // Changing regulation policy while the output is live is intentionally blocked.
+    if ((hpsu->output_request != 0) ||
+        (hpsu->output_enable != 0))
+    {
+        return 0;
+    }
+
+    if (operating_mode > PSU_OPERATING_MODE_AUTO)
+    {
+        operating_mode = PSU_OPERATING_MODE_AUTO;
+    }
+
+    hpsu->operating_mode = operating_mode;
+    hpsu->mode = PSU_MODE_CV;
+    hpsu->mode_enter_cc_counter = 0U;
+    hpsu->mode_exit_cc_counter = 0U;
+    hpsu->mode_violation_counter = 0U;
+
+    return 1;
+}
+
+GMP_STATIC_INLINE fast_gt ctl_cycle_psu_operating_mode(ctl_psu_t* hpsu)
+{
+    psu_operating_mode_t next_mode;
+
+    if (hpsu->operating_mode == PSU_OPERATING_MODE_CV)
+    {
+        next_mode = PSU_OPERATING_MODE_CC;
+    }
+    else if (hpsu->operating_mode == PSU_OPERATING_MODE_CC)
+    {
+        next_mode = PSU_OPERATING_MODE_AUTO;
+    }
+    else
+    {
+        next_mode = PSU_OPERATING_MODE_CV;
+    }
+
+    return ctl_set_psu_operating_mode(hpsu, next_mode);
+}
+
 //=================================================================================================
 // Output and fault interfaces
 
@@ -250,6 +315,7 @@ GMP_STATIC_INLINE fast_gt ctl_clear_psu_fault(ctl_psu_t* hpsu)
     hpsu->mode = PSU_MODE_CV;
     hpsu->mode_enter_cc_counter = 0U;
     hpsu->mode_exit_cc_counter = 0U;
+    hpsu->mode_violation_counter = 0U;
 
     return 1;
 }
@@ -276,6 +342,23 @@ GMP_STATIC_INLINE ctrl_gt ctl_get_psu_current_measurement(
 
 //=================================================================================================
 // Real-time control and protection steps
+
+GMP_STATIC_INLINE void ctl_trip_psu_fault(
+    ctl_psu_t* hpsu,
+    psu_fault_code_t fault_code)
+{
+    hpsu->fault_current_a = hpsu->current_meas_a;
+    hpsu->fault_voltage_v = hpsu->voltage_meas_v;
+    hpsu->fault_code = fault_code;
+    hpsu->fault_latched = 1;
+
+    hpsu->output_request = 0;
+    hpsu->output_enable = 0;
+    hpsu->output_delay_counter = 0U;
+    hpsu->voltage_dac_pu = float2ctrl(0.0f);
+    hpsu->current_dac_pu = float2ctrl(0.0f);
+    hpsu->mode_violation_counter = 0U;
+}
 
 GMP_STATIC_INLINE void ctl_step_psu_overcurrent_protection(
     ctl_psu_t* hpsu)
@@ -310,16 +393,7 @@ GMP_STATIC_INLINE void ctl_step_psu_overcurrent_protection(
 
     if (hpsu->overcurrent_counter >= hpsu->overcurrent_trip_cycles)
     {
-        hpsu->fault_current_a = hpsu->current_meas_a;
-        hpsu->fault_voltage_v = hpsu->voltage_meas_v;
-        hpsu->fault_code = PSU_FAULT_OVERCURRENT;
-        hpsu->fault_latched = 1;
-
-        hpsu->output_request = 0;
-        hpsu->output_enable = 0;
-        hpsu->output_delay_counter = 0U;
-        hpsu->voltage_dac_pu = float2ctrl(0.0f);
-        hpsu->current_dac_pu = float2ctrl(0.0f);
+        ctl_trip_psu_fault(hpsu, PSU_FAULT_HARD_OVERCURRENT);
     }
 }
 
@@ -413,6 +487,54 @@ GMP_STATIC_INLINE void ctl_step_psu_mode_detection(ctl_psu_t* hpsu)
     }
 }
 
+GMP_STATIC_INLINE void ctl_step_psu_mode_limit_protection(ctl_psu_t* hpsu)
+{
+    fast_gt mode_violation = 0;
+    psu_fault_code_t fault_code = PSU_FAULT_NONE;
+
+    if ((hpsu->fault_latched != 0) ||
+        (hpsu->output_enable == 0) ||
+        (hpsu->voltage_set_decivolt == 0U) ||
+        (hpsu->current_set_milliamp == 0U) ||
+        (hpsu->operating_mode == PSU_OPERATING_MODE_AUTO))
+    {
+        hpsu->mode_violation_counter = 0U;
+        return;
+    }
+
+    // The analog minimum-selector remains active in every operating mode.
+    // In fixed CV/CC modes, a loop handover is treated as a protection event.
+    if ((hpsu->operating_mode == PSU_OPERATING_MODE_CV) &&
+        (hpsu->mode == PSU_MODE_CC))
+    {
+        mode_violation = 1;
+        fault_code = PSU_FAULT_CV_OVERCURRENT;
+    }
+    else if ((hpsu->operating_mode == PSU_OPERATING_MODE_CC) &&
+             (hpsu->mode == PSU_MODE_CV))
+    {
+        mode_violation = 1;
+        fault_code = PSU_FAULT_CC_OVERVOLTAGE;
+    }
+
+    if (mode_violation != 0)
+    {
+        if (hpsu->mode_violation_counter < hpsu->mode_limit_trip_cycles)
+        {
+            hpsu->mode_violation_counter++;
+        }
+    }
+    else
+    {
+        hpsu->mode_violation_counter = 0U;
+    }
+
+    if (hpsu->mode_violation_counter >= hpsu->mode_limit_trip_cycles)
+    {
+        ctl_trip_psu_fault(hpsu, fault_code);
+    }
+}
+
 GMP_STATIC_INLINE void ctl_step_psu_output(ctl_psu_t* hpsu)
 {
     if (hpsu->fault_latched != 0)
@@ -449,7 +571,6 @@ GMP_STATIC_INLINE void ctl_step_psu_output(ctl_psu_t* hpsu)
 
 GMP_STATIC_INLINE void ctl_step_psu(ctl_psu_t* hpsu)
 {
-    ctrl_gt calibrated_voltage_set_v;
 
     // Convert the atomic integer UI settings into real-time physical values.
     hpsu->voltage_set_v =
@@ -457,20 +578,15 @@ GMP_STATIC_INLINE void ctl_step_psu(ctl_psu_t* hpsu)
     hpsu->current_set_a =
         float2ctrl((parameter_gt)hpsu->current_set_milliamp * 0.001f);
 
-    // Compensate the measured set-to-output voltage gain and offset before driving DACA.
-    calibrated_voltage_set_v =
-        ctl_mul(
-            hpsu->voltage_set_v,
-            float2ctrl(PSU_VOLTAGE_OUTPUT_CAL_SLOPE)) +
-        float2ctrl(PSU_VOLTAGE_OUTPUT_CAL_BIAS_V);
-
-    // Both references remain active. The analog minimum-selector performs CV/CC transition.
+    // Keep the original set-value-to-DAC mapping. A 0 V setting naturally
+    // produces a zero voltage reference without changing the Vsw state.
     hpsu->voltage_dac_pu =
         ctl_sat(
-            ctl_mul(calibrated_voltage_set_v, hpsu->voltage_to_dac_pu),
+            ctl_mul(hpsu->voltage_set_v, hpsu->voltage_to_dac_pu),
             float2ctrl(1.0f),
             float2ctrl(0.0f));
 
+    // The current reference is independent of the voltage setting.
     hpsu->current_dac_pu =
         ctl_sat(
             ctl_mul(hpsu->current_set_a, hpsu->current_to_dac_pu),
@@ -479,6 +595,7 @@ GMP_STATIC_INLINE void ctl_step_psu(ctl_psu_t* hpsu)
 
     ctl_step_psu_overcurrent_protection(hpsu);
     ctl_step_psu_mode_detection(hpsu);
+    ctl_step_psu_mode_limit_protection(hpsu);
     ctl_step_psu_output(hpsu);
 }
 

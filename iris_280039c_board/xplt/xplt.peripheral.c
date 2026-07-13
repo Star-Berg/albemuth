@@ -193,11 +193,11 @@ void reset_controller(void)
 {
     int i = 0;
 
-    GPIO_WritePin(PWM_RESET_PORT, 0);
+    GPIO_writePin(PWM_RESET_PORT, 0U);
 
     for(i=0;i<10000;++i);
 
-    GPIO_WritePin(PWM_RESET_PORT, 1);
+    GPIO_writePin(PWM_RESET_PORT, 1U);
 
 }
 
@@ -276,54 +276,6 @@ interrupt void INT_IRIS_CAN_1_ISR(void)
     Interrupt_clearACKGroup(INT_IRIS_CAN_1_INTERRUPT_ACK_GROUP);
 }
 
-void send_monitor_data(void)
-{
-    uint16_t rx_raw[4];
-    can_data_t tran_content[2];
-
-    // 0x201: Monitor Grid Voltage
-//    tran_content[0].i32 = (int32_t)(inv_ctrl.idq.dat[phase_d] * CAN_SCALE_FACTOR);
-//    tran_content[1].i32 = (int32_t)(inv_ctrl.idq.dat[phase_q] * CAN_SCALE_FACTOR);
-
-    CAN_sendMessage(IRIS_CAN_BASE, 4, 8, (uint16_t*)tran_content);
-
-    //0x202: Monitor inverter voltage
-//    tran_content[0].i32 = (int32_t)(inv_ctrl.idq.dat[phase_d] * CAN_SCALE_FACTOR);
-//    tran_content[1].i32 = (int32_t)(inv_ctrl.idq.dat[phase_q] * CAN_SCALE_FACTOR);
-
-    CAN_sendMessage(IRIS_CAN_BASE, 5, 8, (uint16_t*)tran_content);
-
-    // 0x203: Monitor grid current
-//    tran_content[0].i32 = (int32_t)(inv_ctrl.idq.dat[phase_d] * CAN_SCALE_FACTOR);
-//    tran_content[1].i32 = (int32_t)(inv_ctrl.idq.dat[phase_q] * CAN_SCALE_FACTOR);
-
-    CAN_sendMessage(IRIS_CAN_BASE, 6, 8, (uint16_t*)tran_content);
-
-    // 0x204: TODO Monitor inverter current
-//    tran_content[0].i32 = (int32_t)(inv_ctrl.idq.dat[phase_d] * CAN_SCALE_FACTOR);
-//    tran_content[1].i32 = (int32_t)(inv_ctrl.idq.dat[phase_q] * CAN_SCALE_FACTOR);
-
-    CAN_sendMessage(IRIS_CAN_BASE, 7, 8, (uint16_t*)tran_content);
-
-    // 0x205: TODO Monitor DC Voltage / Current
-//    tran_content[0].i32 = (int32_t)(inv_ctrl.idq.dat[phase_d] * CAN_SCALE_FACTOR);
-//    tran_content[1].i32 = (int32_t)(inv_ctrl.idq.dat[phase_q] * CAN_SCALE_FACTOR);
-
-    CAN_sendMessage(IRIS_CAN_BASE, 8, 8, (uint16_t*)tran_content);
-
-    // 0x206: Monitor Grid Voltage A and PLL output angle
-//    tran_content[0].i32 = (int32_t)(inv_ctrl.vabc.dat[phase_A] * CAN_SCALE_FACTOR);
-//    tran_content[1].i32 = (int32_t)(inv_ctrl.pll.theta * CAN_SCALE_FACTOR);
-
-    CAN_sendMessage(IRIS_CAN_BASE, 9, 8, (uint16_t*)tran_content);
-
-    // 0x207: Monitor reserved
-//    tran_content[0].i32 = (int32_t)(inv_ctrl.idq.dat[phase_d] * CAN_SCALE_FACTOR);
-//    tran_content[1].i32 = (int32_t)(inv_ctrl.idq.dat[phase_q] * CAN_SCALE_FACTOR);
-
-    CAN_sendMessage(IRIS_CAN_BASE, 10, 8, (uint16_t*)tran_content);
-}
-
 #if BOARD_SELECTION == GMP_IRIS
 
 interrupt void INT_IRIS_UART_RS232_RX_ISR(void)
@@ -346,7 +298,7 @@ interrupt void INT_IRIS_UART_RS232_RX_ISR(void)
 
 extern gmp_datalink_t dl;
 
-void flush_dl_tx_buffer()
+void flush_dl_tx_buffer(void)
 {
     // Send head
     gmp_hal_uart_write(IRIS_UART_USB_BASE, gmp_dev_dl_get_tx_hw_hdr_ptr(&dl), gmp_dev_dl_get_tx_hw_hdr_size(&dl), 10);
@@ -359,7 +311,7 @@ void flush_dl_tx_buffer()
     }
 }
 
-void flush_dl_rx_buffer()
+void flush_dl_rx_buffer(void)
 {
     uint16_t fifoLevel;
     data_gt rxBuf[ISR_LOCAL_BUF_SIZE];
@@ -445,5 +397,3 @@ uint16_t SPI_readReg(uint16_t addr)
 
     return read_data;
 }
-
-

@@ -54,6 +54,9 @@ extern adc_gt idc_src;
  */
 void psu_write_output_switch(fast_gt enable);
 
+void flush_dl_tx_buffer(void);
+void flush_dl_rx_buffer(void);
+
 void reset_controller(void);
 
 uint16_t SPI_readReg(uint16_t addr);

@@ -167,6 +167,34 @@ typedef enum _tag_psu_step_mode_t
 
 static psu_step_mode_t psu_step_mode = PSU_STEP_FINE;
 
+static const char* psu_ui_operating_mode_name(psu_operating_mode_t mode)
+{
+    switch (mode)
+    {
+    case PSU_OPERATING_MODE_CV:
+        return "CV";
+    case PSU_OPERATING_MODE_CC:
+        return "CC";
+    default:
+        return "AUTO";
+    }
+}
+
+static const char* psu_ui_fault_name(psu_fault_code_t fault_code)
+{
+    switch (fault_code)
+    {
+    case PSU_FAULT_CV_OVERCURRENT:
+        return "CV OVERCURRENT";
+    case PSU_FAULT_CC_OVERVOLTAGE:
+        return "CC OVERVOLT";
+    case PSU_FAULT_HARD_OVERCURRENT:
+        return "HARD OVERCURR";
+    default:
+        return "UNKNOWN";
+    }
+}
+
 static void psu_keypad_reset(void)
 {
     uint16_t index;
@@ -498,6 +526,20 @@ static void psu_ui_handle_output_key(void)
     }
 }
 
+static void psu_ui_handle_mode_key(void)
+{
+    if (ctl_cycle_psu_operating_mode(&psu_ctrl) == 0)
+    {
+        gmp_base_print("Turn output off before changing CV/CC/AUTO mode.\r\n");
+        return;
+    }
+
+    gmp_base_print(
+        "Operating mode: %s\r\n",
+        psu_ui_operating_mode_name(
+            ctl_get_psu_operating_mode(&psu_ctrl)));
+}
+
 gmp_task_status_t tsk_key_flush(gmp_task_t* tsk)
 {
     ht16k33_dev_t* dev = (ht16k33_dev_t*)tsk->user_data;
@@ -591,6 +633,11 @@ gmp_task_status_t tsk_key_flush(gmp_task_t* tsk)
                 "voltage" : "current");
         break;
 
+    case PSU_KEY_MODE_TOGGLE_ID:
+        psu_keypad_reset();
+        psu_ui_handle_mode_key();
+        break;
+
     case PSU_KEY_OUTPUT_ID:
         // Output control keeps its original protection/fault-clear behavior.
         psu_keypad_reset();
@@ -601,18 +648,16 @@ gmp_task_status_t tsk_key_flush(gmp_task_t* tsk)
         psu_ui_toggle_step();
         break;
 
-    case PSU_KEY_CLEAR_ID:
-        psu_keypad_reset();
-        gmp_base_print("Numeric entry cleared.\r\n");
+    case PSU_KEY_CLEAR_CANCEL_ID:
+        if (psu_keypad_input.active != 0)
+        {
+            psu_keypad_reset();
+            gmp_base_print("Numeric entry cancelled and cleared.\r\n");
+        }
         break;
 
     case PSU_KEY_BACKSPACE_ID:
         psu_keypad_backspace();
-        break;
-
-    case PSU_KEY_CANCEL_ID:
-        psu_keypad_reset();
-        gmp_base_print("Numeric entry cancelled.\r\n");
         break;
 
     default:
@@ -883,6 +928,7 @@ static void psu_ui_update_normal_led(
     uint16_t voltage_meas_dv;
     uint16_t current_meas_ma;
     uint16_t fault_current_ma;
+    uint16_t fault_voltage_dv;
     uint16_t index;
 
     for (index = 0U; index < 8U; index++)
@@ -892,18 +938,35 @@ static void psu_ui_update_normal_led(
 
     if (ctl_get_psu_fault_state(&psu_ctrl) != 0)
     {
-        fault_current_ma = psu_ui_scale_to_uint16(
-            ctrl2float(ctl_get_psu_fault_current(&psu_ctrl)),
-            1000.0f,
-            999U);
-
         segments[0] = led_lut[LED_LUT_E_INDEX];
         segments[1] = led_lut[LED_LUT_DASH_INDEX];
-        segments[2] = led_lut[0];
-        segments[3] = led_lut[LED_LUT_C_INDEX];
-        segments[5] = led_lut[(fault_current_ma / 100U) % 10U];
-        segments[6] = led_lut[(fault_current_ma / 10U) % 10U];
-        segments[7] = led_lut[fault_current_ma % 10U];
+
+        if (ctl_get_psu_fault_code(&psu_ctrl) == PSU_FAULT_CC_OVERVOLTAGE)
+        {
+            fault_voltage_dv = psu_ui_scale_to_uint16(
+                ctrl2float(ctl_get_psu_fault_voltage(&psu_ctrl)),
+                10.0f,
+                999U);
+
+            segments[2] = led_lut[LED_LUT_U_INDEX];
+            segments[5] = led_lut[(fault_voltage_dv / 100U) % 10U];
+            segments[6] = led_lut[(fault_voltage_dv / 10U) % 10U];
+            segments[7] = led_lut[fault_voltage_dv % 10U];
+        }
+        else
+        {
+            fault_current_ma = psu_ui_scale_to_uint16(
+                ctrl2float(ctl_get_psu_fault_current(&psu_ctrl)),
+                1000.0f,
+                999U);
+
+            segments[2] = led_lut[0];
+            segments[3] = led_lut[LED_LUT_C_INDEX];
+            segments[5] = led_lut[(fault_current_ma / 100U) % 10U];
+            segments[6] = led_lut[(fault_current_ma / 10U) % 10U];
+            segments[7] = led_lut[fault_current_ma % 10U];
+        }
+
         psu_ui_write_led_segments(dev, segments);
         return;
     }
@@ -1007,7 +1070,10 @@ gmp_task_status_t tsk_psu_display(gmp_task_t* tsk)
         switch (oled_line_index)
         {
         case 0U:
-            sprintf(output_line, "FAULT:OVERCURR");
+            sprintf(
+                output_line,
+                "FAULT:%s",
+                psu_ui_fault_name(ctl_get_psu_fault_code(&psu_ctrl)));
             break;
         case 1U:
             sprintf(
@@ -1032,7 +1098,7 @@ gmp_task_status_t tsk_psu_display(gmp_task_t* tsk)
                     9999U) % 100U);
             break;
         default:
-            sprintf(output_line, "SW17=CLEAR");
+            sprintf(output_line, "SW14=CLEAR");
             break;
         }
     }
@@ -1079,9 +1145,12 @@ gmp_task_status_t tsk_psu_display(gmp_task_t* tsk)
         case 0U:
             sprintf(
                 output_line,
-                "%s %s EDIT:%c",
-                (ctl_get_psu_mode(&psu_ctrl) == PSU_MODE_CV) ? "CV" : "CC",
-                (ctl_get_psu_output_state(&psu_ctrl) != 0) ? "ON " : "OFF",
+                "%s/%s %s E:%c",
+                psu_ui_operating_mode_name(
+                    ctl_get_psu_operating_mode(&psu_ctrl)),
+                (ctl_get_psu_output_state(&psu_ctrl) != 0) ?
+                    ((ctl_get_psu_mode(&psu_ctrl) == PSU_MODE_CV) ? "CV" : "CC") : "--",
+                (ctl_get_psu_output_state(&psu_ctrl) != 0) ? "ON" : "OFF",
                 (ctl_get_psu_edit_target(&psu_ctrl) == PSU_EDIT_VOLTAGE) ? 'V' : 'I');
             break;
         case 1U:
@@ -1111,7 +1180,7 @@ gmp_task_status_t tsk_psu_display(gmp_task_t* tsk)
             }
             else
             {
-                sprintf(output_line, "STATUS:READY");
+                sprintf(output_line, "SW18:MODE READY");
             }
             break;
         }

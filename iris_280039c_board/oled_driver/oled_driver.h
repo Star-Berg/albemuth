@@ -4,7 +4,7 @@
 #define _FILE_OLED_DRIVER_H_
 
 /* Your macro for the 7-bit slave address (e.g., 0x3C) */
-#define OLED_IIC_7BIT_ADDR (0x78>>1)
+#define OLED_IIC_7BIT_ADDR (0x78U >> 1U)
 
 /* Global IIC bus handle declared in your repository */
 extern iic_halt iic_bus;
@@ -54,7 +54,12 @@ void oled_show_str(uint8_t x, uint8_t y_page, const char *str);
  * @param  y1: Ending page coordinate (1 to 8).
  * @param  BMP: Array containing the raw monochrome picture dot matrix data.
  */
-void oled_show_bmp(unsigned char x0, unsigned char y0, unsigned char x1, unsigned char y1, unsigned char BMP[]);
+void oled_show_bmp(
+    uint8_t x0,
+    uint8_t y0,
+    uint8_t x1,
+    uint8_t y1,
+    const uint8_t* bmp);
 
 /**
  * @brief  Initializes the SSD1306/SH1106 OLED module controller registers.
@@ -74,8 +79,8 @@ void oled_show_bmp(unsigned char x0, unsigned char y0, unsigned char x1, unsigne
  */
 void oled_init(void);
 
-#define OLED_CMD  0 //Ğ´ÃüÁî
-#define OLED_DATA 1 //Ğ´Êı¾İ
+#define OLED_CMD  0 //å†™å‘½ä»¤
+#define OLED_DATA 1 //å†™æ•°æ®
 #define OLED_MODE 0
 
 #define FONT_SIZE 8
