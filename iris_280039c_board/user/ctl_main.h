@@ -81,6 +81,7 @@ typedef struct _tag_ctl_psu_t
 
     // Fixed-mode limit protection. AUTO mode does not use this counter.
     uint16_t mode_limit_trip_cycles;
+    uint16_t mode_limit_blank_counter;
     uint16_t mode_violation_counter;
 
     // Independent hard over-current protection.
@@ -219,6 +220,7 @@ GMP_STATIC_INLINE fast_gt ctl_set_psu_operating_mode(
     hpsu->mode = PSU_MODE_CV;
     hpsu->mode_enter_cc_counter = 0U;
     hpsu->mode_exit_cc_counter = 0U;
+    hpsu->mode_limit_blank_counter = 0U;
     hpsu->mode_violation_counter = 0U;
 
     return 1;
@@ -315,6 +317,7 @@ GMP_STATIC_INLINE fast_gt ctl_clear_psu_fault(ctl_psu_t* hpsu)
     hpsu->mode = PSU_MODE_CV;
     hpsu->mode_enter_cc_counter = 0U;
     hpsu->mode_exit_cc_counter = 0U;
+    hpsu->mode_limit_blank_counter = 0U;
     hpsu->mode_violation_counter = 0U;
 
     return 1;
@@ -357,6 +360,7 @@ GMP_STATIC_INLINE void ctl_trip_psu_fault(
     hpsu->output_delay_counter = 0U;
     hpsu->voltage_dac_pu = float2ctrl(0.0f);
     hpsu->current_dac_pu = float2ctrl(0.0f);
+    hpsu->mode_limit_blank_counter = 0U;
     hpsu->mode_violation_counter = 0U;
 }
 
@@ -493,11 +497,22 @@ GMP_STATIC_INLINE void ctl_step_psu_mode_limit_protection(ctl_psu_t* hpsu)
     psu_fault_code_t fault_code = PSU_FAULT_NONE;
 
     if ((hpsu->fault_latched != 0) ||
+        (hpsu->output_request == 0) ||
         (hpsu->output_enable == 0) ||
         (hpsu->voltage_set_decivolt == 0U) ||
         (hpsu->current_set_milliamp == 0U) ||
         (hpsu->operating_mode == PSU_OPERATING_MODE_AUTO))
     {
+        hpsu->mode_limit_blank_counter = 0U;
+        hpsu->mode_violation_counter = 0U;
+        return;
+    }
+
+    // Keep active-loop detection running during this interval so it can settle,
+    // but do not interpret the startup handover/overshoot as a fixed-mode fault.
+    if (hpsu->mode_limit_blank_counter < PSU_MODE_LIMIT_BLANK_CYCLES)
+    {
+        hpsu->mode_limit_blank_counter++;
         hpsu->mode_violation_counter = 0U;
         return;
     }
@@ -571,6 +586,8 @@ GMP_STATIC_INLINE void ctl_step_psu_output(ctl_psu_t* hpsu)
 
 GMP_STATIC_INLINE void ctl_step_psu(ctl_psu_t* hpsu)
 {
+    ctrl_gt voltage_command_v;
+    ctrl_gt current_command_a;
 
     // Convert the atomic integer UI settings into real-time physical values.
     hpsu->voltage_set_v =
@@ -578,18 +595,44 @@ GMP_STATIC_INLINE void ctl_step_psu(ctl_psu_t* hpsu)
     hpsu->current_set_a =
         float2ctrl((parameter_gt)hpsu->current_set_milliamp * 0.001f);
 
-    // Keep the original set-value-to-DAC mapping. A 0 V setting naturally
-    // produces a zero voltage reference without changing the Vsw state.
+    // Correct only the physical DAC commands. ADC calibration remains an
+    // independent measurement concern. Negative low-end commands clamp to 0.
+    if (hpsu->voltage_set_decivolt == 0U)
+    {
+        voltage_command_v = float2ctrl(0.0f);
+    }
+    else
+    {
+        voltage_command_v =
+            ctl_mul(
+                hpsu->voltage_set_v,
+                float2ctrl(PSU_VOLTAGE_OUTPUT_CAL_SLOPE)) +
+            float2ctrl(PSU_VOLTAGE_OUTPUT_CAL_BIAS_V);
+    }
+
+    if (hpsu->current_set_milliamp == 0U)
+    {
+        current_command_a = float2ctrl(0.0f);
+    }
+    else
+    {
+        current_command_a =
+            ctl_mul(
+                hpsu->current_set_a,
+                float2ctrl(PSU_CURRENT_OUTPUT_CAL_SLOPE)) +
+            float2ctrl(PSU_CURRENT_OUTPUT_CAL_BIAS_A);
+    }
+
     hpsu->voltage_dac_pu =
         ctl_sat(
-            ctl_mul(hpsu->voltage_set_v, hpsu->voltage_to_dac_pu),
+            ctl_mul(voltage_command_v, hpsu->voltage_to_dac_pu),
             float2ctrl(1.0f),
             float2ctrl(0.0f));
 
-    // The current reference is independent of the voltage setting.
+    // The current reference remains independent of the voltage setting.
     hpsu->current_dac_pu =
         ctl_sat(
-            ctl_mul(hpsu->current_set_a, hpsu->current_to_dac_pu),
+            ctl_mul(current_command_a, hpsu->current_to_dac_pu),
             float2ctrl(1.0f),
             float2ctrl(0.0f));
 

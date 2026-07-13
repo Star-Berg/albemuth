@@ -181,10 +181,11 @@ user/user_main.obj: D:/Github/albemuth/iris_280039c_board/xplt/xplt.ctl_interfac
 user/user_main.obj: D:/Github/gmp_pro/ctl/framework/ctl_dispatch.h
 user/user_main.obj: D:/Github/gmp_pro/core/dev/ring_buf.h
 user/user_main.obj: D:/Github/gmp_pro/core/std/gmp_core_func.h
+user/user_main.obj: ../user/psu_persistence.h
+user/user_main.obj: D:/Github/gmp_pro/core/pm/function_scheduler.h
 user/user_main.obj: ../user/user_main.h
 user/user_main.obj: D:/Github/gmp_pro/core/dev/at_device.h
 user/user_main.obj: D:/Github/gmp_pro/core/dev/datalink.h
-user/user_main.obj: D:/Github/gmp_pro/core/pm/function_scheduler.h
 user/user_main.obj: D:/Github/gmp_pro/core/dev/display/ht16k33.h
 user/user_main.obj: D:/Github/gmp_pro/core/dev/gpio/pca9555.h
 user/user_main.obj: D:/Github/gmp_pro/core/dev/sensor/hdc1080.h
@@ -555,13 +556,15 @@ D:/Github/gmp_pro/core/dev/ring_buf.h:
 
 D:/Github/gmp_pro/core/std/gmp_core_func.h:
 
+../user/psu_persistence.h:
+
+D:/Github/gmp_pro/core/pm/function_scheduler.h:
+
 ../user/user_main.h:
 
 D:/Github/gmp_pro/core/dev/at_device.h:
 
 D:/Github/gmp_pro/core/dev/datalink.h:
-
-D:/Github/gmp_pro/core/pm/function_scheduler.h:
 
 D:/Github/gmp_pro/core/dev/display/ht16k33.h:
 

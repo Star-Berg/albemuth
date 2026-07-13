@@ -47,6 +47,7 @@ void ctl_init_psu(
     hpsu->mode_enter_cc_counter = 0U;
     hpsu->mode_exit_cc_counter = 0U;
     hpsu->mode_limit_trip_cycles = PSU_MODE_LIMIT_TRIP_CYCLES;
+    hpsu->mode_limit_blank_counter = 0U;
     hpsu->mode_violation_counter = 0U;
 
     hpsu->overcurrent_counter = 0U;
@@ -87,6 +88,7 @@ void ctl_init_psu_mode_detection(
     hpsu->mode_detect_cycles = (detect_cycles == 0U) ? 1U : detect_cycles;
     hpsu->mode_enter_cc_counter = 0U;
     hpsu->mode_exit_cc_counter = 0U;
+    hpsu->mode_limit_blank_counter = 0U;
     hpsu->mode_violation_counter = 0U;
     hpsu->mode = PSU_MODE_CV;
 }
@@ -154,6 +156,7 @@ void clear_all_controllers(void)
     psu_ctrl.mode = PSU_MODE_CV;
     psu_ctrl.mode_enter_cc_counter = 0U;
     psu_ctrl.mode_exit_cc_counter = 0U;
+    psu_ctrl.mode_limit_blank_counter = 0U;
     psu_ctrl.mode_violation_counter = 0U;
 }
 

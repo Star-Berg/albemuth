@@ -97,7 +97,6 @@ gmp_task_status_t tsk_dl_debug_device(gmp_task_t* tsk)
 //=================================================================================================
 // Task manager
 
-gpio_halt user_led;
 volatile uint16_t flag_init_cmpt = 0U;
 gmp_scheduler_t sched;
 

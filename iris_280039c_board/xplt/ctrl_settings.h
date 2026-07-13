@@ -246,6 +246,17 @@
 #define PSU_DAC_REF_V                         (3.3f)
 #define PSU_DAC_MAX_CODE                      (4095U)
 
+// Output-command inverse fits, excluding the 0 V / 0 A measurements.
+// The voltage coefficients include the follow-up measured residual model:
+// Vactual = 1.0034483 * Vset + 0.1400000 V. The two affine mappings are
+// composed here so the real-time path still applies one calibration only.
+#define PSU_VOLTAGE_OUTPUT_CAL_SLOPE          (0.9832997f)
+#define PSU_VOLTAGE_OUTPUT_CAL_BIAS_V         (-0.1139542f)
+
+// Iactual = 0.9970769 * Icommand + 0.0037433 A.
+#define PSU_CURRENT_OUTPUT_CAL_SLOPE          (1.0029316f)
+#define PSU_CURRENT_OUTPUT_CAL_BIAS_A         (-0.0037542f)
+
 // Output voltage feedback: Vfu = Vo * 100k / (300k + 100k) = Vo / 4.
 #define PSU_VOLTAGE_FB_RATIO                  (0.25f)
 
@@ -312,8 +323,11 @@
 #define PSU_MODE_CC_EXIT_VOLTAGE_DROP_V       (0.03f)
 #define PSU_MODE_DETECT_CYCLES                (20U)
 
-// In fixed CV or fixed CC mode, a sustained loop handover causes a latched alarm.
-#define PSU_MODE_LIMIT_TRIP_CYCLES            (20U)
+// Fixed-mode protection filters the analog loop's normal startup overshoot.
+// After Vsw turns on, ignore mode mismatch for 50 ms; afterwards a mismatch
+// must remain continuous for 10 ms before it becomes a latched fault.
+#define PSU_MODE_LIMIT_BLANK_CYCLES           (1000U) // 50 ms at 20 kHz
+#define PSU_MODE_LIMIT_TRIP_CYCLES            (200U)  // 10 ms at 20 kHz
 
 // Independent hard over-current trip applies in CV, CC and AUTO modes.
 #define PSU_OVERCURRENT_TRIP_A                (0.103f)
@@ -377,13 +391,6 @@
 
 // HT16K33 indicator outputs. Adjust these three RAM locations/masks if the
 // peripheral board routes its CV/CC/AUTO LEDs differently.
-#define PSU_MODE_CV_LED_RAM_INDEX             (1U)
-#define PSU_MODE_CV_LED_MASK                  (0x01U)
-#define PSU_MODE_CC_LED_RAM_INDEX             (3U)
-#define PSU_MODE_CC_LED_MASK                  (0x01U)
-#define PSU_MODE_AUTO_LED_RAM_INDEX           (5U)
-#define PSU_MODE_AUTO_LED_MASK                (0x01U)
-
 #define PSU_ALARM_TASK_PERIOD_MS              (100U)
 #define PSU_ALARM_ON_TICKS                    (2U)
 #define PSU_ALARM_OFF_TICKS                   (2U)

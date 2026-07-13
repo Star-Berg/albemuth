@@ -44,7 +44,6 @@ adc_gt idc_src;
 // peripheral setup function
 
 extern iic_halt iic_bus;
-extern gpio_halt user_led;
 extern gpio_halt gpio_beep;
 extern gpio_halt gpio_alarm_led;
 extern gpio_halt gpio_output_led;
@@ -137,8 +136,6 @@ void setup_peripheral(void)
     initI2C();
 
     iic_bus = I2CA_BASE;
-
-    user_led = SYSTEM_LED;
 
     gpio_beep = PSU_BEEP_PORT;
     gpio_alarm_led = PSU_ALARM_LED_PORT;

@@ -5,12 +5,13 @@
 
 #include "psu_persistence.h"
 
-#define PSU_FLASH_MAGIC               (0x5053U)
-#define PSU_FLASH_VERSION             (1U)
-#define PSU_FLASH_SECTOR_START        (0x000AF000UL)
-#define PSU_FLASH_SECTOR_WORDS        (0x1000UL)
-#define PSU_FLASH_RECORD_WORDS        (8U)
-#define PSU_FLASH_SAVE_DELAY_TICKS    (20U)
+#define PSU_FLASH_MAGIC                 (0x5053U)
+#define PSU_FLASH_VERSION               (1U)
+#define PSU_FLASH_SECTOR_A_START        (0x000AE000UL)
+#define PSU_FLASH_SECTOR_B_START        (0x000AF000UL)
+#define PSU_FLASH_SECTOR_USABLE_WORDS   (0x0FF0UL)
+#define PSU_FLASH_RECORD_WORDS          (8U)
+#define PSU_FLASH_SAVE_DELAY_TICKS      (20U)
 
 typedef struct _tag_psu_saved_settings_t
 {
@@ -20,10 +21,17 @@ typedef struct _tag_psu_saved_settings_t
     uint16_t edit_target;
 } psu_saved_settings_t;
 
+typedef struct _tag_psu_flash_scan_t
+{
+    const uint16_t* latest_record;
+    uint32_t next_address;
+} psu_flash_scan_t;
+
 static ctl_psu_t* persistence_psu = NULL;
 static psu_saved_settings_t saved_settings;
 static psu_saved_settings_t pending_settings;
-static uint32_t next_record_address = PSU_FLASH_SECTOR_START;
+static uint32_t active_sector_start = PSU_FLASH_SECTOR_A_START;
+static uint32_t next_record_address = PSU_FLASH_SECTOR_A_START;
 static uint16_t next_sequence = 1U;
 static uint16_t pending_ticks = 0U;
 static fast_gt persistence_ready = 0;
@@ -87,6 +95,44 @@ static fast_gt psu_flash_record_valid(const uint16_t* record)
     return record[7] == psu_flash_crc16(record, 7U);
 }
 
+static fast_gt psu_flash_sequence_is_newer(uint16_t lhs, uint16_t rhs)
+{
+    return ((int16_t)(lhs - rhs)) > 0;
+}
+
+static uint32_t psu_flash_other_sector(uint32_t sector_start)
+{
+    return (sector_start == PSU_FLASH_SECTOR_A_START) ?
+        PSU_FLASH_SECTOR_B_START : PSU_FLASH_SECTOR_A_START;
+}
+
+static void psu_flash_scan_sector(
+    uint32_t sector_start,
+    psu_flash_scan_t* scan)
+{
+    uint32_t address;
+    const uint16_t* record;
+
+    scan->latest_record = NULL;
+    scan->next_address = sector_start + PSU_FLASH_SECTOR_USABLE_WORDS;
+
+    for (address = sector_start;
+         address < (sector_start + PSU_FLASH_SECTOR_USABLE_WORDS);
+         address += PSU_FLASH_RECORD_WORDS)
+    {
+        record = (const uint16_t*)address;
+        if (record[0] == 0xFFFFU)
+        {
+            scan->next_address = address;
+            break;
+        }
+        if (psu_flash_record_valid(record) != 0)
+        {
+            scan->latest_record = record;
+        }
+    }
+}
+
 static fast_gt psu_flash_prepare(void)
 {
     Fapi_StatusType status;
@@ -103,8 +149,8 @@ static fast_gt psu_flash_prepare(void)
     return status == Fapi_Status_Success;
 }
 
-#pragma CODE_SECTION(psu_flash_erase_settings_sector, ".TI.ramfunc")
-static fast_gt psu_flash_erase_settings_sector(void)
+#pragma CODE_SECTION(psu_flash_erase_sector, ".TI.ramfunc")
+static fast_gt psu_flash_erase_sector(uint32_t sector_start)
 {
     Fapi_StatusType status;
 
@@ -119,7 +165,7 @@ static fast_gt psu_flash_erase_settings_sector(void)
 
     status = Fapi_issueAsyncCommandWithAddress(
         Fapi_EraseSector,
-        (uint32_t*)PSU_FLASH_SECTOR_START);
+        (uint32_t*)sector_start);
     while (Fapi_checkFsmForReady() == Fapi_Status_FsmBusy)
     {
     }
@@ -131,6 +177,7 @@ static fast_gt psu_flash_erase_settings_sector(void)
 static fast_gt psu_flash_program_record(uint32_t address)
 {
     Fapi_StatusType status;
+    Fapi_FlashStatusWordType flash_status;
 
     status = Fapi_issueProgrammingCommand(
         (uint32_t*)address,
@@ -142,13 +189,35 @@ static fast_gt psu_flash_program_record(uint32_t address)
     while (Fapi_checkFsmForReady() == Fapi_Status_FsmBusy)
     {
     }
+    if ((status != Fapi_Status_Success) || (Fapi_getFsmStatus() != 0U))
+    {
+        return 0;
+    }
 
-    return (status == Fapi_Status_Success) && (Fapi_getFsmStatus() == 0U);
+    status = Fapi_doVerifyBy16bits(
+        (uint16_t*)address,
+        PSU_FLASH_RECORD_WORDS,
+        flash_write_buffer,
+        &flash_status);
+
+    return (status == Fapi_Status_Success) &&
+           (psu_flash_record_valid((const uint16_t*)address) != 0);
 }
 
 static fast_gt psu_flash_save(const psu_saved_settings_t* settings)
 {
+    uint32_t write_address = next_record_address;
+    uint32_t target_sector = active_sector_start;
+    fast_gt rollover = 0;
     fast_gt ok;
+
+    if (write_address >=
+        (active_sector_start + PSU_FLASH_SECTOR_USABLE_WORDS))
+    {
+        target_sector = psu_flash_other_sector(active_sector_start);
+        write_address = target_sector;
+        rollover = 1;
+    }
 
     flash_write_buffer[0] = PSU_FLASH_MAGIC;
     flash_write_buffer[1] = PSU_FLASH_VERSION;
@@ -163,16 +232,15 @@ static fast_gt psu_flash_save(const psu_saved_settings_t* settings)
     EALLOW;
 
     ok = psu_flash_prepare();
-    if ((ok != 0) &&
-        (next_record_address >=
-         (PSU_FLASH_SECTOR_START + PSU_FLASH_SECTOR_WORDS)))
+    if ((ok != 0) && (rollover != 0))
     {
-        ok = psu_flash_erase_settings_sector();
-        next_record_address = PSU_FLASH_SECTOR_START;
+        // Keep the current sector intact until the replacement record has
+        // been successfully programmed and verified in the other sector.
+        ok = psu_flash_erase_sector(target_sector);
     }
     if (ok != 0)
     {
-        ok = psu_flash_program_record(next_record_address);
+        ok = psu_flash_program_record(write_address);
     }
 
     EDIS;
@@ -180,8 +248,14 @@ static fast_gt psu_flash_save(const psu_saved_settings_t* settings)
 
     if (ok != 0)
     {
-        next_record_address += PSU_FLASH_RECORD_WORDS;
+        active_sector_start = target_sector;
+        next_record_address = write_address + PSU_FLASH_RECORD_WORDS;
         next_sequence++;
+    }
+    else if (rollover == 0)
+    {
+        // Never retry a potentially partially programmed 128-bit row.
+        next_record_address += PSU_FLASH_RECORD_WORDS;
     }
 
     return ok;
@@ -189,45 +263,51 @@ static fast_gt psu_flash_save(const psu_saved_settings_t* settings)
 
 void psu_persistence_init(ctl_psu_t* hpsu)
 {
-    uint32_t address;
-    const uint16_t* record;
+    psu_flash_scan_t scan_a;
+    psu_flash_scan_t scan_b;
     const uint16_t* latest_record = NULL;
 
     persistence_psu = hpsu;
+    psu_flash_scan_sector(PSU_FLASH_SECTOR_A_START, &scan_a);
+    psu_flash_scan_sector(PSU_FLASH_SECTOR_B_START, &scan_b);
 
-    for (address = PSU_FLASH_SECTOR_START;
-         address < (PSU_FLASH_SECTOR_START + PSU_FLASH_SECTOR_WORDS);
-         address += PSU_FLASH_RECORD_WORDS)
+    if (scan_a.latest_record != NULL)
     {
-        record = (const uint16_t*)address;
-        if (record[0] == 0xFFFFU)
-        {
-            next_record_address = address;
-            break;
-        }
-        if (psu_flash_record_valid(record) != 0)
-        {
-            latest_record = record;
-            next_sequence = (uint16_t)(record[2] + 1U);
-        }
+        latest_record = scan_a.latest_record;
+        active_sector_start = PSU_FLASH_SECTOR_A_START;
+        next_record_address = scan_a.next_address;
     }
 
-    if (address >= (PSU_FLASH_SECTOR_START + PSU_FLASH_SECTOR_WORDS))
+    if ((scan_b.latest_record != NULL) &&
+        ((latest_record == NULL) ||
+         (psu_flash_sequence_is_newer(
+              scan_b.latest_record[2], latest_record[2]) != 0)))
     {
-        next_record_address = address;
+        latest_record = scan_b.latest_record;
+        active_sector_start = PSU_FLASH_SECTOR_B_START;
+        next_record_address = scan_b.next_address;
     }
 
     if (latest_record != NULL)
     {
+        next_sequence = (uint16_t)(latest_record[2] + 1U);
         ctl_set_psu_voltage_setting_decivolt(hpsu, latest_record[3]);
         ctl_set_psu_current_setting_milliamp(hpsu, latest_record[4]);
         ctl_set_psu_operating_mode(
             hpsu,
             (psu_operating_mode_t)latest_record[5]);
         ctl_set_psu_edit_target(hpsu, (psu_edit_target_t)latest_record[6]);
+        gmp_base_print("PSU settings restored from Flash.\r\n");
+    }
+    else
+    {
+        active_sector_start = PSU_FLASH_SECTOR_A_START;
+        next_record_address = PSU_FLASH_SECTOR_A_START;
+        next_sequence = 1U;
+        gmp_base_print("No valid PSU Flash settings; defaults loaded.\r\n");
     }
 
-    // A restored configuration never energizes the output automatically.
+    // Restoring settings must never energize the physical output.
     ctl_set_psu_output(hpsu, 0);
     hpsu->output_enable = 0;
     hpsu->output_delay_counter = 0U;
@@ -271,10 +351,10 @@ gmp_task_status_t tsk_psu_persistence(gmp_task_t* tsk)
 
     if (pending_ticks >= PSU_FLASH_SAVE_DELAY_TICKS)
     {
-        // Sector erase is much slower than an append program operation. If
-        // the log is full, wait until the output is safely off before erasing.
+        // Erasing a sector takes much longer than appending one record. Wait
+        // for a safe output-off state only when a sector rollover is needed.
         if ((next_record_address >=
-             (PSU_FLASH_SECTOR_START + PSU_FLASH_SECTOR_WORDS)) &&
+             (active_sector_start + PSU_FLASH_SECTOR_USABLE_WORDS)) &&
             ((persistence_psu->output_request != 0) ||
              (persistence_psu->output_enable != 0)))
         {
@@ -288,7 +368,7 @@ gmp_task_status_t tsk_psu_persistence(gmp_task_t* tsk)
         }
         else
         {
-            gmp_base_print("PSU Flash save failed.\r\n");
+            gmp_base_print("PSU Flash save/verify failed.\r\n");
         }
         pending_ticks = 0U;
     }

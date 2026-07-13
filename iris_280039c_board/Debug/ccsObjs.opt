@@ -168,8 +168,10 @@
 "./oled_driver/oled_driver.obj"
 "./user/ctl_main.obj"
 "./user/iris_peripheral.obj"
+"./user/psu_persistence.obj"
 "./user/user_main.obj"
 "./xplt/xplt.peripheral.obj"
 "../device_cmd/28003x_generic_flash_lnk.cmd"
 "../device_cmd/f28003x_headers_nonBIOS.cmd"
 -llibc.a
+-lFAPI_F28003x_EABI_v1.58.10.lib

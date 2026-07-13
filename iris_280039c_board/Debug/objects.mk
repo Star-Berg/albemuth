@@ -4,5 +4,5 @@
 
 USER_OBJS :=
 
-LIBS := -llibc.a
+LIBS := -llibc.a -lFAPI_F28003x_EABI_v1.58.10.lib
 

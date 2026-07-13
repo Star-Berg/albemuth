@@ -887,36 +887,6 @@ static void psu_ui_write_led_segments(
         segments[7]);
 }
 
-static void psu_ui_update_mode_indicators(ht16k33_dev_t* dev)
-{
-    psu_operating_mode_t mode = ctl_get_psu_operating_mode(&psu_ctrl);
-
-    dev->display_ram[PSU_MODE_CV_LED_RAM_INDEX] &=
-        (data_gt)(~PSU_MODE_CV_LED_MASK);
-    dev->display_ram[PSU_MODE_CC_LED_RAM_INDEX] &=
-        (data_gt)(~PSU_MODE_CC_LED_MASK);
-    dev->display_ram[PSU_MODE_AUTO_LED_RAM_INDEX] &=
-        (data_gt)(~PSU_MODE_AUTO_LED_MASK);
-
-    if (mode == PSU_OPERATING_MODE_CV)
-    {
-        dev->display_ram[PSU_MODE_CV_LED_RAM_INDEX] |=
-            PSU_MODE_CV_LED_MASK;
-    }
-    else if (mode == PSU_OPERATING_MODE_CC)
-    {
-        dev->display_ram[PSU_MODE_CC_LED_RAM_INDEX] |=
-            PSU_MODE_CC_LED_MASK;
-    }
-    else
-    {
-        dev->display_ram[PSU_MODE_AUTO_LED_RAM_INDEX] |=
-            PSU_MODE_AUTO_LED_MASK;
-    }
-
-    dev->is_dirty = 1;
-}
-
 static void psu_ui_update_keypad_led(ht16k33_dev_t* dev)
 {
     uint16_t segments[8];
@@ -1080,7 +1050,6 @@ gmp_task_status_t tsk_psu_display(gmp_task_t* tsk)
         return GMP_TASK_DONE;
     }
 
-    psu_ui_update_mode_indicators(dev);
 
     voltage_sample_v = ctrl2float(ctl_get_psu_voltage_measurement(&psu_ctrl));
     current_sample_a = ctrl2float(ctl_get_psu_current_measurement(&psu_ctrl));
