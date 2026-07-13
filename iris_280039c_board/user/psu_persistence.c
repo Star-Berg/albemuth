@@ -10,7 +10,6 @@
 #define PSU_FLASH_SECTOR_START        (0x000AF000UL)
 #define PSU_FLASH_SECTOR_WORDS        (0x1000UL)
 #define PSU_FLASH_RECORD_WORDS        (8U)
-#define PSU_FLASH_RECORD_COUNT        (PSU_FLASH_SECTOR_WORDS / PSU_FLASH_RECORD_WORDS)
 #define PSU_FLASH_SAVE_DELAY_TICKS    (20U)
 
 typedef struct _tag_psu_saved_settings_t
@@ -272,6 +271,16 @@ gmp_task_status_t tsk_psu_persistence(gmp_task_t* tsk)
 
     if (pending_ticks >= PSU_FLASH_SAVE_DELAY_TICKS)
     {
+        // Sector erase is much slower than an append program operation. If
+        // the log is full, wait until the output is safely off before erasing.
+        if ((next_record_address >=
+             (PSU_FLASH_SECTOR_START + PSU_FLASH_SECTOR_WORDS)) &&
+            ((persistence_psu->output_request != 0) ||
+             (persistence_psu->output_enable != 0)))
+        {
+            return GMP_TASK_DONE;
+        }
+
         if (psu_flash_save(&pending_settings) != 0)
         {
             saved_settings = pending_settings;
