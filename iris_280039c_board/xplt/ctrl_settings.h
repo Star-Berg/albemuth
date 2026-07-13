@@ -287,6 +287,12 @@
 #define PSU_OUTPUT_SW_EPWM_OUTPUT             (EPWM_AQ_OUTPUT_A)
 #define PSU_OUTPUT_ON_DELAY_CYCLES            (400U)  // 20 ms at 20 kHz
 
+// DAC soft-start and live-setting slew rates, in 12-bit DAC codes per control
+// cycle.  At 20 kHz, 16 codes/cycle reaches a typical full-scale PSU command
+// in roughly 8 to 10 ms instead of applying it as a single step.
+#define PSU_VOLTAGE_DAC_SLEW_CODES_PER_CYCLE  (16U)
+#define PSU_CURRENT_DAC_SLEW_CODES_PER_CYCLE  (16U)
+
 // Buzzer and status LEDs.
 #define PSU_BEEP_PORT                         (IRIS_GPIO1)
 #define PSU_BEEP_ON_LEVEL                     (1U)
@@ -323,11 +329,15 @@
 #define PSU_MODE_CC_EXIT_VOLTAGE_DROP_V       (0.03f)
 #define PSU_MODE_DETECT_CYCLES                (20U)
 
-// Fixed-mode protection filters the analog loop's normal startup overshoot.
-// After Vsw turns on, ignore mode mismatch for 50 ms; afterwards a mismatch
-// must remain continuous for 10 ms before it becomes a latched fault.
-#define PSU_MODE_LIMIT_BLANK_CYCLES           (1000U) // 50 ms at 20 kHz
-#define PSU_MODE_LIMIT_TRIP_CYCLES            (200U)  // 10 ms at 20 kHz
+// In fixed CV or fixed CC mode, require a sustained 200 ms handover before
+// latching a mode-limit fault.  This tolerates live setpoint edits and analog
+// settling; the independent 103 mA hard-OCP path remains at its fast setting.
+#define PSU_MODE_LIMIT_TRIP_CYCLES            (4000U) // 200 ms at 20 kHz
+
+// Fixed CC gets a startup observation window after Vsw turns on.  Mode-limit
+// protection is armed only after this full interval, so the measured ~200 ms
+// analog startup disturbance cannot arm and immediately retrigger the alarm.
+#define PSU_CC_ACQUIRE_TIMEOUT_CYCLES          (5000U) // 250 ms at 20 kHz
 
 // Independent hard over-current trip applies in CV, CC and AUTO modes.
 #define PSU_OVERCURRENT_TRIP_A                (0.103f)
@@ -389,8 +399,6 @@
 #define PSU_DISPLAY_FILTER_ALPHA              (0.25f)
 #define PSU_OLED_LINE_CHAR_COUNT              (16U)
 
-// HT16K33 indicator outputs. Adjust these three RAM locations/masks if the
-// peripheral board routes its CV/CC/AUTO LEDs differently.
 #define PSU_ALARM_TASK_PERIOD_MS              (100U)
 #define PSU_ALARM_ON_TICKS                    (2U)
 #define PSU_ALARM_OFF_TICKS                   (2U)

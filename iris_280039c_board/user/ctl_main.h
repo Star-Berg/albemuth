@@ -63,6 +63,8 @@ typedef struct _tag_ctl_psu_t
     ctrl_gt current_dac_pu;
     ctrl_gt voltage_to_dac_pu;
     ctrl_gt current_to_dac_pu;
+    ctrl_gt voltage_dac_slew_pu;
+    ctrl_gt current_dac_slew_pu;
 
     // Measurements.
     ctrl_gt voltage_meas_v;
@@ -81,8 +83,10 @@ typedef struct _tag_ctl_psu_t
 
     // Fixed-mode limit protection. AUTO mode does not use this counter.
     uint16_t mode_limit_trip_cycles;
-    uint16_t mode_limit_blank_counter;
     uint16_t mode_violation_counter;
+    uint16_t cc_acquire_timeout_cycles;
+    uint16_t cc_acquire_counter;
+    fast_gt cc_mode_armed;
 
     // Independent hard over-current protection.
     ctrl_gt overcurrent_trip_a;
@@ -220,8 +224,9 @@ GMP_STATIC_INLINE fast_gt ctl_set_psu_operating_mode(
     hpsu->mode = PSU_MODE_CV;
     hpsu->mode_enter_cc_counter = 0U;
     hpsu->mode_exit_cc_counter = 0U;
-    hpsu->mode_limit_blank_counter = 0U;
     hpsu->mode_violation_counter = 0U;
+    hpsu->cc_acquire_counter = 0U;
+    hpsu->cc_mode_armed = 0;
 
     return 1;
 }
@@ -317,8 +322,9 @@ GMP_STATIC_INLINE fast_gt ctl_clear_psu_fault(ctl_psu_t* hpsu)
     hpsu->mode = PSU_MODE_CV;
     hpsu->mode_enter_cc_counter = 0U;
     hpsu->mode_exit_cc_counter = 0U;
-    hpsu->mode_limit_blank_counter = 0U;
     hpsu->mode_violation_counter = 0U;
+    hpsu->cc_acquire_counter = 0U;
+    hpsu->cc_mode_armed = 0;
 
     return 1;
 }
@@ -346,6 +352,26 @@ GMP_STATIC_INLINE ctrl_gt ctl_get_psu_current_measurement(
 //=================================================================================================
 // Real-time control and protection steps
 
+GMP_STATIC_INLINE ctrl_gt ctl_slew_psu_command(
+    ctrl_gt current,
+    ctrl_gt target,
+    ctrl_gt increment)
+{
+    if (increment <= float2ctrl(0.0f))
+    {
+        return target;
+    }
+
+    if (current < target)
+    {
+        return ((target - current) <= increment) ?
+            target : (current + increment);
+    }
+
+    return ((current - target) <= increment) ?
+        target : (current - increment);
+}
+
 GMP_STATIC_INLINE void ctl_trip_psu_fault(
     ctl_psu_t* hpsu,
     psu_fault_code_t fault_code)
@@ -360,8 +386,9 @@ GMP_STATIC_INLINE void ctl_trip_psu_fault(
     hpsu->output_delay_counter = 0U;
     hpsu->voltage_dac_pu = float2ctrl(0.0f);
     hpsu->current_dac_pu = float2ctrl(0.0f);
-    hpsu->mode_limit_blank_counter = 0U;
     hpsu->mode_violation_counter = 0U;
+    hpsu->cc_acquire_counter = 0U;
+    hpsu->cc_mode_armed = 0;
 }
 
 GMP_STATIC_INLINE void ctl_step_psu_overcurrent_protection(
@@ -503,18 +530,39 @@ GMP_STATIC_INLINE void ctl_step_psu_mode_limit_protection(ctl_psu_t* hpsu)
         (hpsu->current_set_milliamp == 0U) ||
         (hpsu->operating_mode == PSU_OPERATING_MODE_AUTO))
     {
-        hpsu->mode_limit_blank_counter = 0U;
         hpsu->mode_violation_counter = 0U;
+        hpsu->cc_acquire_counter = 0U;
+        hpsu->cc_mode_armed = 0;
         return;
     }
 
-    // Keep active-loop detection running during this interval so it can settle,
-    // but do not interpret the startup handover/overshoot as a fixed-mode fault.
-    if (hpsu->mode_limit_blank_counter < PSU_MODE_LIMIT_BLANK_CYCLES)
+    // The active-loop detector starts in CV.  In fixed CC mode, observe the
+    // complete startup interval before arming mode-limit protection; otherwise
+    // an early CC indication followed by a startup spike can cause a false trip.
+    if ((hpsu->operating_mode == PSU_OPERATING_MODE_CC) &&
+        (hpsu->cc_mode_armed == 0))
     {
-        hpsu->mode_limit_blank_counter++;
-        hpsu->mode_violation_counter = 0U;
-        return;
+        if (hpsu->cc_acquire_counter < hpsu->cc_acquire_timeout_cycles)
+        {
+            hpsu->cc_acquire_counter++;
+            hpsu->mode_violation_counter = 0U;
+            return;
+        }
+
+        if (hpsu->mode == PSU_MODE_CC)
+        {
+            hpsu->cc_mode_armed = 1;
+            hpsu->cc_acquire_counter = 0U;
+            hpsu->mode_violation_counter = 0U;
+            return;
+        }
+    }
+
+    // Fixed CV and an already-established fixed CC do not use acquisition state.
+    if ((hpsu->operating_mode == PSU_OPERATING_MODE_CV) ||
+        (hpsu->cc_mode_armed != 0))
+    {
+        hpsu->cc_acquire_counter = 0U;
     }
 
     // The analog minimum-selector remains active in every operating mode.
@@ -564,6 +612,10 @@ GMP_STATIC_INLINE void ctl_step_psu_output(ctl_psu_t* hpsu)
     {
         hpsu->output_enable = 0;
         hpsu->output_delay_counter = 0U;
+        hpsu->voltage_dac_pu = float2ctrl(0.0f);
+        hpsu->current_dac_pu = float2ctrl(0.0f);
+        hpsu->cc_acquire_counter = 0U;
+        hpsu->cc_mode_armed = 0;
         return;
     }
 
@@ -588,6 +640,8 @@ GMP_STATIC_INLINE void ctl_step_psu(ctl_psu_t* hpsu)
 {
     ctrl_gt voltage_command_v;
     ctrl_gt current_command_a;
+    ctrl_gt voltage_target_pu;
+    ctrl_gt current_target_pu;
 
     // Convert the atomic integer UI settings into real-time physical values.
     hpsu->voltage_set_v =
@@ -623,14 +677,14 @@ GMP_STATIC_INLINE void ctl_step_psu(ctl_psu_t* hpsu)
             float2ctrl(PSU_CURRENT_OUTPUT_CAL_BIAS_A);
     }
 
-    hpsu->voltage_dac_pu =
+    voltage_target_pu =
         ctl_sat(
             ctl_mul(voltage_command_v, hpsu->voltage_to_dac_pu),
             float2ctrl(1.0f),
             float2ctrl(0.0f));
 
     // The current reference remains independent of the voltage setting.
-    hpsu->current_dac_pu =
+    current_target_pu =
         ctl_sat(
             ctl_mul(current_command_a, hpsu->current_to_dac_pu),
             float2ctrl(1.0f),
@@ -640,6 +694,30 @@ GMP_STATIC_INLINE void ctl_step_psu(ctl_psu_t* hpsu)
     ctl_step_psu_mode_detection(hpsu);
     ctl_step_psu_mode_limit_protection(hpsu);
     ctl_step_psu_output(hpsu);
+
+    // Keep both DACs at zero while OFF and during the relay delay.  Once Vsw
+    // is enabled, approach the calibrated targets gradually.  This preserves
+    // fast fault shutdown while avoiding a full-reference startup step.
+    if ((hpsu->output_enable != 0) &&
+        (hpsu->fault_latched == 0))
+    {
+        hpsu->voltage_dac_pu =
+            ctl_slew_psu_command(
+                hpsu->voltage_dac_pu,
+                voltage_target_pu,
+                hpsu->voltage_dac_slew_pu);
+
+        hpsu->current_dac_pu =
+            ctl_slew_psu_command(
+                hpsu->current_dac_pu,
+                current_target_pu,
+                hpsu->current_dac_slew_pu);
+    }
+    else
+    {
+        hpsu->voltage_dac_pu = float2ctrl(0.0f);
+        hpsu->current_dac_pu = float2ctrl(0.0f);
+    }
 }
 
 // Periodic controller callback called by the GMP control framework.

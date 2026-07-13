@@ -96,10 +96,9 @@ GMP_STATIC_INLINE void ctl_input_callback(void)
 
 // Write the two analog references and the output switch command.
 //
-// The DAC references are enabled only after the user requests output.
-// During the original 20 ms startup delay, output_request is already 1,
-// so DACA/DACB settle first while the physical Vsw signal remains low.
-// On manual shutdown or fault, Vsw is forced low and both DACs are cleared.
+// The DAC references stay at zero during the 20 ms output delay.  After Vsw
+// turns on, the controller slews DACA/DACB toward their calibrated targets.
+// Manual shutdown or a fault still clears Vsw and both DACs immediately.
 GMP_STATIC_INLINE void ctl_output_callback(void)
 {
     fast_gt reference_enable;
@@ -110,7 +109,8 @@ GMP_STATIC_INLINE void ctl_output_callback(void)
 
     if (reference_enable != 0)
     {
-        // Establish Vset and Iset before the relay/MOSFET is enabled.
+        // During startup these applied commands rise through the controller's
+        // soft slew instead of jumping directly to the final references.
         DAC_setShadowValue(
             IRIS_DACA_BASE,
             psu_dac_pu_to_code(psu_ctrl.voltage_dac_pu));

@@ -1,10 +1,10 @@
 ******************************************************************************
              TMS320C2000 Linker PC v22.6.1                     
 ******************************************************************************
->> Linked Mon Jul 13 23:50:40 2026
+>> Linked Tue Jul 14 02:23:32 2026
 
 OUTPUT FILE NAME:   <Iris_Node_Env.out>
-ENTRY POINT SYMBOL: "_c_int00"  address: 0009507b
+ENTRY POINT SYMBOL: "_c_int00"  address: 0009519c
 
 
 MEMORY CONFIGURATION
@@ -24,7 +24,7 @@ PAGE 0:
   RAMLS4                0000a000   00000800  00000000  00000800  RWIX
   RAMLS5                0000a800   00000800  00000800  00000000  RWIX
   RAMLS6                0000b000   00000800  00000800  00000000  RWIX
-  RAMLS7                0000b800   00000800  00000126  000006da  RWIX
+  RAMLS7                0000b800   00000800  0000012c  000006d4  RWIX
   RAMGS0                0000c000   00001000  00000000  00001000  RWIX
   RAMGS1                0000d000   00001000  00000000  00001000  RWIX
   RAMGS2                0000e000   00001000  00000000  00001000  RWIX
@@ -46,7 +46,7 @@ PAGE 0:
   FLASH_BANK0_SEC13     0008d000   00001000  00000000  00001000  RWIX
   FLASH_BANK0_SEC14     0008e000   00001000  00000000  00001000  RWIX
   FLASH_BANK0_SEC15     0008f000   00001000  00000000  00001000  RWIX
-  FLASH_BANK1           00090000   0000fff0  00005a63  0000a58d  RWIX
+  FLASH_BANK1           00090000   0000fff0  00005b80  0000a470  RWIX
   FLASH_BANK2           000a0000   0000e000  00000000  0000e000  RWIX
   FLASH_SETTINGS_A      000ae000   00001000  00000000  00001000  RWIX
   FLASH_SETTINGS_B      000af000   00000ff0  00000000  00000ff0  RWIX
@@ -193,8 +193,8 @@ codestart
                   00080000    00000002     f28003x_codestartbranch.obj (codestart)
 
 .cinit     0    00081100    00000098     
-                  00081100    0000005c     (.cinit..data.2.load) [load image, compression = lzss]
-                  0008115c    0000001e     (.cinit..data.1.load) [load image, compression = lzss]
+                  00081100    0000005d     (.cinit..data.2.load) [load image, compression = lzss]
+                  0008115d    0000001d     (.cinit..data.1.load) [load image, compression = lzss]
                   0008117a    00000006     (__TI_handler_table)
                   00081180    00000004     (.cinit..bss.1.load) [load image, compression = zero_init]
                   00081184    00000004     (.cinit..bss.2.load) [load image, compression = zero_init]
@@ -227,7 +227,7 @@ Cla1Prog   0    00008000    00000000     UNINITIALIZED
 .bss.1     0    0000ac00    00000400     UNINITIALIZED
                   0000ac00    00000400     user_main.obj (.bss:ram_range)
 
-.bss.2     0    0000b000    00000792     UNINITIALIZED
+.bss.2     0    0000b000    00000798     UNINITIALIZED
                   0000b000    00000402     user_main.obj (.bss)
                   0000b402    00000120     rts2800_fpu32_eabi.lib : trgmsg.c.obj (.bss:_CIOBUF_)
                   0000b522    000000a0                            : defs.c.obj (.bss:__TI_tmpnams)
@@ -239,33 +239,33 @@ Cla1Prog   0    00008000    00000000     UNINITIALIZED
                   0000b6f1    00000001     --HOLE--
                   0000b6f2    00000006     FAPI_F28003x_EABI_v1.58.10.lib : Init.obj (.bss)
                   0000b6f8    00000008     psu_persistence.obj (.bss:flash_write_buffer)
-                  0000b700    00000072     ctl_main.obj (.bss)
-                  0000b772    00000008     rts2800_fpu32_eabi.lib : hostopen.c.obj (.bss:parmbuf)
-                  0000b77a    00000006     sysconfig_adapter.obj (.bss)
+                  0000b700    00000078     ctl_main.obj (.bss)
+                  0000b778    00000008     rts2800_fpu32_eabi.lib : hostopen.c.obj (.bss:parmbuf)
                   0000b780    00000008     psu_persistence.obj (.bss)
-                  0000b788    00000004     oled_driver.obj (.bss:page_cmd$4)
-                  0000b78c    00000004     oled_driver.obj (.bss:pos_cmds$1)
-                  0000b790    00000002     rts2800_fpu32_eabi.lib : memory.c.obj (.bss)
+                  0000b788    00000006     sysconfig_adapter.obj (.bss)
+                  0000b78e    00000004     oled_driver.obj (.bss:page_cmd$4)
+                  0000b792    00000004     oled_driver.obj (.bss:pos_cmds$1)
+                  0000b796    00000002     rts2800_fpu32_eabi.lib : memory.c.obj (.bss)
 
-.data.1    0    0000b792    0000006e     UNINITIALIZED
-                  0000b792    00000048     rts2800_fpu32_eabi.lib : host_device.c.obj (.data:_device)
-                  0000b7da    0000001f     iris_peripheral.obj (.data)
-                  0000b7f9    00000001     rts2800_fpu32_eabi.lib : defs.c.obj (.data)
-                  0000b7fa    00000006                            : exit.c.obj (.data)
+.data.1    0    0000b798    00000068     UNINITIALIZED
+                  0000b798    00000048     rts2800_fpu32_eabi.lib : host_device.c.obj (.data:_device)
+                  0000b7e0    0000001f     iris_peripheral.obj (.data)
+                  0000b7ff    00000001     rts2800_fpu32_eabi.lib : defs.c.obj (.data)
 
-.data.2    0    0000b800    00000126     UNINITIALIZED
+.data.2    0    0000b800    0000012c     UNINITIALIZED
                   0000b800    00000078     rts2800_fpu32_eabi.lib : defs.c.obj (.data:_ftable)
                   0000b878    00000070     user_main.obj (.data:tasks)
                   0000b8e8    00000028     rts2800_fpu32_eabi.lib : host_device.c.obj (.data:_stream)
                   0000b910    0000000a     psu_persistence.obj (.data)
-                  0000b91a    00000002     rts2800_fpu32_eabi.lib : _lock.c.obj (.data:_lock)
-                  0000b91c    00000002                            : _lock.c.obj (.data:_unlock)
-                  0000b91e    00000002     sysconfig_adapter.obj (.data)
-                  0000b920    00000002     user_main.obj (.data)
-                  0000b922    00000001     rts2800_fpu32_eabi.lib : errno.c.obj (.data)
-                  0000b923    00000001                            : fopen.c.obj (.data)
-                  0000b924    00000001                            : memory.c.obj (.data)
-                  0000b925    00000001                            : open.c.obj (.data)
+                  0000b91a    00000006     rts2800_fpu32_eabi.lib : exit.c.obj (.data)
+                  0000b920    00000002                            : _lock.c.obj (.data:_lock)
+                  0000b922    00000002                            : _lock.c.obj (.data:_unlock)
+                  0000b924    00000002     sysconfig_adapter.obj (.data)
+                  0000b926    00000002     user_main.obj (.data)
+                  0000b928    00000001     rts2800_fpu32_eabi.lib : errno.c.obj (.data)
+                  0000b929    00000001                            : fopen.c.obj (.data)
+                  0000b92a    00000001                            : memory.c.obj (.data)
+                  0000b92b    00000001                            : open.c.obj (.data)
 
 .const.1   0    00084000    00001000     
                   00084000    000008e7     gmp_std_port.obj (.const:.string)
@@ -306,434 +306,434 @@ Cla1Prog   0    00008000    00000000     UNINITIALIZED
 .text.2    0    00088000    00001000     
                   00088000    000006c2     rts2800_fpu32_eabi.lib : _printfi.c.obj (.text)
                   000886c2    00000614                            : _printfi.c.obj (.text:__TI_printfi)
-                  00088cd6    000002f3     xplt.peripheral.obj (.text:MainISR)
-                  00088fc9    00000037     FAPI_F28003x_EABI_v1.58.10.lib : FlashStateMachine.obj (.text:Fapi_setActiveFlashBank)
+                  00088cd6    000002b3     ctl_main.obj (.text:ctl_init_psu)
+                  00088f89    00000074     interrupt.obj (.text:Interrupt_clearIFR)
+                  00088ffd    00000002     rts2800_fpu32_eabi.lib : pre_init.c.obj (.text)
+                  00088fff    00000001     ctl_main.obj (.text:ctl_mainloop)
 
-.text.3    0    00090000    00005a63     
+.text.3    0    00090000    00005b80     
                   00090000    000005f8     board.obj (.text:SYSCTL_init)
-                  000905f8    00000349     board.obj (.text:PinMux_init)
-                  00090941    00000298     rts2800_fpu32_eabi.lib : memory.c.obj (.text)
-                  00090bd9    00000284     device.obj (.text:Device_enableAllPeripherals)
-                  00090e5d    00000268     FAPI_F28003x_EABI_v1.58.10.lib : Program.obj (.text:Fapi_issueProgrammingCommand)
-                  000910c5    0000021d     ctl_main.obj (.text:ctl_init_psu)
-                  000912e2    000001ca     iris_peripheral.obj (.text:tsk_psu_display)
-                  000914ac    000001c7     gmp_mem_presp.obj (.text:gmp_mem_persp_rx_cb)
-                  00091673    000001aa     gmp_datalink.obj (.text:gmp_dev_dl_loop_cb)
-                  0009181d    0000015c     board.obj (.text:IRIS_ADCB_init)
-                  00091979    0000013b     sysctl.obj (.text:SysCtl_setClock)
-                  00091ab4    00000137     board.obj (.text:IRIS_ADCA_init)
-                  00091beb    00000131     gmp_tunable.obj (.text:gmp_param_tunable_rx_cb)
-                  00091d1c    00000121     rts2800_fpu32_eabi.lib : fopen.c.obj (.text)
-                  00091e3d    0000011f     board.obj (.text:IRIS_ADCC_init)
-                  00091f5c    0000011c     iris_peripheral.obj (.text:psu_ui_update_normal_led)
-                  00092078    00000118     sysctl.obj (.text:SysCtl_isPLLValid)
-                  00092190    000000f5     gmp_pil_core.obj (.text:sim_deserialize_inputs)
-                  00092285    000000e3     board.obj (.text:IRIS_CAN_init)
-                  00092368    000000e3     gmp_pil_core.obj (.text:gmp_pil_sim_rx_cb)
-                  0009244b    000000cd     peripheral_driver.obj (.text:gmp_hal_iic_read_mem)
-                  00092518    000000bb     peripheral_driver.obj (.text:gmp_hal_iic_write_mem)
-                  000925d3    000000b5     can.obj (.text:CAN_setupMessageObject)
-                  00092688    000000ad     gmp_std_port.obj (.text:gmp_base_show_label)
-                  00092735    000000aa     iris_peripheral.obj (.text:tsk_key_flush)
-                  000927df    000000a9     rts2800_fpu32_eabi.lib : s_scalbn.c.obj (.text)
-                  00092888    000000a8                            : fputs.c.obj (.text)
-                  00092930    0000009c                            : fd_add28.asm.obj (.text)
-                  000929cc    00000095                            : trgmsg.c.obj (.text)
-                  00092a61    00000091     gmp_datalink.obj (.text:gmp_dev_dl_tx_warp)
-                  00092af2    0000008d     oled_driver.obj (.text:oled_init)
-                  00092b7f    0000008b     rts2800_fpu32_eabi.lib : fd_div28.asm.obj (.text)
-                  00092c0a    00000089     psu_persistence.obj (.text:psu_persistence_init)
-                  00092c93    00000083     rts2800_fpu32_eabi.lib : fd_mpy28.asm.obj (.text)
-                  00092d16    00000082     board.obj (.text:IRIS_EQEP1_init)
-                  00092d98    00000082     board.obj (.text:IRIS_EQEP2_init)
-                  00092e1a    00000082     board.obj (.text:IRIS_UART_USB_init)
-                  00092e9c    00000080     FAPI_F28003x_EABI_v1.58.10.lib : Async.obj (.text:Fapi_issueAsyncCommandWithAddress)
-                  00092f1c    0000007e     iris_peripheral.obj (.text:psu_ui_update_keypad_led)
-                  00092f9a    0000007d     ht16k33.obj (.text:ht16k33_read_keys)
-                  00093017    0000007c     rts2800_fpu32_eabi.lib : setvbuf.c.obj (.text)
-                  00093093    0000007b     FAPI_F28003x_EABI_v1.58.10.lib : Read.obj (.text:Fapi_checkRegionForValueBy16bits)
-                  0009310e    0000007b     board.obj (.text:IRIS_UART_RS232_init)
-                  00093189    0000007b     peripheral_driver.obj (.text:gmp_hal_iic_write_reg)
-                  00093204    00000079     iris_peripheral.obj (.text:tsk_psu_encoder)
-                  0009327d    00000074     interrupt.obj (.text:Interrupt_clearIFR)
-                  000932f1    00000073     rts2800_fpu32_eabi.lib : fflush.c.obj (.text)
-                  00093364    00000072     peripheral_driver.obj (.text:gmp_hal_uart_write)
-                  000933d6    00000071     rts2800_fpu32_eabi.lib : open.c.obj (.text)
-                  00093447    0000006a     ht16k33.obj (.text:ht16k33_init)
-                  000934b1    00000066     peripheral_driver.obj (.text:gmp_hal_iic_write_cmd)
-                  00093517    00000066     psu_persistence.obj (.text:psu_flash_save)
-                  0009357d    00000065     rts2800_fpu32_eabi.lib : _io_perm.c.obj (.text)
-                  000935e2    00000063     psu_persistence.obj (.text:tsk_psu_persistence)
-                  00093645    00000061     FAPI_F28003x_EABI_v1.58.10.lib : Utilities.obj (.text:Fapi_configureFMAC)
-                  000936a6    00000061     xplt.peripheral.obj (.text:INT_IRIS_CAN_0_ISR)
-                  00093707    00000061     rts2800_fpu32_eabi.lib : hostlseek.c.obj (.text)
-                  00093768    0000005f     user_main.obj (.text:tsk_startup)
-                  000937c7    0000005e     gmp_pil_core.obj (.text:sim_serialize_outputs)
-                  00093825    0000005d     rts2800_fpu32_eabi.lib : fclose.c.obj (.text)
-                  00093882    0000005c     device.obj (.text:Device_init)
-                  000938de    0000005c     board.obj (.text:IRIS_IIC_init)
-                  0009393a    0000005b     xplt.peripheral.obj (.text:setup_peripheral)
-                  00093995    0000005a     rts2800_fpu32_eabi.lib : s_frexp.c.obj (.text)
-                  000939ef    00000059     gmp_process_mgr.obj (.text:gmp_scheduler_dispatch)
-                  00093a48    00000056     FAPI_F28003x_EABI_v1.58.10.lib : FlashStateMachine.obj (.text:Fapi_issueFsmCommand)
-                  00093a9e    00000051     rts2800_fpu32_eabi.lib : getdevice.c.obj (.text)
-                  00093aef    0000004e     gmp_datalink.obj (.text:gmp_dev_dl_tx_append_u32)
-                  00093b3d    0000004d     iris_peripheral.obj (.text:psu_ui_handle_output_key)
-                  00093b8a    0000004c     interrupt.obj (.text:Interrupt_disable)
-                  00093bd6    0000004c     oled_driver.obj (.text:oled_clear)
-                  00093c22    0000004c     iris_peripheral.obj (.text:psu_keypad_parse_voltage)
-                  00093c6e    00000048     board.obj (.text:IRIS_SPI_OUT_init)
-                  00093cb6    00000047     iris_peripheral.obj (.text:psu_ui_adjust_selected_setting)
-                  00093cfd    00000045     can.obj (.text:CAN_readMessage)
-                  00093d42    00000045     sysctl.obj (.text:SysCtl_selectXTAL)
-                  00093d87    00000045     iris_peripheral.obj (.text:psu_keypad_commit)
-                  00093dcc    00000045     iris_peripheral.obj (.text:psu_keypad_get_digit)
-                  00093e11    00000044     gpio.obj (.text:GPIO_setAnalogMode)
-                  00093e55    00000044     xplt.peripheral.obj (.text:INT_IRIS_UART_USB_RX_ISR)
-                  00093e99    00000044     sysctl.obj (.text:SysCtl_pollX1Counter)
-                  00093edd    00000043     board.obj (.text:IRIS_SPI_FPGA_BRIDGE_init)
-                  00093f20    00000043     xplt.peripheral.obj (.text:initI2C)
-                  00093f63    00000040     oled_driver.obj (.text:oled_show_char)
-                  00093fa3    00000040     user_main.obj (.text:tsk_dl_debug_device)
-                  00093fe3    0000003f     gpio.obj (.text:GPIO_setPadConfig)
-                  00094022    0000003e     i2c.obj (.text:I2C_initController)
-                  00094060    0000003e     interrupt.obj (.text:Interrupt_initModule)
-                  0009409e    0000003e     rts2800_fpu32_eabi.lib : hostrename.c.obj (.text)
-                  000940dc    0000003d     board.obj (.text:INTERRUPT_init)
-                  00094119    0000003d     rts2800_fpu32_eabi.lib : fseek.c.obj (.text)
-                  00094156    0000003c     user_main.obj (.text:init)
-                  00094192    0000003b     FAPI_F28003x_EABI_v1.58.10.lib : Utilities.obj (.text:Fapi_isAddressValid)
-                  000941cd    0000003b     iris_peripheral.obj (.text:psu_ui_handle_mode_key)
-                  00094208    0000003a     gmp_datalink.obj (.text:gmp_dev_dl_default_rx_handler)
-                  00094242    0000003a     rts2800_fpu32_eabi.lib : hostopen.c.obj (.text)
-                  0009427c    00000039                            : hostwrite.c.obj (.text)
-                  000942b5    00000038     gmp_datalink.obj (.text:gmp_dev_dl_push_str)
-                  000942ed    00000038     rts2800_fpu32_eabi.lib : hostread.c.obj (.text)
-                  00094325    00000037     ctl_main.obj (.text:ctl_init)
-                  0009435c    00000035     eqep.obj (.text:EQEP_setInputPolarity)
-                  00094391    00000035     interrupt.obj (.text:Interrupt_enable)
-                  000943c6    00000035     iris_peripheral.obj (.text:psu_keypad_append_decimal)
-                  000943fb    00000034     FAPI_F28003x_EABI_v1.58.10.lib : Read.obj (.text:Fapi_loopRegionForValueBy16bits)
-                  0009442f    00000033     sysconfig_adapter.obj (.text:gmp_csp_startup)
-                  00094462    00000033     rts2800_fpu32_eabi.lib : close.c.obj (.text)
-                  00094495    00000033     iris_peripheral.obj (.text:tsk_psu_alarm)
-                  000944c8    00000032     FAPI_F28003x_EABI_v1.58.10.lib : Init.obj (.text:Fapi_initializeAPI)
-                  000944fa    00000032     rts2800_fpu32_eabi.lib : sprintf.c.obj (.text)
-                  0009452c    00000031     can.obj (.text:CAN_setBitTiming)
-                  0009455d    00000031     FAPI_F28003x_EABI_v1.58.10.lib : FlashStateMachine.obj (.text:Fapi_setupBankSectorEnable)
-                  0009458e    00000031     sysctl.obj (.text:SysCtl_selectOscSource)
-                  000945bf    00000031     rts2800_fpu32_eabi.lib : atoi.c.obj (.text)
-                  000945f0    00000030     board.obj (.text:EPWM_setActionQualifierAction)
-                  00094620    00000030     rts2800_fpu32_eabi.lib : copy_decompress_lzss.c.obj (.text:decompress:lzss)
-                  00094650    00000030                            : _ltoa.c.obj (.text)
-                  00094680    00000030                            : vsprintf.c.obj (.text)
-                  000946b0    0000002f     gpio.obj (.text:GPIO_setPinConfig)
-                  000946df    0000002f     gmp_process_mgr.obj (.text:gmp_scheduler_add_task)
-                  0009470e    0000002e     gmp_datalink.obj (.text:gmp_dev_dl_tx_append_u16)
-                  0009473c    0000002e     peripheral_driver.obj (.text:gmp_hal_gpio_write)
-                  0009476a    0000002d     board.obj (.text:myBoardFSI0_FSITX_init)
-                  00094797    0000002d     oled_driver.obj (.text:oled_set_position)
-                  000947c4    0000002c     fsi.obj (.text:FSI_performTxInitialization)
-                  000947f0    0000002c     FAPI_F28003x_EABI_v1.58.10.lib : Utilities.obj (.text:Fapi_calculateFletcherChecksum)
-                  0009481c    0000002c                                    : Utilities.obj (.text:Fapi_divideUnsignedLong)
-                  00094848    0000002b     rts2800_fpu32_eabi.lib : autoinit.c.obj (.text:__TI_auto_init_nobinit_nopinit)
-                  00094873    0000002a                            : fd_cmp28.asm.obj (.text)
-                  0009489d    0000002a                            : l_div28.asm.obj (.text)
-                  000948c7    00000029                            : exit.c.obj (.text)
-                  000948f0    00000029                            : hostclose.c.obj (.text)
-                  00094919    00000028     sysconfig_adapter.obj (.text:gmp_base_print_c28xsyscfg)
-                  00094941    00000027     gmp_datalink.obj (.text:gmp_dev_dl_tx_append_payload)
-                  00094968    00000027     peripheral_driver.obj (.text:wait_bus_idle)
-                  0009498f    00000026     gpio.obj (.text:GPIO_setControllerCore)
-                  000949b5    00000026     gpio.obj (.text:GPIO_setQualificationMode)
-                  000949db    00000025     board.obj (.text:Board_init)
-                  00094a00    00000025     gmp_mem_presp.obj (.text:check_sandbox_validity)
-                  00094a25    00000024     gmp_process_mgr.obj (.text:gmp_scheduler_init)
-                  00094a49    00000024     iris_peripheral.obj (.text:psu_keypad_parse_current)
-                  00094a6d    00000024     rts2800_fpu32_eabi.lib : hostunlink.c.obj (.text)
-                  00094a91    00000024                            : s_copysign.c.obj (.text)
-                  00094ab5    00000023     sci.obj (.text:SCI_setConfig)
-                  00094ad8    00000023     spi.obj (.text:SPI_setConfig)
-                  00094afb    00000023     board.obj (.text:myCPUTIMER0_init)
-                  00094b1e    00000022     sci.obj (.text:SCI_readCharArray)
-                  00094b40    00000022     ht16k33.obj (.text:ht16k33_update_display)
-                  00094b62    00000022     oled_driver.obj (.text:oled_show_str)
-                  00094b84    00000021     board.obj (.text:IRIS_DACA_init)
-                  00094ba5    00000021     board.obj (.text:IRIS_DACB_init)
-                  00094bc6    00000021     sysctl.obj (.text:SysCtl_selectXTALSingleEnded)
-                  00094be7    00000021     crc16.obj (.text:gmp_base_calculate_crc16)
-                  00094c08    00000021     iris_peripheral.obj (.text:psu_ui_scale_to_uint16)
-                  00094c29    00000021     rts2800_fpu32_eabi.lib : fd_toi28.asm.obj (.text)
-                  00094c4a    00000020     FAPI_F28003x_EABI_v1.58.10.lib : Async.obj (.text:Fapi_issueAsyncCommand)
-                  00094c6a    00000020     psu_persistence.obj (.text:psu_flash_record_valid)
-                  00094c8a    00000020     psu_persistence.obj (.text:psu_flash_scan_sector)
-                  00094caa    0000001f     gpio.obj (.text:GPIO_setDirectionMode)
-                  00094cc9    0000001f     gmp_datalink.obj (.text:gmp_dev_dl_reply_nack)
-                  00094ce8    0000001f     gmp_datalink.obj (.text:gmp_dev_dl_tx_append_u8)
-                  00094d07    0000001f     rts2800_fpu32_eabi.lib : fd_tol28.asm.obj (.text)
-                  00094d26    0000001e     adc.obj (.text:ADC_setOffsetTrimAll)
-                  00094d44    0000001e     sci.obj (.text:SCI_clearInterruptStatus)
-                  00094d62    0000001e     rts2800_fpu32_eabi.lib : ll_cmp28.asm.obj (.text)
-                  00094d80    0000001d     FAPI_F28003x_EABI_v1.58.10.lib : Read.obj (.text:Fapi_flushPipeline)
-                  00094d9d    0000001d     board.obj (.text:SYNC_init)
-                  00094dba    0000001d     xplt.peripheral.obj (.text:flush_dl_tx_buffer)
-                  00094dd7    0000001d     iris_peripheral.obj (.text:psu_keypad_append_digit)
-                  00094df4    0000001d     rts2800_fpu32_eabi.lib : i_tofd28.asm.obj (.text)
-                  00094e11    0000001d                            : memcpy.c.obj (.text)
-                  00094e2e    0000001c     FAPI_F28003x_EABI_v1.58.10.lib : FlashStateMachine.obj (.text:Fapi_setupSectorsForWrite)
-                  00094e4a    0000001c     interrupt.obj (.text:Interrupt_initVectorTable)
-                  00094e66    0000001c     ctl_main.obj (.text:ctl_init_psu_mode_detection)
-                  00094e82    0000001c     iris_peripheral.obj (.text:psu_ui_toggle_step)
-                  00094e9e    0000001c     rts2800_fpu32_eabi.lib : l_tofd28.asm.obj (.text)
-                  00094eba    0000001b     can.obj (.text:CAN_clearInterruptStatus)
-                  00094ed5    0000001b     device.obj (.text:Device_initGPIO)
-                  00094ef0    0000001b     xplt.peripheral.obj (.text:flush_dl_rx_buffer)
-                  00094f0b    0000001a     FAPI_F28003x_EABI_v1.58.10.lib : Utilities.obj (.text:Fapi_WriteReadBack)
-                  00094f25    0000001a     sci.obj (.text:SCI_enableInterrupt)
-                  00094f3f    0000001a     psu_persistence.obj (.text:psu_flash_crc16)
-                  00094f59    00000019     adc.obj (.text:ADC_setVREF)
-                  00094f72    00000019     oled_driver.obj (.text:OLED_WR_Byte)
-                  00094f8b    00000019     board.obj (.text:myBoardFSI0_FSIRX_init)
-                  00094fa4    00000019     rts2800_fpu32_eabi.lib : unlink.c.obj (.text)
-                  00094fbd    00000019                            : write.c.obj (.text)
-                  00094fd6    00000018     board.obj (.text:SysCtl_setPeripheralAccessControl)
-                  00094fee    00000018     rts2800_fpu32_eabi.lib : ll_aox28.asm.obj (.text)
-                  00095006    00000018                            : lseek.c.obj (.text)
-                  0009501e    00000018     iris_peripheral.obj (.text:update_led_content_8byte)
-                  00095036    00000017     fsi.obj (.text:FSI_clearRxModuleReset)
-                  0009504d    00000017     xplt.peripheral.obj (.text:INT_IRIS_CAN_1_ISR)
-                  00095064    00000017     sysconfig_adapter.obj (.text:gmp_step_system_tick)
-                  0009507b    00000017     rts2800_fpu32_eabi.lib : boot28.asm.obj (.text)
-                  00095092    00000016     fsi.obj (.text:FSI_clearTxModuleReset)
-                  000950a8    00000016     ctl_main.obj (.text:ctl_init_psu_protection)
-                  000950be    00000015     can.obj (.text:CAN_initModule)
-                  000950d3    00000015     sysctl.obj (.text:SysCtl_configureType)
-                  000950e8    00000015     rts2800_fpu32_eabi.lib : strncpy.c.obj (.text)
-                  000950fd    00000014     fsi.obj (.text:FSI_resetRxModule)
-                  00095111    00000014     board.obj (.text:IRIS_GPIO1_init)
-                  00095125    00000014     board.obj (.text:IRIS_GPIO2_init)
-                  00095139    00000014     board.obj (.text:IRIS_GPIO3_init)
-                  0009514d    00000014     board.obj (.text:IRIS_GPIO4_init)
-                  00095161    00000014     board.obj (.text:IRIS_GPIO5_init)
-                  00095175    00000014     board.obj (.text:IRIS_GPIO6_init)
-                  00095189    00000014     board.obj (.text:IRIS_GPIO_SPI_RST_init)
-                  0009519d    00000014     board.obj (.text:IRIS_LED1_init)
-                  000951b1    00000014     board.obj (.text:IRIS_LED2_init)
-                  000951c5    00000014     gmp_datalink.obj (.text:gmp_dev_dl_tx_request_cmd)
-                  000951d9    00000014     psu_persistence.obj (.text:psu_settings_equal)
-                  000951ed    00000014     iris_peripheral.obj (.text:psu_ui_pad_oled_line)
-                  00095201    00000013     fsi.obj (.text:FSI_resetTxModule)
-                  00095214    00000013     board.obj (.text:GPIO_init)
-                  00095227    00000013     i2c.obj (.text:I2C_enableInterrupt)
-                  0009523a    00000013     iris_peripheral.obj (.text:psu_ui_fault_name)
-                  0009524d    00000012     fsi.obj (.text:FSI_performRxInitialization)
-                  0009525f    00000012     psu_persistence.obj (.text:psu_flash_prepare)
-                  00095271    00000012     iris_peripheral.obj (.text:psu_keypad_reset)
-                  00095283    00000012     iris_peripheral.obj (.text:psu_ui_write_led_segments)
-                  00095295    00000011     i2c.obj (.text:I2C_clearInterruptStatus)
-                  000952a6    00000011     xplt.peripheral.obj (.text:INT_IRIS_UART_RS232_RX_ISR)
-                  000952b7    00000011     sysconfig_adapter.obj (.text:gmp_base_entry)
-                  000952c8    00000011     iris_peripheral.obj (.text:psu_keypad_start)
-                  000952d9    00000011     iris_peripheral.obj (.text:tsk_LED_flush)
-                  000952ea    00000010     gmp_datalink.obj (.text:gmp_dev_dl_init)
-                  000952fa    00000010     rts2800_fpu32_eabi.lib : memccpy.c.obj (.text)
-                  0009530a    0000000f     FAPI_F28003x_EABI_v1.58.10.lib : Verify.obj (.text:Fapi_doVerifyBy16bits)
-                  00095319    0000000f     gmp_datalink.obj (.text:gmp_dev_dl_reply_ack_null)
-                  00095328    0000000f     gmp_datalink.obj (.text:gmp_dev_dl_tx_request)
-                  00095337    0000000e     FAPI_F28003x_EABI_v1.58.10.lib : FlashStateMachine.obj (.text:Fapi_checkFsmForReady)
-                  00095345    0000000e     iris_peripheral.obj (.text:psu_keypad_backspace)
-                  00095353    0000000e     iris_peripheral.obj (.text:psu_ui_operating_mode_name)
-                  00095361    0000000e     xplt.peripheral.obj (.text:psu_write_output_switch)
-                  0009536f    0000000e     rts2800_fpu32_eabi.lib : fd_sub28.asm.obj (.text)
-                  0009537d    0000000d     f28003x_defaultisr.obj (.text:EMPTY_ISR)
-                  0009538a    0000000d     FAPI_F28003x_EABI_v1.58.10.lib : Utilities.obj (.text:Fapi_calculateOtpChecksum)
-                  00095397    0000000d     ctl_component_interface.obj (.text:ctl_init_adc_channel)
-                  000953a4    0000000d     rts2800_fpu32_eabi.lib : assert.c.obj (.text)
-                  000953b1    0000000d                            : memchr.c.obj (.text)
-                  000953be    0000000c     interrupt.obj (.text:Interrupt_defaultHandler)
-                  000953ca    0000000c     gmp_pil_core.obj (.text:gmp_pil_sim_init)
-                  000953d6    0000000c     rts2800_fpu32_eabi.lib : args_main.c.obj (.text)
-                  000953e2    0000000c                            : strchr.c.obj (.text)
-                  000953ee    0000000b     board.obj (.text:ASYSCTL_init)
-                  000953f9    0000000b     FAPI_F28003x_EABI_v1.58.10.lib : Utilities.obj (.text:Fapi_scaleCycleValues)
-                  00095404    0000000b     psu_persistence.obj (.text:psu_capture_settings)
-                  0009540f    0000000b     rts2800_fpu32_eabi.lib : u_div28.asm.obj (.text)
-                  0009541a    0000000b                            : wcslen.c.obj (.text)
-                  00095425    0000000a     f28003x_defaultisr.obj (.text:ADCA1_ISR)
-                  0009542f    0000000a     f28003x_defaultisr.obj (.text:ADCA2_ISR)
-                  00095439    0000000a     f28003x_defaultisr.obj (.text:ADCA3_ISR)
-                  00095443    0000000a     f28003x_defaultisr.obj (.text:ADCA4_ISR)
-                  0009544d    0000000a     f28003x_defaultisr.obj (.text:ADCA_EVT_ISR)
-                  00095457    0000000a     f28003x_defaultisr.obj (.text:ADCB1_ISR)
-                  00095461    0000000a     f28003x_defaultisr.obj (.text:ADCB2_ISR)
-                  0009546b    0000000a     f28003x_defaultisr.obj (.text:ADCB3_ISR)
-                  00095475    0000000a     f28003x_defaultisr.obj (.text:ADCB4_ISR)
-                  0009547f    0000000a     f28003x_defaultisr.obj (.text:ADCB_EVT_ISR)
-                  00095489    0000000a     f28003x_defaultisr.obj (.text:ADCC1_ISR)
-                  00095493    0000000a     f28003x_defaultisr.obj (.text:ADCC2_ISR)
-                  0009549d    0000000a     f28003x_defaultisr.obj (.text:ADCC3_ISR)
-                  000954a7    0000000a     f28003x_defaultisr.obj (.text:ADCC4_ISR)
-                  000954b1    0000000a     f28003x_defaultisr.obj (.text:ADCC_EVT_ISR)
-                  000954bb    0000000a     f28003x_defaultisr.obj (.text:AES_SINTREQUEST_ISR)
-                  000954c5    0000000a     f28003x_defaultisr.obj (.text:BGCRC_CLA1_ISR)
-                  000954cf    0000000a     f28003x_defaultisr.obj (.text:BGCRC_ISR)
-                  000954d9    0000000a     f28003x_defaultisr.obj (.text:CANA0_ISR)
-                  000954e3    0000000a     f28003x_defaultisr.obj (.text:CANA1_ISR)
-                  000954ed    0000000a     f28003x_defaultisr.obj (.text:CLA1_1_ISR)
-                  000954f7    0000000a     f28003x_defaultisr.obj (.text:CLA1_2_ISR)
-                  00095501    0000000a     f28003x_defaultisr.obj (.text:CLA1_3_ISR)
-                  0009550b    0000000a     f28003x_defaultisr.obj (.text:CLA1_4_ISR)
-                  00095515    0000000a     f28003x_defaultisr.obj (.text:CLA1_5_ISR)
-                  0009551f    0000000a     f28003x_defaultisr.obj (.text:CLA1_6_ISR)
-                  00095529    0000000a     f28003x_defaultisr.obj (.text:CLA1_7_ISR)
-                  00095533    0000000a     f28003x_defaultisr.obj (.text:CLA1_8_ISR)
-                  0009553d    0000000a     f28003x_defaultisr.obj (.text:CLA_OVERFLOW_ISR)
-                  00095547    0000000a     f28003x_defaultisr.obj (.text:CLA_UNDERFLOW_ISR)
-                  00095551    0000000a     f28003x_defaultisr.obj (.text:CLB1_ISR)
-                  0009555b    0000000a     f28003x_defaultisr.obj (.text:CLB2_ISR)
-                  00095565    0000000a     f28003x_defaultisr.obj (.text:CLB3_ISR)
-                  0009556f    0000000a     f28003x_defaultisr.obj (.text:CLB4_ISR)
-                  00095579    0000000a     f28003x_defaultisr.obj (.text:DATALOG_ISR)
-                  00095583    0000000a     f28003x_defaultisr.obj (.text:DCC0_ISR)
-                  0009558d    0000000a     f28003x_defaultisr.obj (.text:DCC1_ISR)
-                  00095597    0000000a     f28003x_defaultisr.obj (.text:DMA_CH1_ISR)
-                  000955a1    0000000a     f28003x_defaultisr.obj (.text:DMA_CH2_ISR)
-                  000955ab    0000000a     f28003x_defaultisr.obj (.text:DMA_CH3_ISR)
-                  000955b5    0000000a     f28003x_defaultisr.obj (.text:DMA_CH4_ISR)
-                  000955bf    0000000a     f28003x_defaultisr.obj (.text:DMA_CH5_ISR)
-                  000955c9    0000000a     f28003x_defaultisr.obj (.text:DMA_CH6_ISR)
-                  000955d3    0000000a     f28003x_defaultisr.obj (.text:ECAP1_ISR)
-                  000955dd    0000000a     f28003x_defaultisr.obj (.text:ECAP2_ISR)
-                  000955e7    0000000a     f28003x_defaultisr.obj (.text:ECAP3_2_ISR)
-                  000955f1    0000000a     f28003x_defaultisr.obj (.text:ECAP3_ISR)
-                  000955fb    0000000a     f28003x_defaultisr.obj (.text:EMU_ISR)
-                  00095605    0000000a     f28003x_defaultisr.obj (.text:EPWM1_ISR)
-                  0009560f    0000000a     f28003x_defaultisr.obj (.text:EPWM1_TZ_ISR)
-                  00095619    0000000a     f28003x_defaultisr.obj (.text:EPWM2_ISR)
-                  00095623    0000000a     f28003x_defaultisr.obj (.text:EPWM2_TZ_ISR)
-                  0009562d    0000000a     f28003x_defaultisr.obj (.text:EPWM3_ISR)
-                  00095637    0000000a     f28003x_defaultisr.obj (.text:EPWM3_TZ_ISR)
-                  00095641    0000000a     f28003x_defaultisr.obj (.text:EPWM4_ISR)
-                  0009564b    0000000a     f28003x_defaultisr.obj (.text:EPWM4_TZ_ISR)
-                  00095655    0000000a     f28003x_defaultisr.obj (.text:EPWM5_ISR)
-                  0009565f    0000000a     f28003x_defaultisr.obj (.text:EPWM5_TZ_ISR)
-                  00095669    0000000a     f28003x_defaultisr.obj (.text:EPWM6_ISR)
-                  00095673    0000000a     f28003x_defaultisr.obj (.text:EPWM6_TZ_ISR)
-                  0009567d    0000000a     f28003x_defaultisr.obj (.text:EPWM7_ISR)
-                  00095687    0000000a     f28003x_defaultisr.obj (.text:EPWM7_TZ_ISR)
-                  00095691    0000000a     f28003x_defaultisr.obj (.text:EPWM8_ISR)
-                  0009569b    0000000a     f28003x_defaultisr.obj (.text:EPWM8_TZ_ISR)
-                  000956a5    0000000a     f28003x_defaultisr.obj (.text:EQEP1_ISR)
-                  000956af    0000000a     f28003x_defaultisr.obj (.text:EQEP2_ISR)
-                  000956b9    0000000a     f28003x_defaultisr.obj (.text:FLASH_CORR_ERR_ISR)
-                  000956c3    0000000a     f28003x_defaultisr.obj (.text:FMC_ISR)
-                  000956cd    0000000a     f28003x_defaultisr.obj (.text:FPU_OVERFLOW_ISR)
-                  000956d7    0000000a     f28003x_defaultisr.obj (.text:FPU_UNDERFLOW_ISR)
-                  000956e1    0000000a     f28003x_defaultisr.obj (.text:FSIRXA1_ISR)
-                  000956eb    0000000a     f28003x_defaultisr.obj (.text:FSIRXA2_ISR)
-                  000956f5    0000000a     f28003x_defaultisr.obj (.text:FSITXA1_ISR)
-                  000956ff    0000000a     f28003x_defaultisr.obj (.text:FSITXA2_ISR)
-                  00095709    0000000a     f28003x_defaultisr.obj (.text:HICA_ISR)
-                  00095713    0000000a     f28003x_defaultisr.obj (.text:I2CA_FIFO_ISR)
-                  0009571d    0000000a     f28003x_defaultisr.obj (.text:I2CA_ISR)
-                  00095727    0000000a     f28003x_defaultisr.obj (.text:I2CB_FIFO_ISR)
-                  00095731    0000000a     f28003x_defaultisr.obj (.text:I2CB_ISR)
-                  0009573b    0000000a     f28003x_defaultisr.obj (.text:ILLEGAL_ISR)
-                  00095745    0000000a     interrupt.obj (.text:Interrupt_illegalOperationHandler)
-                  0009574f    0000000a     interrupt.obj (.text:Interrupt_nmiHandler)
-                  00095759    0000000a     f28003x_defaultisr.obj (.text:LINA_0_ISR)
-                  00095763    0000000a     f28003x_defaultisr.obj (.text:LINA_1_ISR)
-                  0009576d    0000000a     f28003x_defaultisr.obj (.text:LINB_0_ISR)
-                  00095777    0000000a     f28003x_defaultisr.obj (.text:LINB_1_ISR)
-                  00095781    0000000a     f28003x_defaultisr.obj (.text:MCANA_0_ISR)
-                  0009578b    0000000a     f28003x_defaultisr.obj (.text:MCANA_1_ISR)
-                  00095795    0000000a     f28003x_defaultisr.obj (.text:MCANA_ECC_ISR)
-                  0009579f    0000000a     f28003x_defaultisr.obj (.text:MCANA_WAKE_ISR)
-                  000957a9    0000000a     f28003x_defaultisr.obj (.text:MPOST_ISR)
-                  000957b3    0000000a     f28003x_defaultisr.obj (.text:NMI_ISR)
-                  000957bd    0000000a     f28003x_defaultisr.obj (.text:NOTUSED_ISR)
-                  000957c7    0000000a     f28003x_defaultisr.obj (.text:PIE_RESERVED_ISR)
-                  000957d1    0000000a     f28003x_defaultisr.obj (.text:PMBUSA_ISR)
-                  000957db    0000000a     f28003x_defaultisr.obj (.text:RAM_ACC_VIOL_ISR)
-                  000957e5    0000000a     f28003x_defaultisr.obj (.text:RAM_CORR_ERR_ISR)
-                  000957ef    0000000a     f28003x_defaultisr.obj (.text:RTOS_ISR)
-                  000957f9    0000000a     f28003x_defaultisr.obj (.text:SCIA_RX_ISR)
-                  00095803    0000000a     f28003x_defaultisr.obj (.text:SCIA_TX_ISR)
-                  0009580d    0000000a     f28003x_defaultisr.obj (.text:SCIB_RX_ISR)
-                  00095817    0000000a     f28003x_defaultisr.obj (.text:SCIB_TX_ISR)
-                  00095821    0000000a     f28003x_defaultisr.obj (.text:SDFM1DR1_ISR)
-                  0009582b    0000000a     f28003x_defaultisr.obj (.text:SDFM1DR2_ISR)
-                  00095835    0000000a     f28003x_defaultisr.obj (.text:SDFM1DR3_ISR)
-                  0009583f    0000000a     f28003x_defaultisr.obj (.text:SDFM1DR4_ISR)
-                  00095849    0000000a     f28003x_defaultisr.obj (.text:SDFM1_ISR)
-                  00095853    0000000a     f28003x_defaultisr.obj (.text:SDFM2DR1_ISR)
-                  0009585d    0000000a     f28003x_defaultisr.obj (.text:SDFM2DR2_ISR)
-                  00095867    0000000a     f28003x_defaultisr.obj (.text:SDFM2DR3_ISR)
-                  00095871    0000000a     f28003x_defaultisr.obj (.text:SDFM2DR4_ISR)
-                  0009587b    0000000a     f28003x_defaultisr.obj (.text:SDFM2_ISR)
-                  00095885    0000000a     f28003x_defaultisr.obj (.text:SPIA_RX_ISR)
-                  0009588f    0000000a     f28003x_defaultisr.obj (.text:SPIA_TX_ISR)
-                  00095899    0000000a     f28003x_defaultisr.obj (.text:SPIB_RX_ISR)
-                  000958a3    0000000a     f28003x_defaultisr.obj (.text:SPIB_TX_ISR)
-                  000958ad    0000000a     f28003x_defaultisr.obj (.text:SYS_ERR_ISR)
-                  000958b7    0000000a     f28003x_defaultisr.obj (.text:TIMER0_ISR)
-                  000958c1    0000000a     f28003x_defaultisr.obj (.text:TIMER1_ISR)
-                  000958cb    0000000a     f28003x_defaultisr.obj (.text:TIMER2_ISR)
-                  000958d5    0000000a     f28003x_defaultisr.obj (.text:USER10_ISR)
-                  000958df    0000000a     f28003x_defaultisr.obj (.text:USER11_ISR)
-                  000958e9    0000000a     f28003x_defaultisr.obj (.text:USER12_ISR)
-                  000958f3    0000000a     f28003x_defaultisr.obj (.text:USER1_ISR)
-                  000958fd    0000000a     f28003x_defaultisr.obj (.text:USER2_ISR)
-                  00095907    0000000a     f28003x_defaultisr.obj (.text:USER3_ISR)
-                  00095911    0000000a     f28003x_defaultisr.obj (.text:USER4_ISR)
-                  0009591b    0000000a     f28003x_defaultisr.obj (.text:USER5_ISR)
-                  00095925    0000000a     f28003x_defaultisr.obj (.text:USER6_ISR)
-                  0009592f    0000000a     f28003x_defaultisr.obj (.text:USER7_ISR)
-                  00095939    0000000a     f28003x_defaultisr.obj (.text:USER8_ISR)
-                  00095943    0000000a     f28003x_defaultisr.obj (.text:USER9_ISR)
-                  0009594d    0000000a     f28003x_defaultisr.obj (.text:WAKE_ISR)
-                  00095957    0000000a     f28003x_defaultisr.obj (.text:XINT1_ISR)
-                  00095961    0000000a     f28003x_defaultisr.obj (.text:XINT2_ISR)
-                  0009596b    0000000a     f28003x_defaultisr.obj (.text:XINT3_ISR)
-                  00095975    0000000a     f28003x_defaultisr.obj (.text:XINT4_ISR)
-                  0009597f    0000000a     f28003x_defaultisr.obj (.text:XINT5_ISR)
-                  00095989    0000000a     psu_persistence.obj (.text:psu_flash_other_sector)
-                  00095993    0000000a     rts2800_fpu32_eabi.lib : strcmp.c.obj (.text)
-                  0009599d    00000009                            : _lock.c.obj (.text)
-                  000959a6    00000009                            : fd_neg28.asm.obj (.text)
-                  000959af    00000008                            : copy_decompress_none.c.obj (.text:decompress:none)
-                  000959b7    00000008     f28003x_codestartbranch.obj (.text)
-                  000959bf    00000008     gmp_datalink.obj (.text:gmp_dev_dl_tx_ready)
-                  000959c7    00000008     rts2800_fpu32_eabi.lib : strlen.c.obj (.text)
-                  000959cf    00000007     board.obj (.text:ADC_init)
-                  000959d6    00000007     FAPI_F28003x_EABI_v1.58.10.lib : FlashStateMachine.obj (.text:Fapi_getFsmStatus)
-                  000959dd    00000007     iris_peripheral.obj (.text:alarm_led_off)
-                  000959e4    00000007     iris_peripheral.obj (.text:alarm_led_on)
-                  000959eb    00000007     iris_peripheral.obj (.text:beep_off)
-                  000959f2    00000007     iris_peripheral.obj (.text:beep_on)
-                  000959f9    00000007     iris_peripheral.obj (.text:output_led_off)
-                  00095a00    00000007     iris_peripheral.obj (.text:output_led_on)
-                  00095a07    00000007     psu_persistence.obj (.text:psu_flash_sequence_is_newer)
-                  00095a0e    00000007     rts2800_fpu32_eabi.lib : memset.c.obj (.text)
-                  00095a15    00000006     cputimer.obj (.text:CPUTimer_setEmulationMode)
-                  00095a1b    00000006     rts2800_fpu32_eabi.lib : copy_zero_init.c.obj (.text:decompress:ZI)
-                  00095a21    00000006     gmp_mem_presp.obj (.text:gmp_mem_persp_init)
-                  00095a27    00000005     board.obj (.text:DAC_init)
-                  00095a2c    00000005     board.obj (.text:EQEP_init)
-                  00095a31    00000005     board.obj (.text:SCI_init)
-                  00095a36    00000005     board.obj (.text:SPI_init)
-                  00095a3b    00000005     gmp_datalink.obj (.text:gmp_dev_dl_msg_handled)
-                  00095a40    00000005     user_main.obj (.text:mainloop)
-                  00095a45    00000005     rts2800_fpu32_eabi.lib : strcpy.c.obj (.text)
-                  00095a4a    00000004     ctl_divider.obj (.text:ctl_init_divider)
-                  00095a4e    00000004     sysconfig_adapter.obj (.text:gmp_base_get_system_tick)
-                  00095a52    00000004     sysconfig_adapter.obj (.text:gmp_csp_post_process)
-                  00095a56    00000004     gmp_datalink.obj (.text:gmp_dev_dl_tx_state_done)
-                  00095a5a    00000004     peripheral_driver.obj (.text:reset_bus_status)
-                  00095a5e    00000002     rts2800_fpu32_eabi.lib : pre_init.c.obj (.text)
-                  00095a60    00000001     ctl_main.obj (.text:ctl_mainloop)
-                  00095a61    00000001     ctl_main.obj (.text:gmp_pil_sim_step)
-                  00095a62    00000001     rts2800_fpu32_eabi.lib : startup.c.obj (.text)
+                  000905f8    00000376     xplt.peripheral.obj (.text:MainISR)
+                  0009096e    00000349     board.obj (.text:PinMux_init)
+                  00090cb7    00000298     rts2800_fpu32_eabi.lib : memory.c.obj (.text)
+                  00090f4f    00000284     device.obj (.text:Device_enableAllPeripherals)
+                  000911d3    00000268     FAPI_F28003x_EABI_v1.58.10.lib : Program.obj (.text:Fapi_issueProgrammingCommand)
+                  0009143b    000001ca     iris_peripheral.obj (.text:tsk_psu_display)
+                  00091605    000001c7     gmp_mem_presp.obj (.text:gmp_mem_persp_rx_cb)
+                  000917cc    000001aa     gmp_datalink.obj (.text:gmp_dev_dl_loop_cb)
+                  00091976    0000015c     board.obj (.text:IRIS_ADCB_init)
+                  00091ad2    0000013b     sysctl.obj (.text:SysCtl_setClock)
+                  00091c0d    00000137     board.obj (.text:IRIS_ADCA_init)
+                  00091d44    00000131     gmp_tunable.obj (.text:gmp_param_tunable_rx_cb)
+                  00091e75    00000121     rts2800_fpu32_eabi.lib : fopen.c.obj (.text)
+                  00091f96    0000011f     board.obj (.text:IRIS_ADCC_init)
+                  000920b5    0000011c     iris_peripheral.obj (.text:psu_ui_update_normal_led)
+                  000921d1    00000118     sysctl.obj (.text:SysCtl_isPLLValid)
+                  000922e9    000000f5     gmp_pil_core.obj (.text:sim_deserialize_inputs)
+                  000923de    000000e3     board.obj (.text:IRIS_CAN_init)
+                  000924c1    000000e3     gmp_pil_core.obj (.text:gmp_pil_sim_rx_cb)
+                  000925a4    000000cd     peripheral_driver.obj (.text:gmp_hal_iic_read_mem)
+                  00092671    000000bb     peripheral_driver.obj (.text:gmp_hal_iic_write_mem)
+                  0009272c    000000b5     can.obj (.text:CAN_setupMessageObject)
+                  000927e1    000000ad     gmp_std_port.obj (.text:gmp_base_show_label)
+                  0009288e    000000aa     iris_peripheral.obj (.text:tsk_key_flush)
+                  00092938    000000a9     rts2800_fpu32_eabi.lib : s_scalbn.c.obj (.text)
+                  000929e1    000000a8                            : fputs.c.obj (.text)
+                  00092a89    0000009c                            : fd_add28.asm.obj (.text)
+                  00092b25    00000001     ctl_main.obj (.text:gmp_pil_sim_step)
+                  00092b26    00000095     rts2800_fpu32_eabi.lib : trgmsg.c.obj (.text)
+                  00092bbb    00000091     gmp_datalink.obj (.text:gmp_dev_dl_tx_warp)
+                  00092c4c    0000008d     oled_driver.obj (.text:oled_init)
+                  00092cd9    0000008b     psu_persistence.obj (.text:psu_persistence_init)
+                  00092d64    0000008b     rts2800_fpu32_eabi.lib : fd_div28.asm.obj (.text)
+                  00092def    00000083                            : fd_mpy28.asm.obj (.text)
+                  00092e72    00000082     board.obj (.text:IRIS_EQEP1_init)
+                  00092ef4    00000082     board.obj (.text:IRIS_EQEP2_init)
+                  00092f76    00000082     board.obj (.text:IRIS_UART_USB_init)
+                  00092ff8    00000080     FAPI_F28003x_EABI_v1.58.10.lib : Async.obj (.text:Fapi_issueAsyncCommandWithAddress)
+                  00093078    0000007e     iris_peripheral.obj (.text:psu_ui_update_keypad_led)
+                  000930f6    0000007d     ht16k33.obj (.text:ht16k33_read_keys)
+                  00093173    0000007c     rts2800_fpu32_eabi.lib : setvbuf.c.obj (.text)
+                  000931ef    0000007b     FAPI_F28003x_EABI_v1.58.10.lib : Read.obj (.text:Fapi_checkRegionForValueBy16bits)
+                  0009326a    0000007b     board.obj (.text:IRIS_UART_RS232_init)
+                  000932e5    0000007b     peripheral_driver.obj (.text:gmp_hal_iic_write_reg)
+                  00093360    00000079     iris_peripheral.obj (.text:tsk_psu_encoder)
+                  000933d9    00000073     rts2800_fpu32_eabi.lib : fflush.c.obj (.text)
+                  0009344c    00000072     peripheral_driver.obj (.text:gmp_hal_uart_write)
+                  000934be    00000071     rts2800_fpu32_eabi.lib : open.c.obj (.text)
+                  0009352f    0000006a     ht16k33.obj (.text:ht16k33_init)
+                  00093599    00000066     peripheral_driver.obj (.text:gmp_hal_iic_write_cmd)
+                  000935ff    00000066     psu_persistence.obj (.text:psu_flash_save)
+                  00093665    00000065     rts2800_fpu32_eabi.lib : _io_perm.c.obj (.text)
+                  000936ca    00000063     psu_persistence.obj (.text:tsk_psu_persistence)
+                  0009372d    00000061     FAPI_F28003x_EABI_v1.58.10.lib : Utilities.obj (.text:Fapi_configureFMAC)
+                  0009378e    00000061     xplt.peripheral.obj (.text:INT_IRIS_CAN_0_ISR)
+                  000937ef    00000061     rts2800_fpu32_eabi.lib : hostlseek.c.obj (.text)
+                  00093850    0000005f     user_main.obj (.text:tsk_startup)
+                  000938af    0000005e     gmp_pil_core.obj (.text:sim_serialize_outputs)
+                  0009390d    0000005d     rts2800_fpu32_eabi.lib : fclose.c.obj (.text)
+                  0009396a    0000005c     device.obj (.text:Device_init)
+                  000939c6    0000005c     board.obj (.text:IRIS_IIC_init)
+                  00093a22    0000005b     xplt.peripheral.obj (.text:setup_peripheral)
+                  00093a7d    0000005a     rts2800_fpu32_eabi.lib : s_frexp.c.obj (.text)
+                  00093ad7    00000059     gmp_process_mgr.obj (.text:gmp_scheduler_dispatch)
+                  00093b30    00000056     FAPI_F28003x_EABI_v1.58.10.lib : FlashStateMachine.obj (.text:Fapi_issueFsmCommand)
+                  00093b86    00000051     rts2800_fpu32_eabi.lib : getdevice.c.obj (.text)
+                  00093bd7    0000004f     iris_peripheral.obj (.text:psu_ui_handle_output_key)
+                  00093c26    0000004e     gmp_datalink.obj (.text:gmp_dev_dl_tx_append_u32)
+                  00093c74    0000004c     interrupt.obj (.text:Interrupt_disable)
+                  00093cc0    0000004c     oled_driver.obj (.text:oled_clear)
+                  00093d0c    0000004c     iris_peripheral.obj (.text:psu_keypad_parse_voltage)
+                  00093d58    00000048     board.obj (.text:IRIS_SPI_OUT_init)
+                  00093da0    00000047     iris_peripheral.obj (.text:psu_ui_adjust_selected_setting)
+                  00093de7    00000045     can.obj (.text:CAN_readMessage)
+                  00093e2c    00000045     sysctl.obj (.text:SysCtl_selectXTAL)
+                  00093e71    00000045     iris_peripheral.obj (.text:psu_keypad_commit)
+                  00093eb6    00000045     iris_peripheral.obj (.text:psu_keypad_get_digit)
+                  00093efb    00000044     gpio.obj (.text:GPIO_setAnalogMode)
+                  00093f3f    00000044     xplt.peripheral.obj (.text:INT_IRIS_UART_USB_RX_ISR)
+                  00093f83    00000044     sysctl.obj (.text:SysCtl_pollX1Counter)
+                  00093fc7    00000043     board.obj (.text:IRIS_SPI_FPGA_BRIDGE_init)
+                  0009400a    00000043     xplt.peripheral.obj (.text:initI2C)
+                  0009404d    00000040     oled_driver.obj (.text:oled_show_char)
+                  0009408d    00000040     user_main.obj (.text:tsk_dl_debug_device)
+                  000940cd    0000003f     gpio.obj (.text:GPIO_setPadConfig)
+                  0009410c    0000003e     i2c.obj (.text:I2C_initController)
+                  0009414a    0000003e     interrupt.obj (.text:Interrupt_initModule)
+                  00094188    0000003e     rts2800_fpu32_eabi.lib : hostrename.c.obj (.text)
+                  000941c6    0000003d     board.obj (.text:INTERRUPT_init)
+                  00094203    0000003d     iris_peripheral.obj (.text:psu_ui_handle_mode_key)
+                  00094240    0000003d     rts2800_fpu32_eabi.lib : fseek.c.obj (.text)
+                  0009427d    0000003c     user_main.obj (.text:init)
+                  000942b9    0000003b     FAPI_F28003x_EABI_v1.58.10.lib : Utilities.obj (.text:Fapi_isAddressValid)
+                  000942f4    0000003a     gmp_datalink.obj (.text:gmp_dev_dl_default_rx_handler)
+                  0009432e    0000003a     rts2800_fpu32_eabi.lib : hostopen.c.obj (.text)
+                  00094368    00000039                            : hostwrite.c.obj (.text)
+                  000943a1    00000038     gmp_datalink.obj (.text:gmp_dev_dl_push_str)
+                  000943d9    00000038     rts2800_fpu32_eabi.lib : hostread.c.obj (.text)
+                  00094411    00000037     FAPI_F28003x_EABI_v1.58.10.lib : FlashStateMachine.obj (.text:Fapi_setActiveFlashBank)
+                  00094448    00000037     ctl_main.obj (.text:ctl_init)
+                  0009447f    00000035     eqep.obj (.text:EQEP_setInputPolarity)
+                  000944b4    00000035     interrupt.obj (.text:Interrupt_enable)
+                  000944e9    00000035     iris_peripheral.obj (.text:psu_keypad_append_decimal)
+                  0009451e    00000034     FAPI_F28003x_EABI_v1.58.10.lib : Read.obj (.text:Fapi_loopRegionForValueBy16bits)
+                  00094552    00000033     sysconfig_adapter.obj (.text:gmp_csp_startup)
+                  00094585    00000033     rts2800_fpu32_eabi.lib : close.c.obj (.text)
+                  000945b8    00000033     iris_peripheral.obj (.text:tsk_psu_alarm)
+                  000945eb    00000032     FAPI_F28003x_EABI_v1.58.10.lib : Init.obj (.text:Fapi_initializeAPI)
+                  0009461d    00000032     rts2800_fpu32_eabi.lib : sprintf.c.obj (.text)
+                  0009464f    00000031     can.obj (.text:CAN_setBitTiming)
+                  00094680    00000031     FAPI_F28003x_EABI_v1.58.10.lib : FlashStateMachine.obj (.text:Fapi_setupBankSectorEnable)
+                  000946b1    00000031     sysctl.obj (.text:SysCtl_selectOscSource)
+                  000946e2    00000031     rts2800_fpu32_eabi.lib : atoi.c.obj (.text)
+                  00094713    00000030     board.obj (.text:EPWM_setActionQualifierAction)
+                  00094743    00000030     rts2800_fpu32_eabi.lib : copy_decompress_lzss.c.obj (.text:decompress:lzss)
+                  00094773    00000030                            : _ltoa.c.obj (.text)
+                  000947a3    00000030                            : vsprintf.c.obj (.text)
+                  000947d3    0000002f     gpio.obj (.text:GPIO_setPinConfig)
+                  00094802    0000002f     gmp_process_mgr.obj (.text:gmp_scheduler_add_task)
+                  00094831    0000002e     gmp_datalink.obj (.text:gmp_dev_dl_tx_append_u16)
+                  0009485f    0000002e     peripheral_driver.obj (.text:gmp_hal_gpio_write)
+                  0009488d    0000002d     board.obj (.text:myBoardFSI0_FSITX_init)
+                  000948ba    0000002d     oled_driver.obj (.text:oled_set_position)
+                  000948e7    0000002c     fsi.obj (.text:FSI_performTxInitialization)
+                  00094913    0000002c     FAPI_F28003x_EABI_v1.58.10.lib : Utilities.obj (.text:Fapi_calculateFletcherChecksum)
+                  0009493f    0000002c                                    : Utilities.obj (.text:Fapi_divideUnsignedLong)
+                  0009496b    0000002b     rts2800_fpu32_eabi.lib : autoinit.c.obj (.text:__TI_auto_init_nobinit_nopinit)
+                  00094996    0000002a                            : fd_cmp28.asm.obj (.text)
+                  000949c0    0000002a                            : l_div28.asm.obj (.text)
+                  000949ea    00000029                            : exit.c.obj (.text)
+                  00094a13    00000029                            : hostclose.c.obj (.text)
+                  00094a3c    00000028     sysconfig_adapter.obj (.text:gmp_base_print_c28xsyscfg)
+                  00094a64    00000027     gmp_datalink.obj (.text:gmp_dev_dl_tx_append_payload)
+                  00094a8b    00000027     peripheral_driver.obj (.text:wait_bus_idle)
+                  00094ab2    00000026     gpio.obj (.text:GPIO_setControllerCore)
+                  00094ad8    00000026     gpio.obj (.text:GPIO_setQualificationMode)
+                  00094afe    00000025     board.obj (.text:Board_init)
+                  00094b23    00000025     gmp_mem_presp.obj (.text:check_sandbox_validity)
+                  00094b48    00000024     gmp_process_mgr.obj (.text:gmp_scheduler_init)
+                  00094b6c    00000024     iris_peripheral.obj (.text:psu_keypad_parse_current)
+                  00094b90    00000024     rts2800_fpu32_eabi.lib : hostunlink.c.obj (.text)
+                  00094bb4    00000024                            : s_copysign.c.obj (.text)
+                  00094bd8    00000023     sci.obj (.text:SCI_setConfig)
+                  00094bfb    00000023     spi.obj (.text:SPI_setConfig)
+                  00094c1e    00000023     board.obj (.text:myCPUTIMER0_init)
+                  00094c41    00000022     sci.obj (.text:SCI_readCharArray)
+                  00094c63    00000022     ht16k33.obj (.text:ht16k33_update_display)
+                  00094c85    00000022     oled_driver.obj (.text:oled_show_str)
+                  00094ca7    00000021     board.obj (.text:IRIS_DACA_init)
+                  00094cc8    00000021     board.obj (.text:IRIS_DACB_init)
+                  00094ce9    00000021     sysctl.obj (.text:SysCtl_selectXTALSingleEnded)
+                  00094d0a    00000021     crc16.obj (.text:gmp_base_calculate_crc16)
+                  00094d2b    00000021     iris_peripheral.obj (.text:psu_ui_scale_to_uint16)
+                  00094d4c    00000021     rts2800_fpu32_eabi.lib : fd_toi28.asm.obj (.text)
+                  00094d6d    00000020     FAPI_F28003x_EABI_v1.58.10.lib : Async.obj (.text:Fapi_issueAsyncCommand)
+                  00094d8d    00000020     psu_persistence.obj (.text:psu_flash_record_valid)
+                  00094dad    00000020     psu_persistence.obj (.text:psu_flash_scan_sector)
+                  00094dcd    0000001f     gpio.obj (.text:GPIO_setDirectionMode)
+                  00094dec    0000001f     gmp_datalink.obj (.text:gmp_dev_dl_reply_nack)
+                  00094e0b    0000001f     gmp_datalink.obj (.text:gmp_dev_dl_tx_append_u8)
+                  00094e2a    0000001f     rts2800_fpu32_eabi.lib : fd_tol28.asm.obj (.text)
+                  00094e49    0000001e     adc.obj (.text:ADC_setOffsetTrimAll)
+                  00094e67    0000001e     sci.obj (.text:SCI_clearInterruptStatus)
+                  00094e85    0000001e     rts2800_fpu32_eabi.lib : ll_cmp28.asm.obj (.text)
+                  00094ea3    0000001d     FAPI_F28003x_EABI_v1.58.10.lib : Read.obj (.text:Fapi_flushPipeline)
+                  00094ec0    0000001d     board.obj (.text:SYNC_init)
+                  00094edd    0000001d     xplt.peripheral.obj (.text:flush_dl_tx_buffer)
+                  00094efa    0000001d     iris_peripheral.obj (.text:psu_keypad_append_digit)
+                  00094f17    0000001d     rts2800_fpu32_eabi.lib : i_tofd28.asm.obj (.text)
+                  00094f34    0000001d                            : memcpy.c.obj (.text)
+                  00094f51    0000001c     FAPI_F28003x_EABI_v1.58.10.lib : FlashStateMachine.obj (.text:Fapi_setupSectorsForWrite)
+                  00094f6d    0000001c     interrupt.obj (.text:Interrupt_initVectorTable)
+                  00094f89    0000001c     iris_peripheral.obj (.text:psu_ui_toggle_step)
+                  00094fa5    0000001c     rts2800_fpu32_eabi.lib : l_tofd28.asm.obj (.text)
+                  00094fc1    0000001b     can.obj (.text:CAN_clearInterruptStatus)
+                  00094fdc    0000001b     device.obj (.text:Device_initGPIO)
+                  00094ff7    0000001b     xplt.peripheral.obj (.text:flush_dl_rx_buffer)
+                  00095012    0000001a     FAPI_F28003x_EABI_v1.58.10.lib : Utilities.obj (.text:Fapi_WriteReadBack)
+                  0009502c    0000001a     sci.obj (.text:SCI_enableInterrupt)
+                  00095046    0000001a     ctl_main.obj (.text:ctl_init_psu_mode_detection)
+                  00095060    0000001a     psu_persistence.obj (.text:psu_flash_crc16)
+                  0009507a    00000019     adc.obj (.text:ADC_setVREF)
+                  00095093    00000019     oled_driver.obj (.text:OLED_WR_Byte)
+                  000950ac    00000019     board.obj (.text:myBoardFSI0_FSIRX_init)
+                  000950c5    00000019     rts2800_fpu32_eabi.lib : unlink.c.obj (.text)
+                  000950de    00000019                            : write.c.obj (.text)
+                  000950f7    00000018     board.obj (.text:SysCtl_setPeripheralAccessControl)
+                  0009510f    00000018     rts2800_fpu32_eabi.lib : ll_aox28.asm.obj (.text)
+                  00095127    00000018                            : lseek.c.obj (.text)
+                  0009513f    00000018     iris_peripheral.obj (.text:update_led_content_8byte)
+                  00095157    00000017     fsi.obj (.text:FSI_clearRxModuleReset)
+                  0009516e    00000017     xplt.peripheral.obj (.text:INT_IRIS_CAN_1_ISR)
+                  00095185    00000017     sysconfig_adapter.obj (.text:gmp_step_system_tick)
+                  0009519c    00000017     rts2800_fpu32_eabi.lib : boot28.asm.obj (.text)
+                  000951b3    00000016     fsi.obj (.text:FSI_clearTxModuleReset)
+                  000951c9    00000016     ctl_main.obj (.text:ctl_init_psu_protection)
+                  000951df    00000015     can.obj (.text:CAN_initModule)
+                  000951f4    00000015     sysctl.obj (.text:SysCtl_configureType)
+                  00095209    00000015     rts2800_fpu32_eabi.lib : strncpy.c.obj (.text)
+                  0009521e    00000014     fsi.obj (.text:FSI_resetRxModule)
+                  00095232    00000014     board.obj (.text:IRIS_GPIO1_init)
+                  00095246    00000014     board.obj (.text:IRIS_GPIO2_init)
+                  0009525a    00000014     board.obj (.text:IRIS_GPIO3_init)
+                  0009526e    00000014     board.obj (.text:IRIS_GPIO4_init)
+                  00095282    00000014     board.obj (.text:IRIS_GPIO5_init)
+                  00095296    00000014     board.obj (.text:IRIS_GPIO6_init)
+                  000952aa    00000014     board.obj (.text:IRIS_GPIO_SPI_RST_init)
+                  000952be    00000014     board.obj (.text:IRIS_LED1_init)
+                  000952d2    00000014     board.obj (.text:IRIS_LED2_init)
+                  000952e6    00000014     gmp_datalink.obj (.text:gmp_dev_dl_tx_request_cmd)
+                  000952fa    00000014     psu_persistence.obj (.text:psu_settings_equal)
+                  0009530e    00000014     iris_peripheral.obj (.text:psu_ui_pad_oled_line)
+                  00095322    00000013     fsi.obj (.text:FSI_resetTxModule)
+                  00095335    00000013     board.obj (.text:GPIO_init)
+                  00095348    00000013     i2c.obj (.text:I2C_enableInterrupt)
+                  0009535b    00000013     iris_peripheral.obj (.text:psu_ui_fault_name)
+                  0009536e    00000012     fsi.obj (.text:FSI_performRxInitialization)
+                  00095380    00000012     psu_persistence.obj (.text:psu_flash_prepare)
+                  00095392    00000012     iris_peripheral.obj (.text:psu_keypad_reset)
+                  000953a4    00000012     iris_peripheral.obj (.text:psu_ui_write_led_segments)
+                  000953b6    00000011     i2c.obj (.text:I2C_clearInterruptStatus)
+                  000953c7    00000011     xplt.peripheral.obj (.text:INT_IRIS_UART_RS232_RX_ISR)
+                  000953d8    00000011     sysconfig_adapter.obj (.text:gmp_base_entry)
+                  000953e9    00000011     iris_peripheral.obj (.text:psu_keypad_start)
+                  000953fa    00000011     iris_peripheral.obj (.text:tsk_LED_flush)
+                  0009540b    00000010     gmp_datalink.obj (.text:gmp_dev_dl_init)
+                  0009541b    00000010     rts2800_fpu32_eabi.lib : memccpy.c.obj (.text)
+                  0009542b    0000000f     FAPI_F28003x_EABI_v1.58.10.lib : Verify.obj (.text:Fapi_doVerifyBy16bits)
+                  0009543a    0000000f     gmp_datalink.obj (.text:gmp_dev_dl_reply_ack_null)
+                  00095449    0000000f     gmp_datalink.obj (.text:gmp_dev_dl_tx_request)
+                  00095458    0000000e     FAPI_F28003x_EABI_v1.58.10.lib : FlashStateMachine.obj (.text:Fapi_checkFsmForReady)
+                  00095466    0000000e     iris_peripheral.obj (.text:psu_keypad_backspace)
+                  00095474    0000000e     iris_peripheral.obj (.text:psu_ui_operating_mode_name)
+                  00095482    0000000e     xplt.peripheral.obj (.text:psu_write_output_switch)
+                  00095490    0000000e     rts2800_fpu32_eabi.lib : fd_sub28.asm.obj (.text)
+                  0009549e    0000000d     f28003x_defaultisr.obj (.text:EMPTY_ISR)
+                  000954ab    0000000d     FAPI_F28003x_EABI_v1.58.10.lib : Utilities.obj (.text:Fapi_calculateOtpChecksum)
+                  000954b8    0000000d     ctl_component_interface.obj (.text:ctl_init_adc_channel)
+                  000954c5    0000000d     rts2800_fpu32_eabi.lib : assert.c.obj (.text)
+                  000954d2    0000000d                            : memchr.c.obj (.text)
+                  000954df    0000000c     interrupt.obj (.text:Interrupt_defaultHandler)
+                  000954eb    0000000c     gmp_pil_core.obj (.text:gmp_pil_sim_init)
+                  000954f7    0000000c     rts2800_fpu32_eabi.lib : args_main.c.obj (.text)
+                  00095503    0000000c                            : strchr.c.obj (.text)
+                  0009550f    0000000b     board.obj (.text:ASYSCTL_init)
+                  0009551a    0000000b     FAPI_F28003x_EABI_v1.58.10.lib : Utilities.obj (.text:Fapi_scaleCycleValues)
+                  00095525    0000000b     psu_persistence.obj (.text:psu_capture_settings)
+                  00095530    0000000b     rts2800_fpu32_eabi.lib : u_div28.asm.obj (.text)
+                  0009553b    0000000b                            : wcslen.c.obj (.text)
+                  00095546    0000000a     f28003x_defaultisr.obj (.text:ADCA1_ISR)
+                  00095550    0000000a     f28003x_defaultisr.obj (.text:ADCA2_ISR)
+                  0009555a    0000000a     f28003x_defaultisr.obj (.text:ADCA3_ISR)
+                  00095564    0000000a     f28003x_defaultisr.obj (.text:ADCA4_ISR)
+                  0009556e    0000000a     f28003x_defaultisr.obj (.text:ADCA_EVT_ISR)
+                  00095578    0000000a     f28003x_defaultisr.obj (.text:ADCB1_ISR)
+                  00095582    0000000a     f28003x_defaultisr.obj (.text:ADCB2_ISR)
+                  0009558c    0000000a     f28003x_defaultisr.obj (.text:ADCB3_ISR)
+                  00095596    0000000a     f28003x_defaultisr.obj (.text:ADCB4_ISR)
+                  000955a0    0000000a     f28003x_defaultisr.obj (.text:ADCB_EVT_ISR)
+                  000955aa    0000000a     f28003x_defaultisr.obj (.text:ADCC1_ISR)
+                  000955b4    0000000a     f28003x_defaultisr.obj (.text:ADCC2_ISR)
+                  000955be    0000000a     f28003x_defaultisr.obj (.text:ADCC3_ISR)
+                  000955c8    0000000a     f28003x_defaultisr.obj (.text:ADCC4_ISR)
+                  000955d2    0000000a     f28003x_defaultisr.obj (.text:ADCC_EVT_ISR)
+                  000955dc    0000000a     f28003x_defaultisr.obj (.text:AES_SINTREQUEST_ISR)
+                  000955e6    0000000a     f28003x_defaultisr.obj (.text:BGCRC_CLA1_ISR)
+                  000955f0    0000000a     f28003x_defaultisr.obj (.text:BGCRC_ISR)
+                  000955fa    0000000a     f28003x_defaultisr.obj (.text:CANA0_ISR)
+                  00095604    0000000a     f28003x_defaultisr.obj (.text:CANA1_ISR)
+                  0009560e    0000000a     f28003x_defaultisr.obj (.text:CLA1_1_ISR)
+                  00095618    0000000a     f28003x_defaultisr.obj (.text:CLA1_2_ISR)
+                  00095622    0000000a     f28003x_defaultisr.obj (.text:CLA1_3_ISR)
+                  0009562c    0000000a     f28003x_defaultisr.obj (.text:CLA1_4_ISR)
+                  00095636    0000000a     f28003x_defaultisr.obj (.text:CLA1_5_ISR)
+                  00095640    0000000a     f28003x_defaultisr.obj (.text:CLA1_6_ISR)
+                  0009564a    0000000a     f28003x_defaultisr.obj (.text:CLA1_7_ISR)
+                  00095654    0000000a     f28003x_defaultisr.obj (.text:CLA1_8_ISR)
+                  0009565e    0000000a     f28003x_defaultisr.obj (.text:CLA_OVERFLOW_ISR)
+                  00095668    0000000a     f28003x_defaultisr.obj (.text:CLA_UNDERFLOW_ISR)
+                  00095672    0000000a     f28003x_defaultisr.obj (.text:CLB1_ISR)
+                  0009567c    0000000a     f28003x_defaultisr.obj (.text:CLB2_ISR)
+                  00095686    0000000a     f28003x_defaultisr.obj (.text:CLB3_ISR)
+                  00095690    0000000a     f28003x_defaultisr.obj (.text:CLB4_ISR)
+                  0009569a    0000000a     f28003x_defaultisr.obj (.text:DATALOG_ISR)
+                  000956a4    0000000a     f28003x_defaultisr.obj (.text:DCC0_ISR)
+                  000956ae    0000000a     f28003x_defaultisr.obj (.text:DCC1_ISR)
+                  000956b8    0000000a     f28003x_defaultisr.obj (.text:DMA_CH1_ISR)
+                  000956c2    0000000a     f28003x_defaultisr.obj (.text:DMA_CH2_ISR)
+                  000956cc    0000000a     f28003x_defaultisr.obj (.text:DMA_CH3_ISR)
+                  000956d6    0000000a     f28003x_defaultisr.obj (.text:DMA_CH4_ISR)
+                  000956e0    0000000a     f28003x_defaultisr.obj (.text:DMA_CH5_ISR)
+                  000956ea    0000000a     f28003x_defaultisr.obj (.text:DMA_CH6_ISR)
+                  000956f4    0000000a     f28003x_defaultisr.obj (.text:ECAP1_ISR)
+                  000956fe    0000000a     f28003x_defaultisr.obj (.text:ECAP2_ISR)
+                  00095708    0000000a     f28003x_defaultisr.obj (.text:ECAP3_2_ISR)
+                  00095712    0000000a     f28003x_defaultisr.obj (.text:ECAP3_ISR)
+                  0009571c    0000000a     f28003x_defaultisr.obj (.text:EMU_ISR)
+                  00095726    0000000a     f28003x_defaultisr.obj (.text:EPWM1_ISR)
+                  00095730    0000000a     f28003x_defaultisr.obj (.text:EPWM1_TZ_ISR)
+                  0009573a    0000000a     f28003x_defaultisr.obj (.text:EPWM2_ISR)
+                  00095744    0000000a     f28003x_defaultisr.obj (.text:EPWM2_TZ_ISR)
+                  0009574e    0000000a     f28003x_defaultisr.obj (.text:EPWM3_ISR)
+                  00095758    0000000a     f28003x_defaultisr.obj (.text:EPWM3_TZ_ISR)
+                  00095762    0000000a     f28003x_defaultisr.obj (.text:EPWM4_ISR)
+                  0009576c    0000000a     f28003x_defaultisr.obj (.text:EPWM4_TZ_ISR)
+                  00095776    0000000a     f28003x_defaultisr.obj (.text:EPWM5_ISR)
+                  00095780    0000000a     f28003x_defaultisr.obj (.text:EPWM5_TZ_ISR)
+                  0009578a    0000000a     f28003x_defaultisr.obj (.text:EPWM6_ISR)
+                  00095794    0000000a     f28003x_defaultisr.obj (.text:EPWM6_TZ_ISR)
+                  0009579e    0000000a     f28003x_defaultisr.obj (.text:EPWM7_ISR)
+                  000957a8    0000000a     f28003x_defaultisr.obj (.text:EPWM7_TZ_ISR)
+                  000957b2    0000000a     f28003x_defaultisr.obj (.text:EPWM8_ISR)
+                  000957bc    0000000a     f28003x_defaultisr.obj (.text:EPWM8_TZ_ISR)
+                  000957c6    0000000a     f28003x_defaultisr.obj (.text:EQEP1_ISR)
+                  000957d0    0000000a     f28003x_defaultisr.obj (.text:EQEP2_ISR)
+                  000957da    0000000a     f28003x_defaultisr.obj (.text:FLASH_CORR_ERR_ISR)
+                  000957e4    0000000a     f28003x_defaultisr.obj (.text:FMC_ISR)
+                  000957ee    0000000a     f28003x_defaultisr.obj (.text:FPU_OVERFLOW_ISR)
+                  000957f8    0000000a     f28003x_defaultisr.obj (.text:FPU_UNDERFLOW_ISR)
+                  00095802    0000000a     f28003x_defaultisr.obj (.text:FSIRXA1_ISR)
+                  0009580c    0000000a     f28003x_defaultisr.obj (.text:FSIRXA2_ISR)
+                  00095816    0000000a     f28003x_defaultisr.obj (.text:FSITXA1_ISR)
+                  00095820    0000000a     f28003x_defaultisr.obj (.text:FSITXA2_ISR)
+                  0009582a    0000000a     f28003x_defaultisr.obj (.text:HICA_ISR)
+                  00095834    0000000a     f28003x_defaultisr.obj (.text:I2CA_FIFO_ISR)
+                  0009583e    0000000a     f28003x_defaultisr.obj (.text:I2CA_ISR)
+                  00095848    0000000a     f28003x_defaultisr.obj (.text:I2CB_FIFO_ISR)
+                  00095852    0000000a     f28003x_defaultisr.obj (.text:I2CB_ISR)
+                  0009585c    0000000a     f28003x_defaultisr.obj (.text:ILLEGAL_ISR)
+                  00095866    0000000a     interrupt.obj (.text:Interrupt_illegalOperationHandler)
+                  00095870    0000000a     interrupt.obj (.text:Interrupt_nmiHandler)
+                  0009587a    0000000a     f28003x_defaultisr.obj (.text:LINA_0_ISR)
+                  00095884    0000000a     f28003x_defaultisr.obj (.text:LINA_1_ISR)
+                  0009588e    0000000a     f28003x_defaultisr.obj (.text:LINB_0_ISR)
+                  00095898    0000000a     f28003x_defaultisr.obj (.text:LINB_1_ISR)
+                  000958a2    0000000a     f28003x_defaultisr.obj (.text:MCANA_0_ISR)
+                  000958ac    0000000a     f28003x_defaultisr.obj (.text:MCANA_1_ISR)
+                  000958b6    0000000a     f28003x_defaultisr.obj (.text:MCANA_ECC_ISR)
+                  000958c0    0000000a     f28003x_defaultisr.obj (.text:MCANA_WAKE_ISR)
+                  000958ca    0000000a     f28003x_defaultisr.obj (.text:MPOST_ISR)
+                  000958d4    0000000a     f28003x_defaultisr.obj (.text:NMI_ISR)
+                  000958de    0000000a     f28003x_defaultisr.obj (.text:NOTUSED_ISR)
+                  000958e8    0000000a     f28003x_defaultisr.obj (.text:PIE_RESERVED_ISR)
+                  000958f2    0000000a     f28003x_defaultisr.obj (.text:PMBUSA_ISR)
+                  000958fc    0000000a     f28003x_defaultisr.obj (.text:RAM_ACC_VIOL_ISR)
+                  00095906    0000000a     f28003x_defaultisr.obj (.text:RAM_CORR_ERR_ISR)
+                  00095910    0000000a     f28003x_defaultisr.obj (.text:RTOS_ISR)
+                  0009591a    0000000a     f28003x_defaultisr.obj (.text:SCIA_RX_ISR)
+                  00095924    0000000a     f28003x_defaultisr.obj (.text:SCIA_TX_ISR)
+                  0009592e    0000000a     f28003x_defaultisr.obj (.text:SCIB_RX_ISR)
+                  00095938    0000000a     f28003x_defaultisr.obj (.text:SCIB_TX_ISR)
+                  00095942    0000000a     f28003x_defaultisr.obj (.text:SDFM1DR1_ISR)
+                  0009594c    0000000a     f28003x_defaultisr.obj (.text:SDFM1DR2_ISR)
+                  00095956    0000000a     f28003x_defaultisr.obj (.text:SDFM1DR3_ISR)
+                  00095960    0000000a     f28003x_defaultisr.obj (.text:SDFM1DR4_ISR)
+                  0009596a    0000000a     f28003x_defaultisr.obj (.text:SDFM1_ISR)
+                  00095974    0000000a     f28003x_defaultisr.obj (.text:SDFM2DR1_ISR)
+                  0009597e    0000000a     f28003x_defaultisr.obj (.text:SDFM2DR2_ISR)
+                  00095988    0000000a     f28003x_defaultisr.obj (.text:SDFM2DR3_ISR)
+                  00095992    0000000a     f28003x_defaultisr.obj (.text:SDFM2DR4_ISR)
+                  0009599c    0000000a     f28003x_defaultisr.obj (.text:SDFM2_ISR)
+                  000959a6    0000000a     f28003x_defaultisr.obj (.text:SPIA_RX_ISR)
+                  000959b0    0000000a     f28003x_defaultisr.obj (.text:SPIA_TX_ISR)
+                  000959ba    0000000a     f28003x_defaultisr.obj (.text:SPIB_RX_ISR)
+                  000959c4    0000000a     f28003x_defaultisr.obj (.text:SPIB_TX_ISR)
+                  000959ce    0000000a     f28003x_defaultisr.obj (.text:SYS_ERR_ISR)
+                  000959d8    0000000a     f28003x_defaultisr.obj (.text:TIMER0_ISR)
+                  000959e2    0000000a     f28003x_defaultisr.obj (.text:TIMER1_ISR)
+                  000959ec    0000000a     f28003x_defaultisr.obj (.text:TIMER2_ISR)
+                  000959f6    0000000a     f28003x_defaultisr.obj (.text:USER10_ISR)
+                  00095a00    0000000a     f28003x_defaultisr.obj (.text:USER11_ISR)
+                  00095a0a    0000000a     f28003x_defaultisr.obj (.text:USER12_ISR)
+                  00095a14    0000000a     f28003x_defaultisr.obj (.text:USER1_ISR)
+                  00095a1e    0000000a     f28003x_defaultisr.obj (.text:USER2_ISR)
+                  00095a28    0000000a     f28003x_defaultisr.obj (.text:USER3_ISR)
+                  00095a32    0000000a     f28003x_defaultisr.obj (.text:USER4_ISR)
+                  00095a3c    0000000a     f28003x_defaultisr.obj (.text:USER5_ISR)
+                  00095a46    0000000a     f28003x_defaultisr.obj (.text:USER6_ISR)
+                  00095a50    0000000a     f28003x_defaultisr.obj (.text:USER7_ISR)
+                  00095a5a    0000000a     f28003x_defaultisr.obj (.text:USER8_ISR)
+                  00095a64    0000000a     f28003x_defaultisr.obj (.text:USER9_ISR)
+                  00095a6e    0000000a     f28003x_defaultisr.obj (.text:WAKE_ISR)
+                  00095a78    0000000a     f28003x_defaultisr.obj (.text:XINT1_ISR)
+                  00095a82    0000000a     f28003x_defaultisr.obj (.text:XINT2_ISR)
+                  00095a8c    0000000a     f28003x_defaultisr.obj (.text:XINT3_ISR)
+                  00095a96    0000000a     f28003x_defaultisr.obj (.text:XINT4_ISR)
+                  00095aa0    0000000a     f28003x_defaultisr.obj (.text:XINT5_ISR)
+                  00095aaa    0000000a     psu_persistence.obj (.text:psu_flash_other_sector)
+                  00095ab4    0000000a     rts2800_fpu32_eabi.lib : strcmp.c.obj (.text)
+                  00095abe    00000009                            : _lock.c.obj (.text)
+                  00095ac7    00000009                            : fd_neg28.asm.obj (.text)
+                  00095ad0    00000008                            : copy_decompress_none.c.obj (.text:decompress:none)
+                  00095ad8    00000008     f28003x_codestartbranch.obj (.text)
+                  00095ae0    00000008     gmp_datalink.obj (.text:gmp_dev_dl_tx_ready)
+                  00095ae8    00000008     rts2800_fpu32_eabi.lib : strlen.c.obj (.text)
+                  00095af0    00000007     board.obj (.text:ADC_init)
+                  00095af7    00000007     FAPI_F28003x_EABI_v1.58.10.lib : FlashStateMachine.obj (.text:Fapi_getFsmStatus)
+                  00095afe    00000007     iris_peripheral.obj (.text:alarm_led_off)
+                  00095b05    00000007     iris_peripheral.obj (.text:alarm_led_on)
+                  00095b0c    00000007     iris_peripheral.obj (.text:beep_off)
+                  00095b13    00000007     iris_peripheral.obj (.text:beep_on)
+                  00095b1a    00000007     iris_peripheral.obj (.text:output_led_off)
+                  00095b21    00000007     iris_peripheral.obj (.text:output_led_on)
+                  00095b28    00000007     psu_persistence.obj (.text:psu_flash_sequence_is_newer)
+                  00095b2f    00000007     rts2800_fpu32_eabi.lib : memset.c.obj (.text)
+                  00095b36    00000006     cputimer.obj (.text:CPUTimer_setEmulationMode)
+                  00095b3c    00000006     rts2800_fpu32_eabi.lib : copy_zero_init.c.obj (.text:decompress:ZI)
+                  00095b42    00000006     gmp_mem_presp.obj (.text:gmp_mem_persp_init)
+                  00095b48    00000005     board.obj (.text:DAC_init)
+                  00095b4d    00000005     board.obj (.text:EQEP_init)
+                  00095b52    00000005     board.obj (.text:SCI_init)
+                  00095b57    00000005     board.obj (.text:SPI_init)
+                  00095b5c    00000005     gmp_datalink.obj (.text:gmp_dev_dl_msg_handled)
+                  00095b61    00000005     user_main.obj (.text:mainloop)
+                  00095b66    00000005     rts2800_fpu32_eabi.lib : strcpy.c.obj (.text)
+                  00095b6b    00000004     ctl_divider.obj (.text:ctl_init_divider)
+                  00095b6f    00000004     sysconfig_adapter.obj (.text:gmp_base_get_system_tick)
+                  00095b73    00000004     sysconfig_adapter.obj (.text:gmp_csp_post_process)
+                  00095b77    00000004     gmp_datalink.obj (.text:gmp_dev_dl_tx_state_done)
+                  00095b7b    00000004     peripheral_driver.obj (.text:reset_bus_status)
+                  00095b7f    00000001     rts2800_fpu32_eabi.lib : startup.c.obj (.text)
 
 MODULE SUMMARY
 
@@ -794,17 +794,17 @@ MODULE SUMMARY
        Total:                        8589    6         0      
                                                               
     .\user\
-       iris_peripheral.obj           2013    751       67     
+       iris_peripheral.obj           2017    751       67     
        user_main.obj                 224     152       2164   
-       psu_persistence.obj           672     148       26     
-       ctl_main.obj                  648     0         114    
+       ctl_main.obj                  796     0         120    
+       psu_persistence.obj           674     148       26     
     +--+-----------------------------+-------+---------+---------+
-       Total:                        3557    1051      2371   
+       Total:                        3711    1051      2377   
                                                               
     .\xplt\
-       xplt.peripheral.obj           1188    15        0      
+       xplt.peripheral.obj           1319    15        0      
     +--+-----------------------------+-------+---------+---------+
-       Total:                        1188    15        0      
+       Total:                        1319    15        0      
                                                               
     D:/software/ti/c2000/C2000Ware_5_04_00_00/libraries/flash_api/f28003x/lib/FAPI_F28003x_EABI_v1.58.10.lib
        FlashStateMachine.obj         1130    0         0      
@@ -895,16 +895,16 @@ MODULE SUMMARY
        Stack:                        0       0         512    
        Linker Generated:             0       152       0      
     +--+-----------------------------+-------+---------+---------+
-       Grand Total:                  31841   5476      4900   
+       Grand Total:                  32126   5476      4906   
 
 
 LINKER GENERATED COPY TABLES
 
 __TI_cinit_table @ 00081188 records: 4, size/record: 4, table size: 16
-	.data.2: load addr=00081100, load size=0000005c bytes, run addr=0000b800, run size=00000126 bytes, compression=lzss
-	.data.1: load addr=0008115c, load size=0000001e bytes, run addr=0000b792, run size=0000006e bytes, compression=lzss
+	.data.2: load addr=00081100, load size=0000005d bytes, run addr=0000b800, run size=0000012c bytes, compression=lzss
+	.data.1: load addr=0008115d, load size=0000001d bytes, run addr=0000b798, run size=00000068 bytes, compression=lzss
 	.bss.1: load addr=00081180, load size=00000004 bytes, run addr=0000ac00, run size=00000400 bytes, compression=zero_init
-	.bss.2: load addr=00081184, load size=00000004 bytes, run addr=0000b000, run size=00000792 bytes, compression=zero_init
+	.bss.2: load addr=00081184, load size=00000004 bytes, run addr=0000b000, run size=00000798 bytes, compression=zero_init
 
 
 LINKER GENERATED HANDLER TABLE
@@ -952,16 +952,13 @@ address     data page           name
 0000b70a     2dc (0000b700)     psu_current_fb_adc
 
 0000b740     2dd (0000b740)     psu_ctrl
-0000b772     2dd (0000b740)     parmbuf
-0000b77a     2dd (0000b740)     debug_uart
-0000b77c     2dd (0000b740)     sys_tick_div
+0000b778     2dd (0000b740)     parmbuf
 
-0000b792     2de (0000b780)     _device
+0000b788     2de (0000b780)     debug_uart
+0000b78a     2de (0000b780)     sys_tick_div
+0000b798     2de (0000b780)     _device
 
-0000b7f9     2df (0000b7c0)     __TI_ft_end
-0000b7fa     2df (0000b7c0)     __TI_enable_exit_profile_output
-0000b7fc     2df (0000b7c0)     __TI_cleanup_ptr
-0000b7fe     2df (0000b7c0)     __TI_dtors_ptr
+0000b7ff     2df (0000b7c0)     __TI_ft_end
 
 0000b800     2e0 (0000b800)     _ftable
 
@@ -969,11 +966,14 @@ address     data page           name
 
 0000b8e8     2e3 (0000b8c0)     _stream
 
-0000b91a     2e4 (0000b900)     _lock
-0000b91c     2e4 (0000b900)     _unlock
-0000b91e     2e4 (0000b900)     DSPC2000_SystemTick
-0000b920     2e4 (0000b900)     flag_init_cmpt
-0000b922     2e4 (0000b900)     errno
+0000b91a     2e4 (0000b900)     __TI_enable_exit_profile_output
+0000b91c     2e4 (0000b900)     __TI_cleanup_ptr
+0000b91e     2e4 (0000b900)     __TI_dtors_ptr
+0000b920     2e4 (0000b900)     _lock
+0000b922     2e4 (0000b900)     _unlock
+0000b924     2e4 (0000b900)     DSPC2000_SystemTick
+0000b926     2e4 (0000b900)     flag_init_cmpt
+0000b928     2e4 (0000b900)     errno
 
 00084bc0    212f (00084bc0)     F6x8
 
@@ -994,282 +994,282 @@ GLOBAL SYMBOLS: SORTED ALPHABETICALLY BY Name
 
 page  address   name                             
 ----  -------   ----                             
-0     00095425  ADCA1_ISR                        
-0     0009542f  ADCA2_ISR                        
-0     00095439  ADCA3_ISR                        
-0     00095443  ADCA4_ISR                        
-0     0009544d  ADCA_EVT_ISR                     
-0     00095457  ADCB1_ISR                        
-0     00095461  ADCB2_ISR                        
-0     0009546b  ADCB3_ISR                        
-0     00095475  ADCB4_ISR                        
-0     0009547f  ADCB_EVT_ISR                     
-0     00095489  ADCC1_ISR                        
-0     00095493  ADCC2_ISR                        
-0     0009549d  ADCC3_ISR                        
-0     000954a7  ADCC4_ISR                        
-0     000954b1  ADCC_EVT_ISR                     
-0     000959cf  ADC_init                         
-0     00094d26  ADC_setOffsetTrimAll             
-0     00094f59  ADC_setVREF                      
-0     000954bb  AES_SINTREQUEST_ISR              
-0     000953ee  ASYSCTL_init                     
-0     000954c5  BGCRC_CLA1_ISR                   
-0     000954cf  BGCRC_ISR                        
-0     000949db  Board_init                       
-0     000948c7  C$$EXIT                          
-0     00092a1f  C$$IO$$                          
-0     000954d9  CANA0_ISR                        
-0     000954e3  CANA1_ISR                        
-0     00094eba  CAN_clearInterruptStatus         
-0     00092285  CAN_init                         
-0     000950be  CAN_initModule                   
-0     00093cfd  CAN_readMessage                  
-0     0009452c  CAN_setBitTiming                 
-0     000925d3  CAN_setupMessageObject           
-0     000954ed  CLA1_1_ISR                       
-0     000954f7  CLA1_2_ISR                       
-0     00095501  CLA1_3_ISR                       
-0     0009550b  CLA1_4_ISR                       
-0     00095515  CLA1_5_ISR                       
-0     0009551f  CLA1_6_ISR                       
-0     00095529  CLA1_7_ISR                       
-0     00095533  CLA1_8_ISR                       
-0     0009553d  CLA_OVERFLOW_ISR                 
-0     00095547  CLA_UNDERFLOW_ISR                
-0     00095551  CLB1_ISR                         
-0     0009555b  CLB2_ISR                         
-0     00095565  CLB3_ISR                         
-0     0009556f  CLB4_ISR                         
-0     00094afb  CPUTIMER_init                    
-0     00095a15  CPUTimer_setEmulationMode        
+0     00095546  ADCA1_ISR                        
+0     00095550  ADCA2_ISR                        
+0     0009555a  ADCA3_ISR                        
+0     00095564  ADCA4_ISR                        
+0     0009556e  ADCA_EVT_ISR                     
+0     00095578  ADCB1_ISR                        
+0     00095582  ADCB2_ISR                        
+0     0009558c  ADCB3_ISR                        
+0     00095596  ADCB4_ISR                        
+0     000955a0  ADCB_EVT_ISR                     
+0     000955aa  ADCC1_ISR                        
+0     000955b4  ADCC2_ISR                        
+0     000955be  ADCC3_ISR                        
+0     000955c8  ADCC4_ISR                        
+0     000955d2  ADCC_EVT_ISR                     
+0     00095af0  ADC_init                         
+0     00094e49  ADC_setOffsetTrimAll             
+0     0009507a  ADC_setVREF                      
+0     000955dc  AES_SINTREQUEST_ISR              
+0     0009550f  ASYSCTL_init                     
+0     000955e6  BGCRC_CLA1_ISR                   
+0     000955f0  BGCRC_ISR                        
+0     00094afe  Board_init                       
+0     000949ea  C$$EXIT                          
+0     00092b79  C$$IO$$                          
+0     000955fa  CANA0_ISR                        
+0     00095604  CANA1_ISR                        
+0     00094fc1  CAN_clearInterruptStatus         
+0     000923de  CAN_init                         
+0     000951df  CAN_initModule                   
+0     00093de7  CAN_readMessage                  
+0     0009464f  CAN_setBitTiming                 
+0     0009272c  CAN_setupMessageObject           
+0     0009560e  CLA1_1_ISR                       
+0     00095618  CLA1_2_ISR                       
+0     00095622  CLA1_3_ISR                       
+0     0009562c  CLA1_4_ISR                       
+0     00095636  CLA1_5_ISR                       
+0     00095640  CLA1_6_ISR                       
+0     0009564a  CLA1_7_ISR                       
+0     00095654  CLA1_8_ISR                       
+0     0009565e  CLA_OVERFLOW_ISR                 
+0     00095668  CLA_UNDERFLOW_ISR                
+0     00095672  CLB1_ISR                         
+0     0009567c  CLB2_ISR                         
+0     00095686  CLB3_ISR                         
+0     00095690  CLB4_ISR                         
+0     00094c1e  CPUTIMER_init                    
+0     00095b36  CPUTimer_setEmulationMode        
 abs   00000000  Cla1ConstLoadSize                
 0     00008800  Cla1ConstLoadStart               
 0     00008800  Cla1ConstRunStart                
 abs   00000000  Cla1ProgLoadSize                 
 0     00008000  Cla1ProgLoadStart                
 0     00008000  Cla1ProgRunStart                 
-0     00095a27  DAC_init                         
-0     00095579  DATALOG_ISR                      
-0     00095583  DCC0_ISR                         
-0     0009558d  DCC1_ISR                         
-0     00095597  DMA_CH1_ISR                      
-0     000955a1  DMA_CH2_ISR                      
-0     000955ab  DMA_CH3_ISR                      
-0     000955b5  DMA_CH4_ISR                      
-0     000955bf  DMA_CH5_ISR                      
-0     000955c9  DMA_CH6_ISR                      
-0     0000b91e  DSPC2000_SystemTick              
-0     00090bd9  Device_enableAllPeripherals      
-0     00093882  Device_init                      
-0     00094ed5  Device_initGPIO                  
-0     000955d3  ECAP1_ISR                        
-0     000955dd  ECAP2_ISR                        
-0     000955e7  ECAP3_2_ISR                      
-0     000955f1  ECAP3_ISR                        
-0     0009537d  EMPTY_ISR                        
-0     000955fb  EMU_ISR                          
-0     00095605  EPWM1_ISR                        
-0     0009560f  EPWM1_TZ_ISR                     
-0     00095619  EPWM2_ISR                        
-0     00095623  EPWM2_TZ_ISR                     
-0     0009562d  EPWM3_ISR                        
-0     00095637  EPWM3_TZ_ISR                     
-0     00095641  EPWM4_ISR                        
-0     0009564b  EPWM4_TZ_ISR                     
-0     00095655  EPWM5_ISR                        
-0     0009565f  EPWM5_TZ_ISR                     
-0     00095669  EPWM6_ISR                        
-0     00095673  EPWM6_TZ_ISR                     
-0     0009567d  EPWM7_ISR                        
-0     00095687  EPWM7_TZ_ISR                     
-0     00095691  EPWM8_ISR                        
-0     0009569b  EPWM8_TZ_ISR                     
+0     00095b48  DAC_init                         
+0     0009569a  DATALOG_ISR                      
+0     000956a4  DCC0_ISR                         
+0     000956ae  DCC1_ISR                         
+0     000956b8  DMA_CH1_ISR                      
+0     000956c2  DMA_CH2_ISR                      
+0     000956cc  DMA_CH3_ISR                      
+0     000956d6  DMA_CH4_ISR                      
+0     000956e0  DMA_CH5_ISR                      
+0     000956ea  DMA_CH6_ISR                      
+0     0000b924  DSPC2000_SystemTick              
+0     00090f4f  Device_enableAllPeripherals      
+0     0009396a  Device_init                      
+0     00094fdc  Device_initGPIO                  
+0     000956f4  ECAP1_ISR                        
+0     000956fe  ECAP2_ISR                        
+0     00095708  ECAP3_2_ISR                      
+0     00095712  ECAP3_ISR                        
+0     0009549e  EMPTY_ISR                        
+0     0009571c  EMU_ISR                          
+0     00095726  EPWM1_ISR                        
+0     00095730  EPWM1_TZ_ISR                     
+0     0009573a  EPWM2_ISR                        
+0     00095744  EPWM2_TZ_ISR                     
+0     0009574e  EPWM3_ISR                        
+0     00095758  EPWM3_TZ_ISR                     
+0     00095762  EPWM4_ISR                        
+0     0009576c  EPWM4_TZ_ISR                     
+0     00095776  EPWM5_ISR                        
+0     00095780  EPWM5_TZ_ISR                     
+0     0009578a  EPWM6_ISR                        
+0     00095794  EPWM6_TZ_ISR                     
+0     0009579e  EPWM7_ISR                        
+0     000957a8  EPWM7_TZ_ISR                     
+0     000957b2  EPWM8_ISR                        
+0     000957bc  EPWM8_TZ_ISR                     
 0     00087000  EPWM_init                        
-0     000956a5  EQEP1_ISR                        
-0     000956af  EQEP2_ISR                        
-0     00095a2c  EQEP_init                        
-0     0009435c  EQEP_setInputPolarity            
+0     000957c6  EQEP1_ISR                        
+0     000957d0  EQEP2_ISR                        
+0     00095b4d  EQEP_init                        
+0     0009447f  EQEP_setInputPolarity            
 0     00084bc0  F6x8                             
-0     000956b9  FLASH_CORR_ERR_ISR               
-0     000956c3  FMC_ISR                          
-0     000956cd  FPU_OVERFLOW_ISR                 
-0     000956d7  FPU_UNDERFLOW_ISR                
-0     000956e1  FSIRXA1_ISR                      
-0     000956eb  FSIRXA2_ISR                      
-0     00094f8b  FSIRX_init                       
-0     000956f5  FSITXA1_ISR                      
-0     000956ff  FSITXA2_ISR                      
-0     0009476a  FSITX_init                       
-0     00095036  FSI_clearRxModuleReset           
-0     00095092  FSI_clearTxModuleReset           
-0     0009524d  FSI_performRxInitialization      
-0     000947c4  FSI_performTxInitialization      
-0     000950fd  FSI_resetRxModule                
-0     00095201  FSI_resetTxModule                
+0     000957da  FLASH_CORR_ERR_ISR               
+0     000957e4  FMC_ISR                          
+0     000957ee  FPU_OVERFLOW_ISR                 
+0     000957f8  FPU_UNDERFLOW_ISR                
+0     00095802  FSIRXA1_ISR                      
+0     0009580c  FSIRXA2_ISR                      
+0     000950ac  FSIRX_init                       
+0     00095816  FSITXA1_ISR                      
+0     00095820  FSITXA2_ISR                      
+0     0009488d  FSITX_init                       
+0     00095157  FSI_clearRxModuleReset           
+0     000951b3  FSI_clearTxModuleReset           
+0     0009536e  FSI_performRxInitialization      
+0     000948e7  FSI_performTxInitialization      
+0     0009521e  FSI_resetRxModule                
+0     00095322  FSI_resetTxModule                
 0     0000b6f2  Fapi_GlobalInit                  
-0     00094f0b  Fapi_WriteReadBack               
-0     000947f0  Fapi_calculateFletcherChecksum   
-0     0009538a  Fapi_calculateOtpChecksum        
-0     00095337  Fapi_checkFsmForReady            
-0     00093093  Fapi_checkRegionForValueBy16bits 
-0     00093645  Fapi_configureFMAC               
-0     0009481c  Fapi_divideUnsignedLong          
-0     0009530a  Fapi_doVerifyBy16bits            
-0     00094d80  Fapi_flushPipeline               
-0     000959d6  Fapi_getFsmStatus                
-0     000944c8  Fapi_initializeAPI               
-0     00094192  Fapi_isAddressValid              
-0     00094c4a  Fapi_issueAsyncCommand           
-0     00092e9c  Fapi_issueAsyncCommandWithAddress
-0     00093a48  Fapi_issueFsmCommand             
-0     00090e5d  Fapi_issueProgrammingCommand     
-0     000943fb  Fapi_loopRegionForValueBy16bits  
-0     000953f9  Fapi_scaleCycleValues            
-0     00088fc9  Fapi_setActiveFlashBank          
-0     0009455d  Fapi_setupBankSectorEnable       
-0     00094e2e  Fapi_setupSectorsForWrite        
+0     00095012  Fapi_WriteReadBack               
+0     00094913  Fapi_calculateFletcherChecksum   
+0     000954ab  Fapi_calculateOtpChecksum        
+0     00095458  Fapi_checkFsmForReady            
+0     000931ef  Fapi_checkRegionForValueBy16bits 
+0     0009372d  Fapi_configureFMAC               
+0     0009493f  Fapi_divideUnsignedLong          
+0     0009542b  Fapi_doVerifyBy16bits            
+0     00094ea3  Fapi_flushPipeline               
+0     00095af7  Fapi_getFsmStatus                
+0     000945eb  Fapi_initializeAPI               
+0     000942b9  Fapi_isAddressValid              
+0     00094d6d  Fapi_issueAsyncCommand           
+0     00092ff8  Fapi_issueAsyncCommandWithAddress
+0     00093b30  Fapi_issueFsmCommand             
+0     000911d3  Fapi_issueProgrammingCommand     
+0     0009451e  Fapi_loopRegionForValueBy16bits  
+0     0009551a  Fapi_scaleCycleValues            
+0     00094411  Fapi_setActiveFlashBank          
+0     00094680  Fapi_setupBankSectorEnable       
+0     00094f51  Fapi_setupSectorsForWrite        
 0     00008000  Flash_initModule                 
-0     00095214  GPIO_init                        
-0     00093e11  GPIO_setAnalogMode               
-0     0009498f  GPIO_setControllerCore           
-0     00094caa  GPIO_setDirectionMode            
-0     00093fe3  GPIO_setPadConfig                
-0     000946b0  GPIO_setPinConfig                
-0     000949b5  GPIO_setQualificationMode        
-0     00095709  HICA_ISR                         
-0     000948f0  HOSTclose                        
-0     00093707  HOSTlseek                        
-0     00094242  HOSTopen                         
-0     000942ed  HOSTread                         
-0     0009409e  HOSTrename                       
-0     00094a6d  HOSTunlink                       
-0     0009427c  HOSTwrite                        
-0     00095713  I2CA_FIFO_ISR                    
-0     0009571d  I2CA_ISR                         
-0     00095727  I2CB_FIFO_ISR                    
-0     00095731  I2CB_ISR                         
-0     00095295  I2C_clearInterruptStatus         
-0     00095227  I2C_enableInterrupt              
-0     000938de  I2C_init                         
-0     00094022  I2C_initController               
-0     0009573b  ILLEGAL_ISR                      
-0     000940dc  INTERRUPT_init                   
-0     000936a6  INT_IRIS_CAN_0_ISR               
-0     0009504d  INT_IRIS_CAN_1_ISR               
-0     000952a6  INT_IRIS_UART_RS232_RX_ISR       
-0     00093e55  INT_IRIS_UART_USB_RX_ISR         
-0     00091ab4  IRIS_ADCA_init                   
-0     0009181d  IRIS_ADCB_init                   
-0     00091e3d  IRIS_ADCC_init                   
-0     00092285  IRIS_CAN_init                    
-0     00094b84  IRIS_DACA_init                   
-0     00094ba5  IRIS_DACB_init                   
-0     00092d16  IRIS_EQEP1_init                  
-0     00092d98  IRIS_EQEP2_init                  
-0     00095111  IRIS_GPIO1_init                  
-0     00095125  IRIS_GPIO2_init                  
-0     00095139  IRIS_GPIO3_init                  
-0     0009514d  IRIS_GPIO4_init                  
-0     00095161  IRIS_GPIO5_init                  
-0     00095175  IRIS_GPIO6_init                  
-0     00095189  IRIS_GPIO_SPI_RST_init           
-0     000938de  IRIS_IIC_init                    
-0     0009519d  IRIS_LED1_init                   
-0     000951b1  IRIS_LED2_init                   
-0     00093edd  IRIS_SPI_FPGA_BRIDGE_init        
-0     00093c6e  IRIS_SPI_OUT_init                
-0     0009310e  IRIS_UART_RS232_init             
-0     00092e1a  IRIS_UART_USB_init               
-0     000953be  Interrupt_defaultHandler         
-0     00093b8a  Interrupt_disable                
-0     00094391  Interrupt_enable                 
-0     00095745  Interrupt_illegalOperationHandler
-0     00094060  Interrupt_initModule             
-0     00094e4a  Interrupt_initVectorTable        
-0     0009574f  Interrupt_nmiHandler             
-0     00095759  LINA_0_ISR                       
-0     00095763  LINA_1_ISR                       
-0     0009576d  LINB_0_ISR                       
-0     00095777  LINB_1_ISR                       
-0     00095781  MCANA_0_ISR                      
-0     0009578b  MCANA_1_ISR                      
-0     00095795  MCANA_ECC_ISR                    
-0     0009579f  MCANA_WAKE_ISR                   
-0     000957a9  MPOST_ISR                        
-0     00088cd6  MainISR                          
-0     000957b3  NMI_ISR                          
-0     000957bd  NOTUSED_ISR                      
-0     00094f72  OLED_WR_Byte                     
-0     000957c7  PIE_RESERVED_ISR                 
-0     000957d1  PMBUSA_ISR                       
+0     00095335  GPIO_init                        
+0     00093efb  GPIO_setAnalogMode               
+0     00094ab2  GPIO_setControllerCore           
+0     00094dcd  GPIO_setDirectionMode            
+0     000940cd  GPIO_setPadConfig                
+0     000947d3  GPIO_setPinConfig                
+0     00094ad8  GPIO_setQualificationMode        
+0     0009582a  HICA_ISR                         
+0     00094a13  HOSTclose                        
+0     000937ef  HOSTlseek                        
+0     0009432e  HOSTopen                         
+0     000943d9  HOSTread                         
+0     00094188  HOSTrename                       
+0     00094b90  HOSTunlink                       
+0     00094368  HOSTwrite                        
+0     00095834  I2CA_FIFO_ISR                    
+0     0009583e  I2CA_ISR                         
+0     00095848  I2CB_FIFO_ISR                    
+0     00095852  I2CB_ISR                         
+0     000953b6  I2C_clearInterruptStatus         
+0     00095348  I2C_enableInterrupt              
+0     000939c6  I2C_init                         
+0     0009410c  I2C_initController               
+0     0009585c  ILLEGAL_ISR                      
+0     000941c6  INTERRUPT_init                   
+0     0009378e  INT_IRIS_CAN_0_ISR               
+0     0009516e  INT_IRIS_CAN_1_ISR               
+0     000953c7  INT_IRIS_UART_RS232_RX_ISR       
+0     00093f3f  INT_IRIS_UART_USB_RX_ISR         
+0     00091c0d  IRIS_ADCA_init                   
+0     00091976  IRIS_ADCB_init                   
+0     00091f96  IRIS_ADCC_init                   
+0     000923de  IRIS_CAN_init                    
+0     00094ca7  IRIS_DACA_init                   
+0     00094cc8  IRIS_DACB_init                   
+0     00092e72  IRIS_EQEP1_init                  
+0     00092ef4  IRIS_EQEP2_init                  
+0     00095232  IRIS_GPIO1_init                  
+0     00095246  IRIS_GPIO2_init                  
+0     0009525a  IRIS_GPIO3_init                  
+0     0009526e  IRIS_GPIO4_init                  
+0     00095282  IRIS_GPIO5_init                  
+0     00095296  IRIS_GPIO6_init                  
+0     000952aa  IRIS_GPIO_SPI_RST_init           
+0     000939c6  IRIS_IIC_init                    
+0     000952be  IRIS_LED1_init                   
+0     000952d2  IRIS_LED2_init                   
+0     00093fc7  IRIS_SPI_FPGA_BRIDGE_init        
+0     00093d58  IRIS_SPI_OUT_init                
+0     0009326a  IRIS_UART_RS232_init             
+0     00092f76  IRIS_UART_USB_init               
+0     000954df  Interrupt_defaultHandler         
+0     00093c74  Interrupt_disable                
+0     000944b4  Interrupt_enable                 
+0     00095866  Interrupt_illegalOperationHandler
+0     0009414a  Interrupt_initModule             
+0     00094f6d  Interrupt_initVectorTable        
+0     00095870  Interrupt_nmiHandler             
+0     0009587a  LINA_0_ISR                       
+0     00095884  LINA_1_ISR                       
+0     0009588e  LINB_0_ISR                       
+0     00095898  LINB_1_ISR                       
+0     000958a2  MCANA_0_ISR                      
+0     000958ac  MCANA_1_ISR                      
+0     000958b6  MCANA_ECC_ISR                    
+0     000958c0  MCANA_WAKE_ISR                   
+0     000958ca  MPOST_ISR                        
+0     000905f8  MainISR                          
+0     000958d4  NMI_ISR                          
+0     000958de  NOTUSED_ISR                      
+0     00095093  OLED_WR_Byte                     
+0     000958e8  PIE_RESERVED_ISR                 
+0     000958f2  PMBUSA_ISR                       
 0     00084e00  PieVectTableInit                 
-0     000905f8  PinMux_init                      
-0     000957db  RAM_ACC_VIOL_ISR                 
-0     000957e5  RAM_CORR_ERR_ISR                 
-0     000957ef  RTOS_ISR                         
+0     0009096e  PinMux_init                      
+0     000958fc  RAM_ACC_VIOL_ISR                 
+0     00095906  RAM_CORR_ERR_ISR                 
+0     00095910  RTOS_ISR                         
 0     000810fe  RamfuncsLoadEnd                  
 abs   000000fe  RamfuncsLoadSize                 
 0     00081000  RamfuncsLoadStart                
 0     000080fe  RamfuncsRunEnd                   
 abs   000000fe  RamfuncsRunSize                  
 0     00008000  RamfuncsRunStart                 
-0     000957f9  SCIA_RX_ISR                      
-0     00095803  SCIA_TX_ISR                      
-0     0009580d  SCIB_RX_ISR                      
-0     00095817  SCIB_TX_ISR                      
-0     00094d44  SCI_clearInterruptStatus         
-0     00094f25  SCI_enableInterrupt              
-0     00095a31  SCI_init                         
-0     00094b1e  SCI_readCharArray                
-0     00094ab5  SCI_setConfig                    
-0     00095821  SDFM1DR1_ISR                     
-0     0009582b  SDFM1DR2_ISR                     
-0     00095835  SDFM1DR3_ISR                     
-0     0009583f  SDFM1DR4_ISR                     
-0     00095849  SDFM1_ISR                        
-0     00095853  SDFM2DR1_ISR                     
-0     0009585d  SDFM2DR2_ISR                     
-0     00095867  SDFM2DR3_ISR                     
-0     00095871  SDFM2DR4_ISR                     
-0     0009587b  SDFM2_ISR                        
-0     00095885  SPIA_RX_ISR                      
-0     0009588f  SPIA_TX_ISR                      
-0     00095899  SPIB_RX_ISR                      
-0     000958a3  SPIB_TX_ISR                      
-0     00095a36  SPI_init                         
-0     00094ad8  SPI_setConfig                    
-0     00094d9d  SYNC_init                        
+0     0009591a  SCIA_RX_ISR                      
+0     00095924  SCIA_TX_ISR                      
+0     0009592e  SCIB_RX_ISR                      
+0     00095938  SCIB_TX_ISR                      
+0     00094e67  SCI_clearInterruptStatus         
+0     0009502c  SCI_enableInterrupt              
+0     00095b52  SCI_init                         
+0     00094c41  SCI_readCharArray                
+0     00094bd8  SCI_setConfig                    
+0     00095942  SDFM1DR1_ISR                     
+0     0009594c  SDFM1DR2_ISR                     
+0     00095956  SDFM1DR3_ISR                     
+0     00095960  SDFM1DR4_ISR                     
+0     0009596a  SDFM1_ISR                        
+0     00095974  SDFM2DR1_ISR                     
+0     0009597e  SDFM2DR2_ISR                     
+0     00095988  SDFM2DR3_ISR                     
+0     00095992  SDFM2DR4_ISR                     
+0     0009599c  SDFM2_ISR                        
+0     000959a6  SPIA_RX_ISR                      
+0     000959b0  SPIA_TX_ISR                      
+0     000959ba  SPIB_RX_ISR                      
+0     000959c4  SPIB_TX_ISR                      
+0     00095b57  SPI_init                         
+0     00094bfb  SPI_setConfig                    
+0     00094ec0  SYNC_init                        
 0     00090000  SYSCTL_init                      
-0     000958ad  SYS_ERR_ISR                      
-0     000950d3  SysCtl_configureType             
+0     000959ce  SYS_ERR_ISR                      
+0     000951f4  SysCtl_configureType             
 0     000080fa  SysCtl_delay                     
-0     00092078  SysCtl_isPLLValid                
-0     0009458e  SysCtl_selectOscSource           
-0     00093d42  SysCtl_selectXTAL                
-0     00094bc6  SysCtl_selectXTALSingleEnded     
-0     00091979  SysCtl_setClock                  
-0     000958b7  TIMER0_ISR                       
-0     000958c1  TIMER1_ISR                       
-0     000958cb  TIMER2_ISR                       
-0     000958d5  USER10_ISR                       
-0     000958df  USER11_ISR                       
-0     000958e9  USER12_ISR                       
-0     000958f3  USER1_ISR                        
-0     000958fd  USER2_ISR                        
-0     00095907  USER3_ISR                        
-0     00095911  USER4_ISR                        
-0     0009591b  USER5_ISR                        
-0     00095925  USER6_ISR                        
-0     0009592f  USER7_ISR                        
-0     00095939  USER8_ISR                        
-0     00095943  USER9_ISR                        
-0     0009594d  WAKE_ISR                         
-0     00095957  XINT1_ISR                        
-0     00095961  XINT2_ISR                        
-0     0009596b  XINT3_ISR                        
-0     00095975  XINT4_ISR                        
-0     0009597f  XINT5_ISR                        
+0     000921d1  SysCtl_isPLLValid                
+0     000946b1  SysCtl_selectOscSource           
+0     00093e2c  SysCtl_selectXTAL                
+0     00094ce9  SysCtl_selectXTALSingleEnded     
+0     00091ad2  SysCtl_setClock                  
+0     000959d8  TIMER0_ISR                       
+0     000959e2  TIMER1_ISR                       
+0     000959ec  TIMER2_ISR                       
+0     000959f6  USER10_ISR                       
+0     00095a00  USER11_ISR                       
+0     00095a0a  USER12_ISR                       
+0     00095a14  USER1_ISR                        
+0     00095a1e  USER2_ISR                        
+0     00095a28  USER3_ISR                        
+0     00095a32  USER4_ISR                        
+0     00095a3c  USER5_ISR                        
+0     00095a46  USER6_ISR                        
+0     00095a50  USER7_ISR                        
+0     00095a5a  USER8_ISR                        
+0     00095a64  USER9_ISR                        
+0     00095a6e  WAKE_ISR                         
+0     00095a78  XINT1_ISR                        
+0     00095a82  XINT2_ISR                        
+0     00095a8c  XINT3_ISR                        
+0     00095a96  XINT4_ISR                        
+0     00095aa0  XINT5_ISR                        
 0     0000b402  __CIOBUF_                        
 0     00081188  __TI_CINIT_Base                  
 0     00081198  __TI_CINIT_Limit                 
@@ -1279,231 +1279,231 @@ abs   000000fe  RamfuncsRunSize
 0     00000600  __TI_STACK_END                   
 abs   00000200  __TI_STACK_SIZE                  
 abs   00000400  __TI_SYSMEM_SIZE                 
-0     00094848  __TI_auto_init_nobinit_nopinit   
-0     00091dbb  __TI_cleanup                     
-0     0000b7fc  __TI_cleanup_ptr                 
-0     00093825  __TI_closefile                   
-0     00094620  __TI_decompress_lzss             
-0     000959af  __TI_decompress_none             
-0     000932f1  __TI_doflush                     
-0     0000b7fe  __TI_dtors_ptr                   
-0     0000b7fa  __TI_enable_exit_profile_output  
-0     0000b7f9  __TI_ft_end                      
-0     00090bd7  __TI_heap_check                  
-0     00090bb8  __TI_heap_largest_available      
-0     00090b99  __TI_heap_total_available        
-0     00094650  __TI_ltoa                        
+0     0009496b  __TI_auto_init_nobinit_nopinit   
+0     00091f14  __TI_cleanup                     
+0     0000b91c  __TI_cleanup_ptr                 
+0     0009390d  __TI_closefile                   
+0     00094743  __TI_decompress_lzss             
+0     00095ad0  __TI_decompress_none             
+0     000933d9  __TI_doflush                     
+0     0000b91e  __TI_dtors_ptr                   
+0     0000b91a  __TI_enable_exit_profile_output  
+0     0000b7ff  __TI_ft_end                      
+0     00090f4d  __TI_heap_check                  
+0     00090f2e  __TI_heap_largest_available      
+0     00090f0f  __TI_heap_total_available        
+0     00094773  __TI_ltoa                        
 abs   ffffffff  __TI_pprof_out_hndl              
 0     00088b51  __TI_printfi                     
 abs   ffffffff  __TI_prof_data_size              
 abs   ffffffff  __TI_prof_data_start             
-0     000935b7  __TI_rd_ok                       
-0     00092a24  __TI_readmsg                     
+0     0009369f  __TI_rd_ok                       
+0     00092b7e  __TI_readmsg                     
 0     0000b522  __TI_tmpnams                     
-0     000929cc  __TI_writemsg                    
-0     0009357d  __TI_wrt_ok                      
-0     00095a1b  __TI_zero_init                   
-0     00092930  __c28xabi_addd                   
-0     00094fee  __c28xabi_andll                  
-0     00094873  __c28xabi_cmpd                   
-0     00094d62  __c28xabi_cmpll                  
-0     00094d74  __c28xabi_cmpull                 
-0     00092b7f  __c28xabi_divd                   
-0     0009489d  __c28xabi_divl                   
+0     00092b26  __TI_writemsg                    
+0     00093665  __TI_wrt_ok                      
+0     00095b3c  __TI_zero_init                   
+0     00092a89  __c28xabi_addd                   
+0     0009510f  __c28xabi_andll                  
+0     00094996  __c28xabi_cmpd                   
+0     00094e85  __c28xabi_cmpll                  
+0     00094e97  __c28xabi_cmpull                 
+0     00092d64  __c28xabi_divd                   
+0     000949c0  __c28xabi_divl                   
 0     00087ef0  __c28xabi_divll                  
-0     0009540f  __c28xabi_divu                   
-0     000948ba  __c28xabi_divul                  
+0     00095530  __c28xabi_divu                   
+0     000949dd  __c28xabi_divul                  
 0     00087f66  __c28xabi_divull                 
-0     00094c29  __c28xabi_dtoi                   
-0     00094d07  __c28xabi_dtol                   
-0     00094df4  __c28xabi_itod                   
-0     00094e9e  __c28xabi_ltod                   
-0     000948ac  __c28xabi_modl                   
+0     00094d4c  __c28xabi_dtoi                   
+0     00094e2a  __c28xabi_dtol                   
+0     00094f17  __c28xabi_itod                   
+0     00094fa5  __c28xabi_ltod                   
+0     000949cf  __c28xabi_modl                   
 0     00087f2c  __c28xabi_modll                  
-0     00095414  __c28xabi_modu                   
-0     000948c1  __c28xabi_modul                  
+0     00095535  __c28xabi_modu                   
+0     000949e4  __c28xabi_modul                  
 0     00087f95  __c28xabi_modull                 
-0     00092c93  __c28xabi_mpyd                   
-0     000959a6  __c28xabi_negd                   
-0     00094ff6  __c28xabi_orll                   
-0     0009536f  __c28xabi_subd                   
-0     00094ffe  __c28xabi_xorll                  
+0     00092def  __c28xabi_mpyd                   
+0     00095ac7  __c28xabi_negd                   
+0     00095117  __c28xabi_orll                   
+0     00095490  __c28xabi_subd                   
+0     0009511f  __c28xabi_xorll                  
 n/a   UNDEFED   __c_args__                       
 0     00000400  __stack                          
-0     000953a4  _abort_msg                       
-0     000953d6  _args_main                       
-0     0009507b  _c_int00                         
+0     000954c5  _abort_msg                       
+0     000954f7  _args_main                       
+0     0009519c  _c_int00                         
 0     00085164  _ctypes_                         
-0     0000b792  _device                          
+0     0000b798  _device                          
 0     0000b800  _ftable                          
-0     0000b91a  _lock                            
-0     000959a5  _nop                             
-0     000959a1  _register_lock                   
-0     0009599d  _register_unlock                 
+0     0000b920  _lock                            
+0     00095ac6  _nop                             
+0     00095ac2  _register_lock                   
+0     00095abe  _register_unlock                 
 0     0000b8e8  _stream                          
 0     0000a800  _sys_memory                      
-0     00095a62  _system_post_cinit               
-0     00095a5e  _system_pre_init                 
-0     0000b91c  _unlock                          
-0     000948c7  abort                            
-0     000959dd  alarm_led_off                    
-0     000959e4  alarm_led_on                     
-0     00090aeb  aligned_alloc                    
-0     000945bf  atoi                             
-0     000959eb  beep_off                         
-0     000959f2  beep_on                          
-0     00090abe  calloc                           
-0     00094462  close                            
+0     00095b7f  _system_post_cinit               
+0     00088ffd  _system_pre_init                 
+0     0000b922  _unlock                          
+0     000949ea  abort                            
+0     00095afe  alarm_led_off                    
+0     00095b05  alarm_led_on                     
+0     00090e61  aligned_alloc                    
+0     000946e2  atoi                             
+0     00095b0c  beep_off                         
+0     00095b13  beep_on                          
+0     00090e34  calloc                           
+0     00094585  close                            
 0     00080000  code_start                       
-0     00094a91  copysign                         
-0     00094a91  copysignl                        
-0     00094325  ctl_init                         
-0     00095397  ctl_init_adc_channel             
-0     00095a4a  ctl_init_divider                 
-0     000910c5  ctl_init_psu                     
-0     00094e66  ctl_init_psu_mode_detection      
-0     000950a8  ctl_init_psu_protection          
-0     00095a60  ctl_mainloop                     
-0     0000b77a  debug_uart                       
+0     00094bb4  copysign                         
+0     00094bb4  copysignl                        
+0     00094448  ctl_init                         
+0     000954b8  ctl_init_adc_channel             
+0     00095b6b  ctl_init_divider                 
+0     00088cd6  ctl_init_psu                     
+0     00095046  ctl_init_psu_mode_detection      
+0     000951c9  ctl_init_psu_protection          
+0     00088fff  ctl_mainloop                     
+0     0000b788  debug_uart                       
 0     000854b2  dict_m1                          
 0     0000b0c0  dl                               
-0     0000b922  errno                            
-0     000948c9  exit                             
-0     00093869  fclose                           
-0     00093320  fflush                           
-0     00093a9e  finddevice                       
-0     0000b920  flag_init_cmpt                   
-0     00094ef0  flush_dl_rx_buffer               
-0     00094dba  flush_dl_tx_buffer               
-0     00091df6  fopen                            
-0     00092888  fputs                            
-0     0009096c  free                             
-0     00091dd8  freopen                          
-0     00093995  frexp                            
-0     00093995  frexpl                           
-0     00094119  fseek                            
-0     00094119  fseeko                           
-0     00093ab9  getdevice                        
-0     00094be7  gmp_base_calculate_crc16         
-0     0009096c  gmp_base_free                    
-0     00095a4e  gmp_base_get_system_tick         
-0     00094919  gmp_base_print_c28xsyscfg        
-0     00092688  gmp_base_show_label              
-0     00095a52  gmp_csp_post_process             
-0     0009442f  gmp_csp_startup                  
-0     00094208  gmp_dev_dl_default_rx_handler    
-0     000952ea  gmp_dev_dl_init                  
-0     00091673  gmp_dev_dl_loop_cb               
-0     00095a3b  gmp_dev_dl_msg_handled           
-0     000942b5  gmp_dev_dl_push_str              
-0     00095319  gmp_dev_dl_reply_ack_null        
-0     00094cc9  gmp_dev_dl_reply_nack            
-0     00094941  gmp_dev_dl_tx_append_payload     
-0     0009470e  gmp_dev_dl_tx_append_u16         
-0     00093aef  gmp_dev_dl_tx_append_u32         
-0     00094ce8  gmp_dev_dl_tx_append_u8          
-0     000959bf  gmp_dev_dl_tx_ready              
-0     00095328  gmp_dev_dl_tx_request            
-0     000951c5  gmp_dev_dl_tx_request_cmd        
-0     00095a56  gmp_dev_dl_tx_state_done         
-0     00092a61  gmp_dev_dl_tx_warp               
-0     0009473c  gmp_hal_gpio_write               
-0     0009244b  gmp_hal_iic_read_mem             
-0     000934b1  gmp_hal_iic_write_cmd            
-0     00092518  gmp_hal_iic_write_mem            
-0     00093189  gmp_hal_iic_write_reg            
-0     00093364  gmp_hal_uart_write               
-0     00095a21  gmp_mem_persp_init               
-0     000914ac  gmp_mem_persp_rx_cb              
+0     0000b928  errno                            
+0     000949ec  exit                             
+0     00093951  fclose                           
+0     00093408  fflush                           
+0     00093b86  finddevice                       
+0     0000b926  flag_init_cmpt                   
+0     00094ff7  flush_dl_rx_buffer               
+0     00094edd  flush_dl_tx_buffer               
+0     00091f4f  fopen                            
+0     000929e1  fputs                            
+0     00090ce2  free                             
+0     00091f31  freopen                          
+0     00093a7d  frexp                            
+0     00093a7d  frexpl                           
+0     00094240  fseek                            
+0     00094240  fseeko                           
+0     00093ba1  getdevice                        
+0     00094d0a  gmp_base_calculate_crc16         
+0     00090ce2  gmp_base_free                    
+0     00095b6f  gmp_base_get_system_tick         
+0     00094a3c  gmp_base_print_c28xsyscfg        
+0     000927e1  gmp_base_show_label              
+0     00095b73  gmp_csp_post_process             
+0     00094552  gmp_csp_startup                  
+0     000942f4  gmp_dev_dl_default_rx_handler    
+0     0009540b  gmp_dev_dl_init                  
+0     000917cc  gmp_dev_dl_loop_cb               
+0     00095b5c  gmp_dev_dl_msg_handled           
+0     000943a1  gmp_dev_dl_push_str              
+0     0009543a  gmp_dev_dl_reply_ack_null        
+0     00094dec  gmp_dev_dl_reply_nack            
+0     00094a64  gmp_dev_dl_tx_append_payload     
+0     00094831  gmp_dev_dl_tx_append_u16         
+0     00093c26  gmp_dev_dl_tx_append_u32         
+0     00094e0b  gmp_dev_dl_tx_append_u8          
+0     00095ae0  gmp_dev_dl_tx_ready              
+0     00095449  gmp_dev_dl_tx_request            
+0     000952e6  gmp_dev_dl_tx_request_cmd        
+0     00095b77  gmp_dev_dl_tx_state_done         
+0     00092bbb  gmp_dev_dl_tx_warp               
+0     0009485f  gmp_hal_gpio_write               
+0     000925a4  gmp_hal_iic_read_mem             
+0     00093599  gmp_hal_iic_write_cmd            
+0     00092671  gmp_hal_iic_write_mem            
+0     000932e5  gmp_hal_iic_write_reg            
+0     0009344c  gmp_hal_uart_write               
+0     00095b42  gmp_mem_persp_init               
+0     00091605  gmp_mem_persp_rx_cb              
 0     00087ff7  gmp_param_tunable_init           
-0     00091beb  gmp_param_tunable_rx_cb          
-0     000953ca  gmp_pil_sim_init                 
-0     00092368  gmp_pil_sim_rx_cb                
-0     00095a61  gmp_pil_sim_step                 
-0     000946df  gmp_scheduler_add_task           
-0     000939ef  gmp_scheduler_dispatch           
-0     00094a25  gmp_scheduler_init               
-0     00095064  gmp_step_system_tick             
+0     00091d44  gmp_param_tunable_rx_cb          
+0     000954eb  gmp_pil_sim_init                 
+0     000924c1  gmp_pil_sim_rx_cb                
+0     00092b25  gmp_pil_sim_step                 
+0     00094802  gmp_scheduler_add_task           
+0     00093ad7  gmp_scheduler_dispatch           
+0     00094b48  gmp_scheduler_init               
+0     00095185  gmp_step_system_tick             
 0     0000b6c6  gpio_alarm_led                   
 0     0000b6c4  gpio_beep                        
 0     0000b6c8  gpio_output_led                  
 0     0000b6cc  hdc1080                          
 0     0000b6d0  ht16k33                          
-0     00093447  ht16k33_init                     
-0     00092f9a  ht16k33_read_keys                
-0     00094b40  ht16k33_update_display           
+0     0009352f  ht16k33_init                     
+0     000930f6  ht16k33_read_keys                
+0     00094c63  ht16k33_update_display           
 0     0000b6ca  iic_bus                          
-0     00094156  init                             
-0     00093f20  initI2C                          
+0     0009427d  init                             
+0     0009400a  initI2C                          
 0     0000b004  kd                               
 0     0000b002  ki                               
 0     0000b000  kp                               
-0     000927df  ldexp                            
-0     000927df  ldexpl                           
+0     00092938  ldexp                            
+0     00092938  ldexpl                           
 0     00084de8  led_lut                          
-0     00095006  lseek                            
-0     000952b7  main                             
-0     00095a40  mainloop                         
-0     00090941  malloc                           
+0     00095127  lseek                            
+0     000953d8  main                             
+0     00095b61  mainloop                         
+0     00090cb7  malloc                           
 0     0000b00e  mem_persp_server                 
 0     000854c6  mem_regions                      
 0     000854cd  mem_regions_count                
-0     00090aeb  memalign                         
-0     000952fa  memccpy                          
-0     000953b1  memchr                           
-0     00094e11  memcpy                           
-0     00095a0e  memset                           
-0     00090aba  minit                            
-0     00094f8b  myBoardFSI0_FSIRX_init           
-0     0009476a  myBoardFSI0_FSITX_init           
-0     00094afb  myCPUTIMER0_init                 
-0     00093bd6  oled_clear                       
-0     00092af2  oled_init                        
-0     00094797  oled_set_position                
-0     00093f63  oled_show_char                   
-0     00094b62  oled_show_str                    
-0     000933d6  open                             
-0     000959f9  output_led_off                   
-0     00095a00  output_led_on                    
-0     0000b772  parmbuf                          
+0     00090e61  memalign                         
+0     0009541b  memccpy                          
+0     000954d2  memchr                           
+0     00094f34  memcpy                           
+0     00095b2f  memset                           
+0     00090e30  minit                            
+0     000950ac  myBoardFSI0_FSIRX_init           
+0     0009488d  myBoardFSI0_FSITX_init           
+0     00094c1e  myCPUTIMER0_init                 
+0     00093cc0  oled_clear                       
+0     00092c4c  oled_init                        
+0     000948ba  oled_set_position                
+0     0009404d  oled_show_char                   
+0     00094c85  oled_show_str                    
+0     000934be  open                             
+0     00095b1a  output_led_off                   
+0     00095b21  output_led_on                    
+0     0000b778  parmbuf                          
 0     0000b040  pil                              
 0     0000b740  psu_ctrl                         
 0     0000b70a  psu_current_fb_adc               
-0     00092c0a  psu_persistence_init             
+0     00092cd9  psu_persistence_init             
 0     0000b700  psu_voltage_fb_adc               
-0     00095361  psu_write_output_switch          
-0     0009291d  puts                             
+0     00095482  psu_write_output_switch          
+0     00092a76  puts                             
 0     0000ac00  ram_range                        
-0     00090a36  realloc                          
-0     00094fa4  remove                           
-0     000927df  scalbn                           
-0     000927df  scalbnl                          
+0     00090dac  realloc                          
+0     000950c5  remove                           
+0     00092938  scalbn                           
+0     00092938  scalbnl                          
 0     0000b016  sched                            
-0     0009393a  setup_peripheral                 
-0     00093017  setvbuf                          
-0     000944fa  sprintf                          
-0     000953e2  strchr                           
-0     00095993  strcmp                           
-0     00095a45  strcpy                           
-0     000959c7  strlen                           
-0     000950e8  strncpy                          
-0     0000b77c  sys_tick_div                     
+0     00093a22  setup_peripheral                 
+0     00093173  setvbuf                          
+0     0009461d  sprintf                          
+0     00095503  strchr                           
+0     00095ab4  strcmp                           
+0     00095b66  strcpy                           
+0     00095ae8  strlen                           
+0     00095209  strncpy                          
+0     0000b78a  sys_tick_div                     
 0     0000b878  tasks                            
-0     000952d9  tsk_LED_flush                    
-0     00093fa3  tsk_dl_debug_device              
-0     00092735  tsk_key_flush                    
-0     00094495  tsk_psu_alarm                    
-0     000912e2  tsk_psu_display                  
-0     00093204  tsk_psu_encoder                  
-0     000935e2  tsk_psu_persistence              
-0     00093768  tsk_startup                      
+0     000953fa  tsk_LED_flush                    
+0     0009408d  tsk_dl_debug_device              
+0     0009288e  tsk_key_flush                    
+0     000945b8  tsk_psu_alarm                    
+0     0009143b  tsk_psu_display                  
+0     00093360  tsk_psu_encoder                  
+0     000936ca  tsk_psu_persistence              
+0     00093850  tsk_startup                      
 0     0000b006  tunable                          
-0     00094fa4  unlink                           
-0     0009501e  update_led_content_8byte         
+0     000950c5  unlink                           
+0     0009513f  update_led_content_8byte         
 0     000854cc  var_tunable_count                
-0     00094680  vsprintf                         
-0     0009541a  wcslen                           
-0     00094fbd  write                            
+0     000947a3  vsprintf                         
+0     0009553b  wcslen                           
+0     000950de  write                            
 
 
 GLOBAL SYMBOLS: SORTED BY Symbol Address 
@@ -1542,22 +1542,22 @@ page  address   name
 0     0000b700  psu_voltage_fb_adc               
 0     0000b70a  psu_current_fb_adc               
 0     0000b740  psu_ctrl                         
-0     0000b772  parmbuf                          
-0     0000b77a  debug_uart                       
-0     0000b77c  sys_tick_div                     
-0     0000b792  _device                          
-0     0000b7f9  __TI_ft_end                      
-0     0000b7fa  __TI_enable_exit_profile_output  
-0     0000b7fc  __TI_cleanup_ptr                 
-0     0000b7fe  __TI_dtors_ptr                   
+0     0000b778  parmbuf                          
+0     0000b788  debug_uart                       
+0     0000b78a  sys_tick_div                     
+0     0000b798  _device                          
+0     0000b7ff  __TI_ft_end                      
 0     0000b800  _ftable                          
 0     0000b878  tasks                            
 0     0000b8e8  _stream                          
-0     0000b91a  _lock                            
-0     0000b91c  _unlock                          
-0     0000b91e  DSPC2000_SystemTick              
-0     0000b920  flag_init_cmpt                   
-0     0000b922  errno                            
+0     0000b91a  __TI_enable_exit_profile_output  
+0     0000b91c  __TI_cleanup_ptr                 
+0     0000b91e  __TI_dtors_ptr                   
+0     0000b920  _lock                            
+0     0000b922  _unlock                          
+0     0000b924  DSPC2000_SystemTick              
+0     0000b926  flag_init_cmpt                   
+0     0000b928  errno                            
 0     00080000  code_start                       
 0     00081000  RamfuncsLoadStart                
 0     000810fe  RamfuncsLoadEnd                  
@@ -1581,435 +1581,435 @@ page  address   name
 0     00087f95  __c28xabi_modull                 
 0     00087ff7  gmp_param_tunable_init           
 0     00088b51  __TI_printfi                     
-0     00088cd6  MainISR                          
-0     00088fc9  Fapi_setActiveFlashBank          
+0     00088cd6  ctl_init_psu                     
+0     00088ffd  _system_pre_init                 
+0     00088fff  ctl_mainloop                     
 0     00090000  SYSCTL_init                      
-0     000905f8  PinMux_init                      
-0     00090941  malloc                           
-0     0009096c  free                             
-0     0009096c  gmp_base_free                    
-0     00090a36  realloc                          
-0     00090aba  minit                            
-0     00090abe  calloc                           
-0     00090aeb  aligned_alloc                    
-0     00090aeb  memalign                         
-0     00090b99  __TI_heap_total_available        
-0     00090bb8  __TI_heap_largest_available      
-0     00090bd7  __TI_heap_check                  
-0     00090bd9  Device_enableAllPeripherals      
-0     00090e5d  Fapi_issueProgrammingCommand     
-0     000910c5  ctl_init_psu                     
-0     000912e2  tsk_psu_display                  
-0     000914ac  gmp_mem_persp_rx_cb              
-0     00091673  gmp_dev_dl_loop_cb               
-0     0009181d  IRIS_ADCB_init                   
-0     00091979  SysCtl_setClock                  
-0     00091ab4  IRIS_ADCA_init                   
-0     00091beb  gmp_param_tunable_rx_cb          
-0     00091dbb  __TI_cleanup                     
-0     00091dd8  freopen                          
-0     00091df6  fopen                            
-0     00091e3d  IRIS_ADCC_init                   
-0     00092078  SysCtl_isPLLValid                
-0     00092285  CAN_init                         
-0     00092285  IRIS_CAN_init                    
-0     00092368  gmp_pil_sim_rx_cb                
-0     0009244b  gmp_hal_iic_read_mem             
-0     00092518  gmp_hal_iic_write_mem            
-0     000925d3  CAN_setupMessageObject           
-0     00092688  gmp_base_show_label              
-0     00092735  tsk_key_flush                    
-0     000927df  ldexp                            
-0     000927df  ldexpl                           
-0     000927df  scalbn                           
-0     000927df  scalbnl                          
-0     00092888  fputs                            
-0     0009291d  puts                             
-0     00092930  __c28xabi_addd                   
-0     000929cc  __TI_writemsg                    
-0     00092a1f  C$$IO$$                          
-0     00092a24  __TI_readmsg                     
-0     00092a61  gmp_dev_dl_tx_warp               
-0     00092af2  oled_init                        
-0     00092b7f  __c28xabi_divd                   
-0     00092c0a  psu_persistence_init             
-0     00092c93  __c28xabi_mpyd                   
-0     00092d16  IRIS_EQEP1_init                  
-0     00092d98  IRIS_EQEP2_init                  
-0     00092e1a  IRIS_UART_USB_init               
-0     00092e9c  Fapi_issueAsyncCommandWithAddress
-0     00092f9a  ht16k33_read_keys                
-0     00093017  setvbuf                          
-0     00093093  Fapi_checkRegionForValueBy16bits 
-0     0009310e  IRIS_UART_RS232_init             
-0     00093189  gmp_hal_iic_write_reg            
-0     00093204  tsk_psu_encoder                  
-0     000932f1  __TI_doflush                     
-0     00093320  fflush                           
-0     00093364  gmp_hal_uart_write               
-0     000933d6  open                             
-0     00093447  ht16k33_init                     
-0     000934b1  gmp_hal_iic_write_cmd            
-0     0009357d  __TI_wrt_ok                      
-0     000935b7  __TI_rd_ok                       
-0     000935e2  tsk_psu_persistence              
-0     00093645  Fapi_configureFMAC               
-0     000936a6  INT_IRIS_CAN_0_ISR               
-0     00093707  HOSTlseek                        
-0     00093768  tsk_startup                      
-0     00093825  __TI_closefile                   
-0     00093869  fclose                           
-0     00093882  Device_init                      
-0     000938de  I2C_init                         
-0     000938de  IRIS_IIC_init                    
-0     0009393a  setup_peripheral                 
-0     00093995  frexp                            
-0     00093995  frexpl                           
-0     000939ef  gmp_scheduler_dispatch           
-0     00093a48  Fapi_issueFsmCommand             
-0     00093a9e  finddevice                       
-0     00093ab9  getdevice                        
-0     00093aef  gmp_dev_dl_tx_append_u32         
-0     00093b8a  Interrupt_disable                
-0     00093bd6  oled_clear                       
-0     00093c6e  IRIS_SPI_OUT_init                
-0     00093cfd  CAN_readMessage                  
-0     00093d42  SysCtl_selectXTAL                
-0     00093e11  GPIO_setAnalogMode               
-0     00093e55  INT_IRIS_UART_USB_RX_ISR         
-0     00093edd  IRIS_SPI_FPGA_BRIDGE_init        
-0     00093f20  initI2C                          
-0     00093f63  oled_show_char                   
-0     00093fa3  tsk_dl_debug_device              
-0     00093fe3  GPIO_setPadConfig                
-0     00094022  I2C_initController               
-0     00094060  Interrupt_initModule             
-0     0009409e  HOSTrename                       
-0     000940dc  INTERRUPT_init                   
-0     00094119  fseek                            
-0     00094119  fseeko                           
-0     00094156  init                             
-0     00094192  Fapi_isAddressValid              
-0     00094208  gmp_dev_dl_default_rx_handler    
-0     00094242  HOSTopen                         
-0     0009427c  HOSTwrite                        
-0     000942b5  gmp_dev_dl_push_str              
-0     000942ed  HOSTread                         
-0     00094325  ctl_init                         
-0     0009435c  EQEP_setInputPolarity            
-0     00094391  Interrupt_enable                 
-0     000943fb  Fapi_loopRegionForValueBy16bits  
-0     0009442f  gmp_csp_startup                  
-0     00094462  close                            
-0     00094495  tsk_psu_alarm                    
-0     000944c8  Fapi_initializeAPI               
-0     000944fa  sprintf                          
-0     0009452c  CAN_setBitTiming                 
-0     0009455d  Fapi_setupBankSectorEnable       
-0     0009458e  SysCtl_selectOscSource           
-0     000945bf  atoi                             
-0     00094620  __TI_decompress_lzss             
-0     00094650  __TI_ltoa                        
-0     00094680  vsprintf                         
-0     000946b0  GPIO_setPinConfig                
-0     000946df  gmp_scheduler_add_task           
-0     0009470e  gmp_dev_dl_tx_append_u16         
-0     0009473c  gmp_hal_gpio_write               
-0     0009476a  FSITX_init                       
-0     0009476a  myBoardFSI0_FSITX_init           
-0     00094797  oled_set_position                
-0     000947c4  FSI_performTxInitialization      
-0     000947f0  Fapi_calculateFletcherChecksum   
-0     0009481c  Fapi_divideUnsignedLong          
-0     00094848  __TI_auto_init_nobinit_nopinit   
-0     00094873  __c28xabi_cmpd                   
-0     0009489d  __c28xabi_divl                   
-0     000948ac  __c28xabi_modl                   
-0     000948ba  __c28xabi_divul                  
-0     000948c1  __c28xabi_modul                  
-0     000948c7  C$$EXIT                          
-0     000948c7  abort                            
-0     000948c9  exit                             
-0     000948f0  HOSTclose                        
-0     00094919  gmp_base_print_c28xsyscfg        
-0     00094941  gmp_dev_dl_tx_append_payload     
-0     0009498f  GPIO_setControllerCore           
-0     000949b5  GPIO_setQualificationMode        
-0     000949db  Board_init                       
-0     00094a25  gmp_scheduler_init               
-0     00094a6d  HOSTunlink                       
-0     00094a91  copysign                         
-0     00094a91  copysignl                        
-0     00094ab5  SCI_setConfig                    
-0     00094ad8  SPI_setConfig                    
-0     00094afb  CPUTIMER_init                    
-0     00094afb  myCPUTIMER0_init                 
-0     00094b1e  SCI_readCharArray                
-0     00094b40  ht16k33_update_display           
-0     00094b62  oled_show_str                    
-0     00094b84  IRIS_DACA_init                   
-0     00094ba5  IRIS_DACB_init                   
-0     00094bc6  SysCtl_selectXTALSingleEnded     
-0     00094be7  gmp_base_calculate_crc16         
-0     00094c29  __c28xabi_dtoi                   
-0     00094c4a  Fapi_issueAsyncCommand           
-0     00094caa  GPIO_setDirectionMode            
-0     00094cc9  gmp_dev_dl_reply_nack            
-0     00094ce8  gmp_dev_dl_tx_append_u8          
-0     00094d07  __c28xabi_dtol                   
-0     00094d26  ADC_setOffsetTrimAll             
-0     00094d44  SCI_clearInterruptStatus         
-0     00094d62  __c28xabi_cmpll                  
-0     00094d74  __c28xabi_cmpull                 
-0     00094d80  Fapi_flushPipeline               
-0     00094d9d  SYNC_init                        
-0     00094dba  flush_dl_tx_buffer               
-0     00094df4  __c28xabi_itod                   
-0     00094e11  memcpy                           
-0     00094e2e  Fapi_setupSectorsForWrite        
-0     00094e4a  Interrupt_initVectorTable        
-0     00094e66  ctl_init_psu_mode_detection      
-0     00094e9e  __c28xabi_ltod                   
-0     00094eba  CAN_clearInterruptStatus         
-0     00094ed5  Device_initGPIO                  
-0     00094ef0  flush_dl_rx_buffer               
-0     00094f0b  Fapi_WriteReadBack               
-0     00094f25  SCI_enableInterrupt              
-0     00094f59  ADC_setVREF                      
-0     00094f72  OLED_WR_Byte                     
-0     00094f8b  FSIRX_init                       
-0     00094f8b  myBoardFSI0_FSIRX_init           
-0     00094fa4  remove                           
-0     00094fa4  unlink                           
-0     00094fbd  write                            
-0     00094fee  __c28xabi_andll                  
-0     00094ff6  __c28xabi_orll                   
-0     00094ffe  __c28xabi_xorll                  
-0     00095006  lseek                            
-0     0009501e  update_led_content_8byte         
-0     00095036  FSI_clearRxModuleReset           
-0     0009504d  INT_IRIS_CAN_1_ISR               
-0     00095064  gmp_step_system_tick             
-0     0009507b  _c_int00                         
-0     00095092  FSI_clearTxModuleReset           
-0     000950a8  ctl_init_psu_protection          
-0     000950be  CAN_initModule                   
-0     000950d3  SysCtl_configureType             
-0     000950e8  strncpy                          
-0     000950fd  FSI_resetRxModule                
-0     00095111  IRIS_GPIO1_init                  
-0     00095125  IRIS_GPIO2_init                  
-0     00095139  IRIS_GPIO3_init                  
-0     0009514d  IRIS_GPIO4_init                  
-0     00095161  IRIS_GPIO5_init                  
-0     00095175  IRIS_GPIO6_init                  
-0     00095189  IRIS_GPIO_SPI_RST_init           
-0     0009519d  IRIS_LED1_init                   
-0     000951b1  IRIS_LED2_init                   
-0     000951c5  gmp_dev_dl_tx_request_cmd        
-0     00095201  FSI_resetTxModule                
-0     00095214  GPIO_init                        
-0     00095227  I2C_enableInterrupt              
-0     0009524d  FSI_performRxInitialization      
-0     00095295  I2C_clearInterruptStatus         
-0     000952a6  INT_IRIS_UART_RS232_RX_ISR       
-0     000952b7  main                             
-0     000952d9  tsk_LED_flush                    
-0     000952ea  gmp_dev_dl_init                  
-0     000952fa  memccpy                          
-0     0009530a  Fapi_doVerifyBy16bits            
-0     00095319  gmp_dev_dl_reply_ack_null        
-0     00095328  gmp_dev_dl_tx_request            
-0     00095337  Fapi_checkFsmForReady            
-0     00095361  psu_write_output_switch          
-0     0009536f  __c28xabi_subd                   
-0     0009537d  EMPTY_ISR                        
-0     0009538a  Fapi_calculateOtpChecksum        
-0     00095397  ctl_init_adc_channel             
-0     000953a4  _abort_msg                       
-0     000953b1  memchr                           
-0     000953be  Interrupt_defaultHandler         
-0     000953ca  gmp_pil_sim_init                 
-0     000953d6  _args_main                       
-0     000953e2  strchr                           
-0     000953ee  ASYSCTL_init                     
-0     000953f9  Fapi_scaleCycleValues            
-0     0009540f  __c28xabi_divu                   
-0     00095414  __c28xabi_modu                   
-0     0009541a  wcslen                           
-0     00095425  ADCA1_ISR                        
-0     0009542f  ADCA2_ISR                        
-0     00095439  ADCA3_ISR                        
-0     00095443  ADCA4_ISR                        
-0     0009544d  ADCA_EVT_ISR                     
-0     00095457  ADCB1_ISR                        
-0     00095461  ADCB2_ISR                        
-0     0009546b  ADCB3_ISR                        
-0     00095475  ADCB4_ISR                        
-0     0009547f  ADCB_EVT_ISR                     
-0     00095489  ADCC1_ISR                        
-0     00095493  ADCC2_ISR                        
-0     0009549d  ADCC3_ISR                        
-0     000954a7  ADCC4_ISR                        
-0     000954b1  ADCC_EVT_ISR                     
-0     000954bb  AES_SINTREQUEST_ISR              
-0     000954c5  BGCRC_CLA1_ISR                   
-0     000954cf  BGCRC_ISR                        
-0     000954d9  CANA0_ISR                        
-0     000954e3  CANA1_ISR                        
-0     000954ed  CLA1_1_ISR                       
-0     000954f7  CLA1_2_ISR                       
-0     00095501  CLA1_3_ISR                       
-0     0009550b  CLA1_4_ISR                       
-0     00095515  CLA1_5_ISR                       
-0     0009551f  CLA1_6_ISR                       
-0     00095529  CLA1_7_ISR                       
-0     00095533  CLA1_8_ISR                       
-0     0009553d  CLA_OVERFLOW_ISR                 
-0     00095547  CLA_UNDERFLOW_ISR                
-0     00095551  CLB1_ISR                         
-0     0009555b  CLB2_ISR                         
-0     00095565  CLB3_ISR                         
-0     0009556f  CLB4_ISR                         
-0     00095579  DATALOG_ISR                      
-0     00095583  DCC0_ISR                         
-0     0009558d  DCC1_ISR                         
-0     00095597  DMA_CH1_ISR                      
-0     000955a1  DMA_CH2_ISR                      
-0     000955ab  DMA_CH3_ISR                      
-0     000955b5  DMA_CH4_ISR                      
-0     000955bf  DMA_CH5_ISR                      
-0     000955c9  DMA_CH6_ISR                      
-0     000955d3  ECAP1_ISR                        
-0     000955dd  ECAP2_ISR                        
-0     000955e7  ECAP3_2_ISR                      
-0     000955f1  ECAP3_ISR                        
-0     000955fb  EMU_ISR                          
-0     00095605  EPWM1_ISR                        
-0     0009560f  EPWM1_TZ_ISR                     
-0     00095619  EPWM2_ISR                        
-0     00095623  EPWM2_TZ_ISR                     
-0     0009562d  EPWM3_ISR                        
-0     00095637  EPWM3_TZ_ISR                     
-0     00095641  EPWM4_ISR                        
-0     0009564b  EPWM4_TZ_ISR                     
-0     00095655  EPWM5_ISR                        
-0     0009565f  EPWM5_TZ_ISR                     
-0     00095669  EPWM6_ISR                        
-0     00095673  EPWM6_TZ_ISR                     
-0     0009567d  EPWM7_ISR                        
-0     00095687  EPWM7_TZ_ISR                     
-0     00095691  EPWM8_ISR                        
-0     0009569b  EPWM8_TZ_ISR                     
-0     000956a5  EQEP1_ISR                        
-0     000956af  EQEP2_ISR                        
-0     000956b9  FLASH_CORR_ERR_ISR               
-0     000956c3  FMC_ISR                          
-0     000956cd  FPU_OVERFLOW_ISR                 
-0     000956d7  FPU_UNDERFLOW_ISR                
-0     000956e1  FSIRXA1_ISR                      
-0     000956eb  FSIRXA2_ISR                      
-0     000956f5  FSITXA1_ISR                      
-0     000956ff  FSITXA2_ISR                      
-0     00095709  HICA_ISR                         
-0     00095713  I2CA_FIFO_ISR                    
-0     0009571d  I2CA_ISR                         
-0     00095727  I2CB_FIFO_ISR                    
-0     00095731  I2CB_ISR                         
-0     0009573b  ILLEGAL_ISR                      
-0     00095745  Interrupt_illegalOperationHandler
-0     0009574f  Interrupt_nmiHandler             
-0     00095759  LINA_0_ISR                       
-0     00095763  LINA_1_ISR                       
-0     0009576d  LINB_0_ISR                       
-0     00095777  LINB_1_ISR                       
-0     00095781  MCANA_0_ISR                      
-0     0009578b  MCANA_1_ISR                      
-0     00095795  MCANA_ECC_ISR                    
-0     0009579f  MCANA_WAKE_ISR                   
-0     000957a9  MPOST_ISR                        
-0     000957b3  NMI_ISR                          
-0     000957bd  NOTUSED_ISR                      
-0     000957c7  PIE_RESERVED_ISR                 
-0     000957d1  PMBUSA_ISR                       
-0     000957db  RAM_ACC_VIOL_ISR                 
-0     000957e5  RAM_CORR_ERR_ISR                 
-0     000957ef  RTOS_ISR                         
-0     000957f9  SCIA_RX_ISR                      
-0     00095803  SCIA_TX_ISR                      
-0     0009580d  SCIB_RX_ISR                      
-0     00095817  SCIB_TX_ISR                      
-0     00095821  SDFM1DR1_ISR                     
-0     0009582b  SDFM1DR2_ISR                     
-0     00095835  SDFM1DR3_ISR                     
-0     0009583f  SDFM1DR4_ISR                     
-0     00095849  SDFM1_ISR                        
-0     00095853  SDFM2DR1_ISR                     
-0     0009585d  SDFM2DR2_ISR                     
-0     00095867  SDFM2DR3_ISR                     
-0     00095871  SDFM2DR4_ISR                     
-0     0009587b  SDFM2_ISR                        
-0     00095885  SPIA_RX_ISR                      
-0     0009588f  SPIA_TX_ISR                      
-0     00095899  SPIB_RX_ISR                      
-0     000958a3  SPIB_TX_ISR                      
-0     000958ad  SYS_ERR_ISR                      
-0     000958b7  TIMER0_ISR                       
-0     000958c1  TIMER1_ISR                       
-0     000958cb  TIMER2_ISR                       
-0     000958d5  USER10_ISR                       
-0     000958df  USER11_ISR                       
-0     000958e9  USER12_ISR                       
-0     000958f3  USER1_ISR                        
-0     000958fd  USER2_ISR                        
-0     00095907  USER3_ISR                        
-0     00095911  USER4_ISR                        
-0     0009591b  USER5_ISR                        
-0     00095925  USER6_ISR                        
-0     0009592f  USER7_ISR                        
-0     00095939  USER8_ISR                        
-0     00095943  USER9_ISR                        
-0     0009594d  WAKE_ISR                         
-0     00095957  XINT1_ISR                        
-0     00095961  XINT2_ISR                        
-0     0009596b  XINT3_ISR                        
-0     00095975  XINT4_ISR                        
-0     0009597f  XINT5_ISR                        
-0     00095993  strcmp                           
-0     0009599d  _register_unlock                 
-0     000959a1  _register_lock                   
-0     000959a5  _nop                             
-0     000959a6  __c28xabi_negd                   
-0     000959af  __TI_decompress_none             
-0     000959bf  gmp_dev_dl_tx_ready              
-0     000959c7  strlen                           
-0     000959cf  ADC_init                         
-0     000959d6  Fapi_getFsmStatus                
-0     000959dd  alarm_led_off                    
-0     000959e4  alarm_led_on                     
-0     000959eb  beep_off                         
-0     000959f2  beep_on                          
-0     000959f9  output_led_off                   
-0     00095a00  output_led_on                    
-0     00095a0e  memset                           
-0     00095a15  CPUTimer_setEmulationMode        
-0     00095a1b  __TI_zero_init                   
-0     00095a21  gmp_mem_persp_init               
-0     00095a27  DAC_init                         
-0     00095a2c  EQEP_init                        
-0     00095a31  SCI_init                         
-0     00095a36  SPI_init                         
-0     00095a3b  gmp_dev_dl_msg_handled           
-0     00095a40  mainloop                         
-0     00095a45  strcpy                           
-0     00095a4a  ctl_init_divider                 
-0     00095a4e  gmp_base_get_system_tick         
-0     00095a52  gmp_csp_post_process             
-0     00095a56  gmp_dev_dl_tx_state_done         
-0     00095a5e  _system_pre_init                 
-0     00095a60  ctl_mainloop                     
-0     00095a61  gmp_pil_sim_step                 
-0     00095a62  _system_post_cinit               
+0     000905f8  MainISR                          
+0     0009096e  PinMux_init                      
+0     00090cb7  malloc                           
+0     00090ce2  free                             
+0     00090ce2  gmp_base_free                    
+0     00090dac  realloc                          
+0     00090e30  minit                            
+0     00090e34  calloc                           
+0     00090e61  aligned_alloc                    
+0     00090e61  memalign                         
+0     00090f0f  __TI_heap_total_available        
+0     00090f2e  __TI_heap_largest_available      
+0     00090f4d  __TI_heap_check                  
+0     00090f4f  Device_enableAllPeripherals      
+0     000911d3  Fapi_issueProgrammingCommand     
+0     0009143b  tsk_psu_display                  
+0     00091605  gmp_mem_persp_rx_cb              
+0     000917cc  gmp_dev_dl_loop_cb               
+0     00091976  IRIS_ADCB_init                   
+0     00091ad2  SysCtl_setClock                  
+0     00091c0d  IRIS_ADCA_init                   
+0     00091d44  gmp_param_tunable_rx_cb          
+0     00091f14  __TI_cleanup                     
+0     00091f31  freopen                          
+0     00091f4f  fopen                            
+0     00091f96  IRIS_ADCC_init                   
+0     000921d1  SysCtl_isPLLValid                
+0     000923de  CAN_init                         
+0     000923de  IRIS_CAN_init                    
+0     000924c1  gmp_pil_sim_rx_cb                
+0     000925a4  gmp_hal_iic_read_mem             
+0     00092671  gmp_hal_iic_write_mem            
+0     0009272c  CAN_setupMessageObject           
+0     000927e1  gmp_base_show_label              
+0     0009288e  tsk_key_flush                    
+0     00092938  ldexp                            
+0     00092938  ldexpl                           
+0     00092938  scalbn                           
+0     00092938  scalbnl                          
+0     000929e1  fputs                            
+0     00092a76  puts                             
+0     00092a89  __c28xabi_addd                   
+0     00092b25  gmp_pil_sim_step                 
+0     00092b26  __TI_writemsg                    
+0     00092b79  C$$IO$$                          
+0     00092b7e  __TI_readmsg                     
+0     00092bbb  gmp_dev_dl_tx_warp               
+0     00092c4c  oled_init                        
+0     00092cd9  psu_persistence_init             
+0     00092d64  __c28xabi_divd                   
+0     00092def  __c28xabi_mpyd                   
+0     00092e72  IRIS_EQEP1_init                  
+0     00092ef4  IRIS_EQEP2_init                  
+0     00092f76  IRIS_UART_USB_init               
+0     00092ff8  Fapi_issueAsyncCommandWithAddress
+0     000930f6  ht16k33_read_keys                
+0     00093173  setvbuf                          
+0     000931ef  Fapi_checkRegionForValueBy16bits 
+0     0009326a  IRIS_UART_RS232_init             
+0     000932e5  gmp_hal_iic_write_reg            
+0     00093360  tsk_psu_encoder                  
+0     000933d9  __TI_doflush                     
+0     00093408  fflush                           
+0     0009344c  gmp_hal_uart_write               
+0     000934be  open                             
+0     0009352f  ht16k33_init                     
+0     00093599  gmp_hal_iic_write_cmd            
+0     00093665  __TI_wrt_ok                      
+0     0009369f  __TI_rd_ok                       
+0     000936ca  tsk_psu_persistence              
+0     0009372d  Fapi_configureFMAC               
+0     0009378e  INT_IRIS_CAN_0_ISR               
+0     000937ef  HOSTlseek                        
+0     00093850  tsk_startup                      
+0     0009390d  __TI_closefile                   
+0     00093951  fclose                           
+0     0009396a  Device_init                      
+0     000939c6  I2C_init                         
+0     000939c6  IRIS_IIC_init                    
+0     00093a22  setup_peripheral                 
+0     00093a7d  frexp                            
+0     00093a7d  frexpl                           
+0     00093ad7  gmp_scheduler_dispatch           
+0     00093b30  Fapi_issueFsmCommand             
+0     00093b86  finddevice                       
+0     00093ba1  getdevice                        
+0     00093c26  gmp_dev_dl_tx_append_u32         
+0     00093c74  Interrupt_disable                
+0     00093cc0  oled_clear                       
+0     00093d58  IRIS_SPI_OUT_init                
+0     00093de7  CAN_readMessage                  
+0     00093e2c  SysCtl_selectXTAL                
+0     00093efb  GPIO_setAnalogMode               
+0     00093f3f  INT_IRIS_UART_USB_RX_ISR         
+0     00093fc7  IRIS_SPI_FPGA_BRIDGE_init        
+0     0009400a  initI2C                          
+0     0009404d  oled_show_char                   
+0     0009408d  tsk_dl_debug_device              
+0     000940cd  GPIO_setPadConfig                
+0     0009410c  I2C_initController               
+0     0009414a  Interrupt_initModule             
+0     00094188  HOSTrename                       
+0     000941c6  INTERRUPT_init                   
+0     00094240  fseek                            
+0     00094240  fseeko                           
+0     0009427d  init                             
+0     000942b9  Fapi_isAddressValid              
+0     000942f4  gmp_dev_dl_default_rx_handler    
+0     0009432e  HOSTopen                         
+0     00094368  HOSTwrite                        
+0     000943a1  gmp_dev_dl_push_str              
+0     000943d9  HOSTread                         
+0     00094411  Fapi_setActiveFlashBank          
+0     00094448  ctl_init                         
+0     0009447f  EQEP_setInputPolarity            
+0     000944b4  Interrupt_enable                 
+0     0009451e  Fapi_loopRegionForValueBy16bits  
+0     00094552  gmp_csp_startup                  
+0     00094585  close                            
+0     000945b8  tsk_psu_alarm                    
+0     000945eb  Fapi_initializeAPI               
+0     0009461d  sprintf                          
+0     0009464f  CAN_setBitTiming                 
+0     00094680  Fapi_setupBankSectorEnable       
+0     000946b1  SysCtl_selectOscSource           
+0     000946e2  atoi                             
+0     00094743  __TI_decompress_lzss             
+0     00094773  __TI_ltoa                        
+0     000947a3  vsprintf                         
+0     000947d3  GPIO_setPinConfig                
+0     00094802  gmp_scheduler_add_task           
+0     00094831  gmp_dev_dl_tx_append_u16         
+0     0009485f  gmp_hal_gpio_write               
+0     0009488d  FSITX_init                       
+0     0009488d  myBoardFSI0_FSITX_init           
+0     000948ba  oled_set_position                
+0     000948e7  FSI_performTxInitialization      
+0     00094913  Fapi_calculateFletcherChecksum   
+0     0009493f  Fapi_divideUnsignedLong          
+0     0009496b  __TI_auto_init_nobinit_nopinit   
+0     00094996  __c28xabi_cmpd                   
+0     000949c0  __c28xabi_divl                   
+0     000949cf  __c28xabi_modl                   
+0     000949dd  __c28xabi_divul                  
+0     000949e4  __c28xabi_modul                  
+0     000949ea  C$$EXIT                          
+0     000949ea  abort                            
+0     000949ec  exit                             
+0     00094a13  HOSTclose                        
+0     00094a3c  gmp_base_print_c28xsyscfg        
+0     00094a64  gmp_dev_dl_tx_append_payload     
+0     00094ab2  GPIO_setControllerCore           
+0     00094ad8  GPIO_setQualificationMode        
+0     00094afe  Board_init                       
+0     00094b48  gmp_scheduler_init               
+0     00094b90  HOSTunlink                       
+0     00094bb4  copysign                         
+0     00094bb4  copysignl                        
+0     00094bd8  SCI_setConfig                    
+0     00094bfb  SPI_setConfig                    
+0     00094c1e  CPUTIMER_init                    
+0     00094c1e  myCPUTIMER0_init                 
+0     00094c41  SCI_readCharArray                
+0     00094c63  ht16k33_update_display           
+0     00094c85  oled_show_str                    
+0     00094ca7  IRIS_DACA_init                   
+0     00094cc8  IRIS_DACB_init                   
+0     00094ce9  SysCtl_selectXTALSingleEnded     
+0     00094d0a  gmp_base_calculate_crc16         
+0     00094d4c  __c28xabi_dtoi                   
+0     00094d6d  Fapi_issueAsyncCommand           
+0     00094dcd  GPIO_setDirectionMode            
+0     00094dec  gmp_dev_dl_reply_nack            
+0     00094e0b  gmp_dev_dl_tx_append_u8          
+0     00094e2a  __c28xabi_dtol                   
+0     00094e49  ADC_setOffsetTrimAll             
+0     00094e67  SCI_clearInterruptStatus         
+0     00094e85  __c28xabi_cmpll                  
+0     00094e97  __c28xabi_cmpull                 
+0     00094ea3  Fapi_flushPipeline               
+0     00094ec0  SYNC_init                        
+0     00094edd  flush_dl_tx_buffer               
+0     00094f17  __c28xabi_itod                   
+0     00094f34  memcpy                           
+0     00094f51  Fapi_setupSectorsForWrite        
+0     00094f6d  Interrupt_initVectorTable        
+0     00094fa5  __c28xabi_ltod                   
+0     00094fc1  CAN_clearInterruptStatus         
+0     00094fdc  Device_initGPIO                  
+0     00094ff7  flush_dl_rx_buffer               
+0     00095012  Fapi_WriteReadBack               
+0     0009502c  SCI_enableInterrupt              
+0     00095046  ctl_init_psu_mode_detection      
+0     0009507a  ADC_setVREF                      
+0     00095093  OLED_WR_Byte                     
+0     000950ac  FSIRX_init                       
+0     000950ac  myBoardFSI0_FSIRX_init           
+0     000950c5  remove                           
+0     000950c5  unlink                           
+0     000950de  write                            
+0     0009510f  __c28xabi_andll                  
+0     00095117  __c28xabi_orll                   
+0     0009511f  __c28xabi_xorll                  
+0     00095127  lseek                            
+0     0009513f  update_led_content_8byte         
+0     00095157  FSI_clearRxModuleReset           
+0     0009516e  INT_IRIS_CAN_1_ISR               
+0     00095185  gmp_step_system_tick             
+0     0009519c  _c_int00                         
+0     000951b3  FSI_clearTxModuleReset           
+0     000951c9  ctl_init_psu_protection          
+0     000951df  CAN_initModule                   
+0     000951f4  SysCtl_configureType             
+0     00095209  strncpy                          
+0     0009521e  FSI_resetRxModule                
+0     00095232  IRIS_GPIO1_init                  
+0     00095246  IRIS_GPIO2_init                  
+0     0009525a  IRIS_GPIO3_init                  
+0     0009526e  IRIS_GPIO4_init                  
+0     00095282  IRIS_GPIO5_init                  
+0     00095296  IRIS_GPIO6_init                  
+0     000952aa  IRIS_GPIO_SPI_RST_init           
+0     000952be  IRIS_LED1_init                   
+0     000952d2  IRIS_LED2_init                   
+0     000952e6  gmp_dev_dl_tx_request_cmd        
+0     00095322  FSI_resetTxModule                
+0     00095335  GPIO_init                        
+0     00095348  I2C_enableInterrupt              
+0     0009536e  FSI_performRxInitialization      
+0     000953b6  I2C_clearInterruptStatus         
+0     000953c7  INT_IRIS_UART_RS232_RX_ISR       
+0     000953d8  main                             
+0     000953fa  tsk_LED_flush                    
+0     0009540b  gmp_dev_dl_init                  
+0     0009541b  memccpy                          
+0     0009542b  Fapi_doVerifyBy16bits            
+0     0009543a  gmp_dev_dl_reply_ack_null        
+0     00095449  gmp_dev_dl_tx_request            
+0     00095458  Fapi_checkFsmForReady            
+0     00095482  psu_write_output_switch          
+0     00095490  __c28xabi_subd                   
+0     0009549e  EMPTY_ISR                        
+0     000954ab  Fapi_calculateOtpChecksum        
+0     000954b8  ctl_init_adc_channel             
+0     000954c5  _abort_msg                       
+0     000954d2  memchr                           
+0     000954df  Interrupt_defaultHandler         
+0     000954eb  gmp_pil_sim_init                 
+0     000954f7  _args_main                       
+0     00095503  strchr                           
+0     0009550f  ASYSCTL_init                     
+0     0009551a  Fapi_scaleCycleValues            
+0     00095530  __c28xabi_divu                   
+0     00095535  __c28xabi_modu                   
+0     0009553b  wcslen                           
+0     00095546  ADCA1_ISR                        
+0     00095550  ADCA2_ISR                        
+0     0009555a  ADCA3_ISR                        
+0     00095564  ADCA4_ISR                        
+0     0009556e  ADCA_EVT_ISR                     
+0     00095578  ADCB1_ISR                        
+0     00095582  ADCB2_ISR                        
+0     0009558c  ADCB3_ISR                        
+0     00095596  ADCB4_ISR                        
+0     000955a0  ADCB_EVT_ISR                     
+0     000955aa  ADCC1_ISR                        
+0     000955b4  ADCC2_ISR                        
+0     000955be  ADCC3_ISR                        
+0     000955c8  ADCC4_ISR                        
+0     000955d2  ADCC_EVT_ISR                     
+0     000955dc  AES_SINTREQUEST_ISR              
+0     000955e6  BGCRC_CLA1_ISR                   
+0     000955f0  BGCRC_ISR                        
+0     000955fa  CANA0_ISR                        
+0     00095604  CANA1_ISR                        
+0     0009560e  CLA1_1_ISR                       
+0     00095618  CLA1_2_ISR                       
+0     00095622  CLA1_3_ISR                       
+0     0009562c  CLA1_4_ISR                       
+0     00095636  CLA1_5_ISR                       
+0     00095640  CLA1_6_ISR                       
+0     0009564a  CLA1_7_ISR                       
+0     00095654  CLA1_8_ISR                       
+0     0009565e  CLA_OVERFLOW_ISR                 
+0     00095668  CLA_UNDERFLOW_ISR                
+0     00095672  CLB1_ISR                         
+0     0009567c  CLB2_ISR                         
+0     00095686  CLB3_ISR                         
+0     00095690  CLB4_ISR                         
+0     0009569a  DATALOG_ISR                      
+0     000956a4  DCC0_ISR                         
+0     000956ae  DCC1_ISR                         
+0     000956b8  DMA_CH1_ISR                      
+0     000956c2  DMA_CH2_ISR                      
+0     000956cc  DMA_CH3_ISR                      
+0     000956d6  DMA_CH4_ISR                      
+0     000956e0  DMA_CH5_ISR                      
+0     000956ea  DMA_CH6_ISR                      
+0     000956f4  ECAP1_ISR                        
+0     000956fe  ECAP2_ISR                        
+0     00095708  ECAP3_2_ISR                      
+0     00095712  ECAP3_ISR                        
+0     0009571c  EMU_ISR                          
+0     00095726  EPWM1_ISR                        
+0     00095730  EPWM1_TZ_ISR                     
+0     0009573a  EPWM2_ISR                        
+0     00095744  EPWM2_TZ_ISR                     
+0     0009574e  EPWM3_ISR                        
+0     00095758  EPWM3_TZ_ISR                     
+0     00095762  EPWM4_ISR                        
+0     0009576c  EPWM4_TZ_ISR                     
+0     00095776  EPWM5_ISR                        
+0     00095780  EPWM5_TZ_ISR                     
+0     0009578a  EPWM6_ISR                        
+0     00095794  EPWM6_TZ_ISR                     
+0     0009579e  EPWM7_ISR                        
+0     000957a8  EPWM7_TZ_ISR                     
+0     000957b2  EPWM8_ISR                        
+0     000957bc  EPWM8_TZ_ISR                     
+0     000957c6  EQEP1_ISR                        
+0     000957d0  EQEP2_ISR                        
+0     000957da  FLASH_CORR_ERR_ISR               
+0     000957e4  FMC_ISR                          
+0     000957ee  FPU_OVERFLOW_ISR                 
+0     000957f8  FPU_UNDERFLOW_ISR                
+0     00095802  FSIRXA1_ISR                      
+0     0009580c  FSIRXA2_ISR                      
+0     00095816  FSITXA1_ISR                      
+0     00095820  FSITXA2_ISR                      
+0     0009582a  HICA_ISR                         
+0     00095834  I2CA_FIFO_ISR                    
+0     0009583e  I2CA_ISR                         
+0     00095848  I2CB_FIFO_ISR                    
+0     00095852  I2CB_ISR                         
+0     0009585c  ILLEGAL_ISR                      
+0     00095866  Interrupt_illegalOperationHandler
+0     00095870  Interrupt_nmiHandler             
+0     0009587a  LINA_0_ISR                       
+0     00095884  LINA_1_ISR                       
+0     0009588e  LINB_0_ISR                       
+0     00095898  LINB_1_ISR                       
+0     000958a2  MCANA_0_ISR                      
+0     000958ac  MCANA_1_ISR                      
+0     000958b6  MCANA_ECC_ISR                    
+0     000958c0  MCANA_WAKE_ISR                   
+0     000958ca  MPOST_ISR                        
+0     000958d4  NMI_ISR                          
+0     000958de  NOTUSED_ISR                      
+0     000958e8  PIE_RESERVED_ISR                 
+0     000958f2  PMBUSA_ISR                       
+0     000958fc  RAM_ACC_VIOL_ISR                 
+0     00095906  RAM_CORR_ERR_ISR                 
+0     00095910  RTOS_ISR                         
+0     0009591a  SCIA_RX_ISR                      
+0     00095924  SCIA_TX_ISR                      
+0     0009592e  SCIB_RX_ISR                      
+0     00095938  SCIB_TX_ISR                      
+0     00095942  SDFM1DR1_ISR                     
+0     0009594c  SDFM1DR2_ISR                     
+0     00095956  SDFM1DR3_ISR                     
+0     00095960  SDFM1DR4_ISR                     
+0     0009596a  SDFM1_ISR                        
+0     00095974  SDFM2DR1_ISR                     
+0     0009597e  SDFM2DR2_ISR                     
+0     00095988  SDFM2DR3_ISR                     
+0     00095992  SDFM2DR4_ISR                     
+0     0009599c  SDFM2_ISR                        
+0     000959a6  SPIA_RX_ISR                      
+0     000959b0  SPIA_TX_ISR                      
+0     000959ba  SPIB_RX_ISR                      
+0     000959c4  SPIB_TX_ISR                      
+0     000959ce  SYS_ERR_ISR                      
+0     000959d8  TIMER0_ISR                       
+0     000959e2  TIMER1_ISR                       
+0     000959ec  TIMER2_ISR                       
+0     000959f6  USER10_ISR                       
+0     00095a00  USER11_ISR                       
+0     00095a0a  USER12_ISR                       
+0     00095a14  USER1_ISR                        
+0     00095a1e  USER2_ISR                        
+0     00095a28  USER3_ISR                        
+0     00095a32  USER4_ISR                        
+0     00095a3c  USER5_ISR                        
+0     00095a46  USER6_ISR                        
+0     00095a50  USER7_ISR                        
+0     00095a5a  USER8_ISR                        
+0     00095a64  USER9_ISR                        
+0     00095a6e  WAKE_ISR                         
+0     00095a78  XINT1_ISR                        
+0     00095a82  XINT2_ISR                        
+0     00095a8c  XINT3_ISR                        
+0     00095a96  XINT4_ISR                        
+0     00095aa0  XINT5_ISR                        
+0     00095ab4  strcmp                           
+0     00095abe  _register_unlock                 
+0     00095ac2  _register_lock                   
+0     00095ac6  _nop                             
+0     00095ac7  __c28xabi_negd                   
+0     00095ad0  __TI_decompress_none             
+0     00095ae0  gmp_dev_dl_tx_ready              
+0     00095ae8  strlen                           
+0     00095af0  ADC_init                         
+0     00095af7  Fapi_getFsmStatus                
+0     00095afe  alarm_led_off                    
+0     00095b05  alarm_led_on                     
+0     00095b0c  beep_off                         
+0     00095b13  beep_on                          
+0     00095b1a  output_led_off                   
+0     00095b21  output_led_on                    
+0     00095b2f  memset                           
+0     00095b36  CPUTimer_setEmulationMode        
+0     00095b3c  __TI_zero_init                   
+0     00095b42  gmp_mem_persp_init               
+0     00095b48  DAC_init                         
+0     00095b4d  EQEP_init                        
+0     00095b52  SCI_init                         
+0     00095b57  SPI_init                         
+0     00095b5c  gmp_dev_dl_msg_handled           
+0     00095b61  mainloop                         
+0     00095b66  strcpy                           
+0     00095b6b  ctl_init_divider                 
+0     00095b6f  gmp_base_get_system_tick         
+0     00095b73  gmp_csp_post_process             
+0     00095b77  gmp_dev_dl_tx_state_done         
+0     00095b7f  _system_post_cinit               
 abs   00000000  Cla1ConstLoadSize                
 abs   00000000  Cla1ProgLoadSize                 
 abs   000000fe  RamfuncsLoadSize                 

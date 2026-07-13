@@ -34,6 +34,15 @@ void ctl_init_psu(
             PSU_CURRENT_AMP_GAIN /
             PSU_DAC_REF_V);
 
+    hpsu->voltage_dac_slew_pu =
+        float2ctrl(
+            (parameter_gt)PSU_VOLTAGE_DAC_SLEW_CODES_PER_CYCLE /
+            (parameter_gt)PSU_DAC_MAX_CODE);
+    hpsu->current_dac_slew_pu =
+        float2ctrl(
+            (parameter_gt)PSU_CURRENT_DAC_SLEW_CODES_PER_CYCLE /
+            (parameter_gt)PSU_DAC_MAX_CODE);
+
     hpsu->voltage_set_v = float2ctrl(0.0f);
     hpsu->current_set_a = float2ctrl(0.0f);
     hpsu->voltage_dac_pu = float2ctrl(0.0f);
@@ -47,8 +56,10 @@ void ctl_init_psu(
     hpsu->mode_enter_cc_counter = 0U;
     hpsu->mode_exit_cc_counter = 0U;
     hpsu->mode_limit_trip_cycles = PSU_MODE_LIMIT_TRIP_CYCLES;
-    hpsu->mode_limit_blank_counter = 0U;
     hpsu->mode_violation_counter = 0U;
+    hpsu->cc_acquire_timeout_cycles = PSU_CC_ACQUIRE_TIMEOUT_CYCLES;
+    hpsu->cc_acquire_counter = 0U;
+    hpsu->cc_mode_armed = 0;
 
     hpsu->overcurrent_counter = 0U;
     hpsu->fault_latched = 0;
@@ -88,7 +99,6 @@ void ctl_init_psu_mode_detection(
     hpsu->mode_detect_cycles = (detect_cycles == 0U) ? 1U : detect_cycles;
     hpsu->mode_enter_cc_counter = 0U;
     hpsu->mode_exit_cc_counter = 0U;
-    hpsu->mode_limit_blank_counter = 0U;
     hpsu->mode_violation_counter = 0U;
     hpsu->mode = PSU_MODE_CV;
 }
@@ -156,8 +166,9 @@ void clear_all_controllers(void)
     psu_ctrl.mode = PSU_MODE_CV;
     psu_ctrl.mode_enter_cc_counter = 0U;
     psu_ctrl.mode_exit_cc_counter = 0U;
-    psu_ctrl.mode_limit_blank_counter = 0U;
     psu_ctrl.mode_violation_counter = 0U;
+    psu_ctrl.cc_acquire_counter = 0U;
+    psu_ctrl.cc_mode_armed = 0;
 }
 
 void ctl_mainloop(void)
