@@ -31,10 +31,10 @@
 #define CONTROLLER_FREQUENCY (20e3)
 
 // PWM depth
-#define CTRL_PWM_CMP_MAX (3000)
+#define CTRL_PWM_CMP_MAX (2500 - 1)
 
 // PWM dead band
-#define CTRL_PWM_DEADBAND_CMP (60)
+#define CTRL_PWM_DEADBAND_CMP (100)
 
 // System tick
 #define DSP_C2000_DSP_TIME_DIV (100000 / CTRL_PWM_CMP_MAX / 2)
@@ -230,9 +230,6 @@
 //#define MOTOR_IV
 //#define MOTOR_IW
 
-#define INPUT_WAVE_RESULT_REG    ADCARESULT_BASE
-#define INPUT_WAVE               ADC_SOC_NUMBER0
-
 // System LED
 #define SYSTEM_LED      IRIS_LED1
 #define CONTROLLER_LED  IRIS_LED2
@@ -240,5 +237,134 @@
 #endif //BOARD_PIN_MAPPING
 
 #endif // BOARD_PIN_MAPPING
+
+
+
+//=================================================================================================
+// Programmable DC power-supply hardware mapping
+
+#define PSU_DAC_REF_V                         (3.3f)
+#define PSU_DAC_MAX_CODE                      (4095U)
+
+// Output voltage feedback: Vfu = Vo * 100k / (300k + 100k) = Vo / 4.
+#define PSU_VOLTAGE_FB_RATIO                  (0.25f)
+
+// Voltage set-to-DAC calibration from bench data:
+// calibrated set voltage = requested voltage * slope + bias.
+// Set slope to 1.0f and bias to 0.0f to restore the original behavior.
+#define PSU_VOLTAGE_OUTPUT_CAL_SLOPE          (1.011f)
+#define PSU_VOLTAGE_OUTPUT_CAL_BIAS_V         (0.0f)
+
+// Current feedback: Vfi = Io * Rshunt * amplifier gain.
+#define PSU_CURRENT_SHUNT_OHM                 (1.0f)
+#define PSU_CURRENT_AMP_GAIN                  (20.0f)
+
+// ADC channels: Vfu -> J7-1 / ADC_CH1, Vfi -> J7-3 / ADC_CH3.
+#define PSU_ADC_REF_V                         (CTRL_ADC_VOLTAGE_REF)
+#define PSU_ADC_RESOLUTION_BITS               (12U)
+#define PSU_ADC_IQN                           (24U)
+#define PSU_VFU_RESULT_BASE                   (ADC_CH1_RESULT_BASE)
+#define PSU_VFU_SOC                           (ADC_CH1)
+#define PSU_VFI_RESULT_BASE                   (ADC_CH3_RESULT_BASE)
+#define PSU_VFI_SOC                           (ADC_CH3)
+
+// Output relay/MOSF switch:
+// IRIS_EPWM6_BASE maps to EPWM7A / GPIO28 / J3-17.
+// The ePWM output is forced to a static high or low level; no PWM waveform is used.
+#define PSU_OUTPUT_SW_EPWM_BASE               (IRIS_EPWM6_BASE)
+#define PSU_OUTPUT_SW_EPWM_OUTPUT             (EPWM_AQ_OUTPUT_A)
+#define PSU_OUTPUT_ON_DELAY_CYCLES            (400U)  // 20 ms at 20 kHz
+
+// Buzzer and status LEDs.
+#define PSU_BEEP_PORT                         (IRIS_GPIO1)
+#define PSU_BEEP_ON_LEVEL                     (1U)
+#define PSU_BEEP_OFF_LEVEL                    (0U)
+#define PSU_OUTPUT_LED_PORT                   (SYSTEM_LED)
+#define PSU_OUTPUT_LED_ON_LEVEL               (0U)
+#define PSU_OUTPUT_LED_OFF_LEVEL              (1U)
+#define PSU_ALARM_LED_PORT                    (CONTROLLER_LED)
+#define PSU_ALARM_LED_ON_LEVEL                (0U)
+#define PSU_ALARM_LED_OFF_LEVEL               (1U)
+
+//=================================================================================================
+// User settings and automatic CV/CC operation
+
+// Voltage setting: 0.0 to 10.0 V, stored in 0.1 V units.
+#define PSU_VOLTAGE_SET_MIN_DV                (0U)
+#define PSU_VOLTAGE_SET_MAX_DV                (100U)
+#define PSU_DEFAULT_VOLTAGE_SET_DV            (85U)
+
+// Current setting: 0 to 100 mA, stored in 1 mA units.
+#define PSU_CURRENT_SET_MIN_MA                (0U)
+#define PSU_CURRENT_SET_MAX_MA                (100U)
+#define PSU_DEFAULT_CURRENT_SET_MA            (50U)
+
+// The analog minimum-selector performs the real CV/CC transition.
+// Software detects the active loop for display and indicators only.
+#define PSU_MODE_CC_ENTER_CURRENT_MARGIN_A    (0.002f)
+#define PSU_MODE_CC_EXIT_CURRENT_MARGIN_A     (0.005f)
+#define PSU_MODE_CC_ENTER_VOLTAGE_DROP_V      (0.10f)
+#define PSU_MODE_CC_EXIT_VOLTAGE_DROP_V       (0.03f)
+#define PSU_MODE_DETECT_CYCLES                (20U)
+
+// Independent over-current trip. Normal 50 mA CC operation is not a fault.
+#define PSU_OVERCURRENT_TRIP_A                (0.103f)
+#define PSU_OVERCURRENT_TRIP_CYCLES           (20U)
+
+//=================================================================================================
+// Keypad mapping
+
+// HT16K33 key IDs are determined by the key-matrix wiring, not by the printed
+// SW number. These values follow the verified reference-board mapping.
+// Physical SW1-SW11: 1,2,3,4,5,6,7,8,9,0,decimal point.
+#define PSU_KEY_DIGIT_1_ID                    (15U)
+#define PSU_KEY_DIGIT_2_ID                    (14U)
+#define PSU_KEY_DIGIT_3_ID                    (22U)
+#define PSU_KEY_DIGIT_4_ID                    (6U)
+#define PSU_KEY_DIGIT_5_ID                    (5U)
+#define PSU_KEY_DIGIT_6_ID                    (4U)
+#define PSU_KEY_DIGIT_7_ID                    (19U)
+#define PSU_KEY_DIGIT_8_ID                    (18U)
+#define PSU_KEY_DIGIT_9_ID                    (17U)
+#define PSU_KEY_DIGIT_0_ID                    (2U)
+#define PSU_KEY_DECIMAL_ID                    (1U)
+
+// Remaining physical keys, in order SW12-SW18.
+#define PSU_KEY_CONFIRM_ID                    (9U)  // SW12: confirm numeric input
+#define PSU_KEY_EDIT_TOGGLE_ID                (7U)  // SW13: select voltage/current
+#define PSU_KEY_OUTPUT_ID                     (16U)  // SW14: output on/off or clear fault
+#define PSU_KEY_STEP_TOGGLE_ID                (20U)  // SW15: fine/coarse encoder step
+#define PSU_KEY_CLEAR_ID                      (21U)  // SW16: clear current entry
+#define PSU_KEY_BACKSPACE_ID                  (8U)  // SW17: delete last input character
+#define PSU_KEY_CANCEL_ID                     (3U)  // SW18: cancel current entry
+
+#define PSU_KEY_TASK_PERIOD_MS                (50U)
+#define PSU_KEY_RELEASE_TICKS                 (4U)
+#define PSU_KEY_INPUT_TIMEOUT_TICKS           (200U) // 10 seconds
+#define PSU_KEYPAD_BUFFER_SIZE                (8U)
+
+//=================================================================================================
+// Rotary encoder and display tasks
+
+#define PSU_ENCODER_BASE                      (IRIS_EQEP1_BASE)
+#define PSU_ENCODER_TASK_PERIOD_MS            (20U)
+#define PSU_ENCODER_MAX_POSITION              (10000UL)
+#define PSU_ENCODER_COUNTS_PER_STEP           (4L)
+#define PSU_ENCODER_REVERSE                   (0U)
+
+// Fine/coarse adjustment increments. Voltage units are 0.1 V; current units are mA.
+#define PSU_ENCODER_V_FINE_STEP_DV             (1L)
+#define PSU_ENCODER_V_COARSE_STEP_DV           (5L)
+#define PSU_ENCODER_I_FINE_STEP_MA             (1L)
+#define PSU_ENCODER_I_COARSE_STEP_MA           (5L)
+
+#define PSU_DISPLAY_TASK_PERIOD_MS            (50U)
+#define PSU_LED_FLUSH_TASK_PERIOD_MS          (50U)
+#define PSU_DISPLAY_FILTER_ALPHA              (0.25f)
+#define PSU_OLED_LINE_CHAR_COUNT              (16U)
+
+#define PSU_ALARM_TASK_PERIOD_MS              (100U)
+#define PSU_ALARM_ON_TICKS                    (2U)
+#define PSU_ALARM_OFF_TICKS                   (2U)
 
 #endif // _FILE_CTRL_SETTINGS_H_

@@ -1038,11 +1038,11 @@ void EPWM_init(){
     EPWM_setDeadBandDelayMode(IRIS_EPWM1_BASE, EPWM_DB_RED, true);	
     EPWM_setRisingEdgeDelayCountShadowLoadMode(IRIS_EPWM1_BASE, EPWM_RED_LOAD_ON_CNTR_ZERO);	
     EPWM_disableRisingEdgeDelayCountShadowLoadMode(IRIS_EPWM1_BASE);	
-    EPWM_setRisingEdgeDelayCount(IRIS_EPWM1_BASE, 60);	
+    EPWM_setRisingEdgeDelayCount(IRIS_EPWM1_BASE, 50);	
     EPWM_setDeadBandDelayMode(IRIS_EPWM1_BASE, EPWM_DB_FED, true);	
     EPWM_setFallingEdgeDelayCountShadowLoadMode(IRIS_EPWM1_BASE, EPWM_FED_LOAD_ON_CNTR_ZERO);	
     EPWM_disableFallingEdgeDelayCountShadowLoadMode(IRIS_EPWM1_BASE);	
-    EPWM_setFallingEdgeDelayCount(IRIS_EPWM1_BASE, 60);	
+    EPWM_setFallingEdgeDelayCount(IRIS_EPWM1_BASE, 50);	
     EPWM_enableInterrupt(IRIS_EPWM1_BASE);	
     EPWM_setInterruptSource(IRIS_EPWM1_BASE, EPWM_INT_TBCTR_PERIOD);	
     EPWM_setInterruptEventCount(IRIS_EPWM1_BASE, 1);	

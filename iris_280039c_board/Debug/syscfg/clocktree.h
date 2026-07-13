@@ -52,10 +52,10 @@
 //##### SYSPLL ENABLED #####
 //
 // PLLRAWCLK				= 120 MHz   (Output of SYSPLL if enabled) 
-// PLLSYSCLK				= 60 MHz
-// CPUCLK					= 60 MHz
-// SYSCLK					= 60 MHz
-// LSPCLK					= 60 MHz 
+// PLLSYSCLK				= 120 MHz
+// CPUCLK					= 120 MHz
+// SYSCLK					= 120 MHz
+// LSPCLK					= 120 MHz 
 	
 //*****************************************************************************
 //
@@ -69,18 +69,18 @@
 //
 // Define to pass to SysCtl_setClock(). Will configure the clock as follows:
 // SYSPLL ENABLED
-// SYSCLK = 60 MHz = 12 MHz (OSCCLK) * 80 (IMULT) / (4 (REFDIV) * 2 (ODIV) * 2 (SYSCLKDIVSEL))
-#define DEVICE_SYSCLK_FREQ          ((DEVICE_OSCSRC_FREQ * 80) / (4 * 2 * 2))
+// SYSCLK = 120 MHz = 12 MHz (OSCCLK) * 80 (IMULT) / (4 (REFDIV) * 2 (ODIV) * 1 (SYSCLKDIVSEL))
+#define DEVICE_SYSCLK_FREQ          ((DEVICE_OSCSRC_FREQ * 80) / (4 * 2 * 1))
 //
 #define DEVICE_SETCLOCK_CFG         (SYSCTL_OSCSRC_XTAL_SE  | SYSCTL_IMULT(80) | \
 									 SYSCTL_REFDIV(4) | SYSCTL_ODIV(2)| \
-									 SYSCTL_SYSDIV(2) | SYSCTL_PLL_ENABLE | \
+									 SYSCTL_SYSDIV(1) | SYSCTL_PLL_ENABLE | \
 									 SYSCTL_DCC_BASE_0)
 									 
 
 //
 // Define to pass to SysCtl_setLowSpeedClock().
-// Low Speed Clock (LSPCLK) = 60 MHz / 1 = 60 MHz
+// Low Speed Clock (LSPCLK) = 120 MHz / 1 = 120 MHz
 //
 #define DEVICE_LSPCLK_CFG  			SYSCTL_LSPCLK_PRESCALE_1
 
@@ -88,7 +88,7 @@
 
 //*****************************************************************************
 //
-// CPUCLK Domain (60 MHz)
+// CPUCLK Domain (120 MHz)
 //
 //*****************************************************************************
 // FPU
@@ -97,7 +97,7 @@
 //	
 //*****************************************************************************
 //
-// SYSCLK Domain (60 MHz)
+// SYSCLK Domain (120 MHz)
 //
 //*****************************************************************************
 // ePIE
@@ -144,7 +144,7 @@
 
 //*****************************************************************************
 //
-// Gated Peripheral SYSCLK Domain (60 MHz) 
+// Gated Peripheral SYSCLK Domain (120 MHz) 
 //
 //*****************************************************************************
 // CPUTIMERs
@@ -174,7 +174,7 @@
 
 //*****************************************************************************
 //
-// Gated LSPCLK Domain (60 MHz) 
+// Gated LSPCLK Domain (120 MHz) 
 //
 //*****************************************************************************
 // SCI

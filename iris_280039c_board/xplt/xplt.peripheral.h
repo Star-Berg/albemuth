@@ -21,7 +21,6 @@ extern "C"
 #include "ctrl_settings.h"
 
 // select ADC PTR interface
-#include <ctl/component/interface/adc_channel.h>
 #include <ctl/component/interface/adc_ptr_channel.h>
 
 //=================================================================================================
@@ -49,8 +48,11 @@ extern adc_gt udc_src;
 extern ptr_adc_channel_t idc;
 extern adc_gt idc_src;
 
-// input wave ADC feedback
-extern adc_channel_t input_wave_adc;
+/**
+ * @brief Drive the PSU output switch through EPWM7A as a static logic output.
+ * @param enable Zero forces J3-17 low; non-zero forces J3-17 high.
+ */
+void psu_write_output_switch(fast_gt enable);
 
 void reset_controller(void);
 

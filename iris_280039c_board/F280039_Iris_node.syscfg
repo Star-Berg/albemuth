@@ -1,8 +1,8 @@
 /**
  * These arguments were used when this file was generated. They will be automatically applied on subsequent loads
  * via the GUI or CLI. Run CLI with '--help' for additional information on how to override these arguments.
- * @cliArgs --device "F28003x" --part "F28003x_100PZ" --package "100PZ" --context "system" --product "gmp_pro@1.00.00.05" --product "C2000WARE@5.03.00.00"
- * @v2CliArgs --device "TMS320F280039C" --package "100PZ" --context "system" --product "gmp_pro@1.00.00.05" --product "C2000WARE@5.03.00.00"
+ * @cliArgs --device "F28003x" --part "F28003x_100PZ" --package "100PZ" --context "system" --product "C2000WARE@5.03.00.00" --product "gmp_pro@1.00.00.05"
+ * @v2CliArgs --device "TMS320F280039C" --package "100PZ" --context "system" --product "C2000WARE@5.03.00.00" --product "gmp_pro@1.00.00.05"
  * @versions {"tool":"1.21.0+3721"}
  */
 
@@ -224,6 +224,9 @@ divider4.divideValue = 2;
 const divider5       = system.clockTree["PLL_REFDIV"];
 divider5.divideValue = 4;
 
+const divider6       = system.clockTree["SYSCLKDIVSEL"];
+divider6.divideValue = 1;
+
 const multiplier1         = system.clockTree["PLL_IMULT"];
 multiplier1.multiplyValue = 80;
 
@@ -309,8 +312,8 @@ epwm1.epwmActionQualifier_EPWM_AQ_OUTPUT_A_shadowMode            = true;
 epwm1.epwmCounterCompare_cmpB                                    = 1500;
 epwm1.epwmDeadband_polarityFED                                   = "EPWM_DB_POLARITY_ACTIVE_LOW";
 epwm1.epwmEventTrigger_interruptSource                           = "EPWM_INT_TBCTR_PERIOD";
-epwm1.epwmDeadband_delayRED                                      = 60;
-epwm1.epwmDeadband_delayFED                                      = 60;
+epwm1.epwmDeadband_delayRED                                      = 50;
+epwm1.epwmDeadband_delayFED                                      = 50;
 epwm1.epwmTimebase_period                                        = 3000;
 epwm1.epwmCounterCompare_cmpA                                    = 1500;
 

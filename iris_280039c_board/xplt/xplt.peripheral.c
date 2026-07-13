@@ -46,6 +46,25 @@ adc_gt idc_src;
 extern iic_halt iic_bus;
 extern gpio_halt user_led;
 extern gpio_halt gpio_beep;
+extern gpio_halt gpio_alarm_led;
+extern gpio_halt gpio_output_led;
+
+/**
+ * @brief Write the physical PSU output-switch command.
+ *
+ * EPWM7A is routed to GPIO28 / J3-17. Continuous software force makes
+ * the ePWM pin behave as a static digital output without changing the
+ * existing output-request, delay, fault, or CV/CC control logic.
+ */
+void psu_write_output_switch(fast_gt enable)
+{
+    EPWM_setActionQualifierContSWForceAction(
+        PSU_OUTPUT_SW_EPWM_BASE,
+        PSU_OUTPUT_SW_EPWM_OUTPUT,
+        (enable != 0) ?
+            EPWM_AQ_SW_OUTPUT_HIGH :
+            EPWM_AQ_SW_OUTPUT_LOW);
+}
 
 //
 // Function to configure I2C A in FIFO mode.
@@ -82,11 +101,16 @@ void initI2C()
     I2C_enableModule(I2CA_BASE);
 }
 
-adc_channel_t input_wave_adc;
+
 
 // User should setup all the peripheral in this function.
 void setup_peripheral(void)
 {
+    // Safe startup state: disconnect Vsw and clear both analog references.
+    psu_write_output_switch(0);
+    DAC_setShadowValue(IRIS_DACA_BASE, 0U);
+    DAC_setShadowValue(IRIS_DACB_BASE, 0U);
+
     // Setup Debug Uart
     debug_uart = IRIS_UART_USB_BASE;
 
@@ -116,12 +140,14 @@ void setup_peripheral(void)
 
     user_led = SYSTEM_LED;
 
-    gpio_beep = IRIS_GPIO1;
+    gpio_beep = PSU_BEEP_PORT;
+    gpio_alarm_led = PSU_ALARM_LED_PORT;
+    gpio_output_led = PSU_OUTPUT_LED_PORT;
 
-
-    //ADC INIT
-
-    ctl_init_adc_channel(&input_wave_adc, 4.0f, 0.5f, 12, 24);
+    // Keep all indicators in their safe startup states.
+    gmp_hal_gpio_write(gpio_beep, PSU_BEEP_OFF_LEVEL);
+    gmp_hal_gpio_write(gpio_alarm_led, PSU_ALARM_LED_OFF_LEVEL);
+    gmp_hal_gpio_write(gpio_output_led, PSU_OUTPUT_LED_OFF_LEVEL);
 
 }
 
@@ -184,7 +210,7 @@ void reset_controller(void)
 // 32 bit union
 typedef union {
     int32_t i32;
-    uint16_t u16[2]; // C2000ÖĞuint16_tÕ¼1¸öword£¬32Î»Õ¼ÓÃ2¸öword
+    uint16_t u16[2]; // C2000uint16_tÕ¼1word32Î»Õ¼2word
 } can_data_t;
 
 // CAN interrupt
@@ -373,48 +399,48 @@ interrupt void INT_IRIS_UART_USB_RX_ISR(void)
 
 
 //=========================================================
-// 1. SPI ¶ÁĞ´µ×²ãº¯Êı·â×°
+// 1. SPI Ğ´×²ãº¯×°
 //=========================================================
 
-// Ïò FPGA Ğ´Èë¼Ä´æÆ÷
-// Ğ­Òé: Ö¡1=[15Î»=1(Ğ´), 14:8=µØÖ·, 7:0=±£Áô] -> Ö¡2=[16Î»Êı¾İ]
+//  FPGA Ğ´Ä´
+// Ğ­: Ö¡1=[15Î»=1(Ğ´), 14:8=Ö·, 7:0=] -> Ö¡2=[16Î»]
 void SPI_writeReg(uint16_t addr, uint16_t data)
 {
-    // ¹¹ÔìĞ´ÃüÁî£¬×î¸ßÎ»Îª 0
-    uint16_t cmd = 0x0000 | ((addr & 0x7F) << 8); // ×î¸ßÎ»×ÔÈ»ÊÇ 0
+    // Ğ´î£¬Î»Îª 0
+    uint16_t cmd = 0x0000 | ((addr & 0x7F) << 8); // Î»È» 0
 
-    // ½«Á½¸ö 16-bit word Ñ¹Èë TX FIFO ·¢ËÍ
+    //  16-bit word Ñ¹ TX FIFO 
     SPI_writeDataBlockingFIFO(IRIS_SPI_FPGA_BRIDGE_BASE, cmd);
     SPI_writeDataBlockingFIFO(IRIS_SPI_FPGA_BRIDGE_BASE, data);
 
-    // µÈ´ı FPGA ½ÓÊÕ²¢·µ»ØÁ½¸ö 16-bit word
-    // ËäÈ»ÊÇĞ´²Ù×÷£¬µ«ÊÇ SPI È«Ë«¹¤»áÊÕµ½¶Ô·½·¢»ØµÄ·ÏÊı¾İ
+    // È´ FPGA Õ² 16-bit word
+    // È»Ğ´ SPI È«Ë«ÕµÔ·ØµÄ·
     while(SPI_getRxFIFOStatus(IRIS_SPI_FPGA_BRIDGE_BASE) < SPI_FIFO_RX2);
 
-    // °Ñ½ÓÊÕµ½µÄÕâÁ½¸ö·ÏÊı¾İ¶Á³ö£¬Çå¿Õ RX FIFO£¬·ÀÖ¹Ó°ÏìºóĞøÍ¨ĞÅ
+    // Ñ½Õµİ¶ RX FIFOÖ¹Ó°Í¨
     SPI_readDataBlockingFIFO(IRIS_SPI_FPGA_BRIDGE_BASE);
     SPI_readDataBlockingFIFO(IRIS_SPI_FPGA_BRIDGE_BASE);
 }
 
-// ´Ó FPGA ¶ÁÈ¡¼Ä´æÆ÷
-// Ğ­Òé: Ö¡1=[15Î»=0(¶Á), 14:8=µØÖ·, 7:0=±£Áô] -> Ö¡2=[16Î»Õ¼Î»·ûÊı¾İ(0x0000)]
+//  FPGA È¡Ä´
+// Ğ­: Ö¡1=[15Î»=0(), 14:8=Ö·, 7:0=] -> Ö¡2=[16Î»Õ¼Î»(0x0000)]
 uint16_t SPI_readReg(uint16_t addr)
 {
-    // ¹¹Ôì¶ÁÃüÁî£¬×î¸ßÎ»Îª 1
-    uint16_t cmd = 0x8000 | ((addr & 0x7F) << 8); // Ç¿ÖÆ°Ñ×î¸ßÎ»À­¸ß
-    uint16_t dummy_data = 0x0000; // ÓÃÓÚ²úÉúÊ±ÖÓµÄÑÆÊı¾İ
+    // î£¬Î»Îª 1
+    uint16_t cmd = 0x8000 | ((addr & 0x7F) << 8); // Ç¿Æ°Î»
+    uint16_t dummy_data = 0x0000; // Ú²Ê±Óµ
 
-    // Ñ¹ÈëÃüÁîÖ¡ºÍÊı¾İÖ¡
+    // Ñ¹Ö¡Ö¡
     SPI_writeDataBlockingFIFO(IRIS_SPI_FPGA_BRIDGE_BASE, cmd);
     SPI_writeDataBlockingFIFO(IRIS_SPI_FPGA_BRIDGE_BASE, dummy_data);
 
-    // µÈ´ı½ÓÊÕ 2 ¸ö×Ö
+    // È´ 2 
     while(SPI_getRxFIFOStatus(IRIS_SPI_FPGA_BRIDGE_BASE) < SPI_FIFO_RX2);
 
-    // ¶Á³öµÄµÚÒ»¸ö×ÖÊÇ·¢ËÍÃüÁîÖ¡Ê± FPGA ·µ»ØµÄ£¨Í¨³£ÊÇ×´Ì¬Î»»òÈ«0£¬Ö±½Ó¶ªÆú£©
+    // ÄµÒ»Ç·Ö¡Ê± FPGA ØµÄ£Í¨×´Ì¬Î»È«0Ö±Ó¶
     SPI_readDataBlockingFIFO(IRIS_SPI_FPGA_BRIDGE_BASE);
 
-    // ¶Á³öµÄµÚ¶ş¸ö×Ö²ÅÊÇÎÒÃÇÒªµÄÕæÊµÊı¾İÖ¡
+    // ÄµÚ¶Ö²ÒªÊµÖ¡
     uint16_t read_data = SPI_readDataBlockingFIFO(IRIS_SPI_FPGA_BRIDGE_BASE);
 
     return read_data;

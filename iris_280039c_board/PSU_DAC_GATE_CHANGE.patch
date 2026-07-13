@@ -1,0 +1,73 @@
+--- a/xplt/xplt.ctl_interface.h
++++ b/xplt/xplt.ctl_interface.h
+@@ -60,18 +60,47 @@
+ }
+ 
+ // Write the two analog references and the output switch command.
++//
++// The DAC references are enabled only after the user requests output.
++// During the original 20 ms startup delay, output_request is already 1,
++// so DACA/DACB settle first while the physical Vsw signal remains low.
++// On manual shutdown or fault, Vsw is forced low and both DACs are cleared.
+ GMP_STATIC_INLINE void ctl_output_callback(void)
+ {
+-    DAC_setShadowValue(
+-        IRIS_DACA_BASE,
+-        psu_dac_pu_to_code(psu_ctrl.voltage_dac_pu));
+-
+-    DAC_setShadowValue(
+-        IRIS_DACB_BASE,
+-        psu_dac_pu_to_code(psu_ctrl.current_dac_pu));
++    fast_gt reference_enable;
+ 
+-    psu_write_output_switch(
+-        psu_ctrl.output_enable);
++    reference_enable =
++        ((psu_ctrl.output_request != 0) &&
++         (psu_ctrl.fault_latched == 0));
++
++    if (reference_enable != 0)
++    {
++        // Establish Vset and Iset before the relay/MOSFET is enabled.
++        DAC_setShadowValue(
++            IRIS_DACA_BASE,
++            psu_dac_pu_to_code(psu_ctrl.voltage_dac_pu));
++
++        DAC_setShadowValue(
++            IRIS_DACB_BASE,
++            psu_dac_pu_to_code(psu_ctrl.current_dac_pu));
++
++        // output_enable becomes 1 only after the existing 20 ms delay.
++        psu_write_output_switch(
++            psu_ctrl.output_enable);
++    }
++    else
++    {
++        // Disconnect the output first, then remove both references.
++        psu_write_output_switch(0);
++
++        DAC_setShadowValue(
++            IRIS_DACA_BASE,
++            0U);
++
++        DAC_setShadowValue(
++            IRIS_DACB_BASE,
++            0U);
++    }
+ }
+ 
+ // Compatibility interfaces retained for the GMP controller framework.
+--- a/xplt/xplt.peripheral.c
++++ b/xplt/xplt.peripheral.c
+@@ -106,8 +106,10 @@
+ // User should setup all the peripheral in this function.
+ void setup_peripheral(void)
+ {
+-    // Safe startup state: force J3-17 / EPWM7A low immediately.
++    // Safe startup state: disconnect Vsw and clear both analog references.
+     psu_write_output_switch(0);
++    DAC_setShadowValue(IRIS_DACA_BASE, 0U);
++    DAC_setShadowValue(IRIS_DACB_BASE, 0U);
+ 
+     // Setup Debug Uart
+     debug_uart = IRIS_UART_USB_BASE;

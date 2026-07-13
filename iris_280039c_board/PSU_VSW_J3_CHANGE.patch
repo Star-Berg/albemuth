@@ -1,0 +1,102 @@
+diff --git a/mnt/data/psu_input_fixed_inspect/iris_280039c_board/xplt/ctrl_settings.h b/mnt/data/psu_vsw_epwm_work/iris_280039c_board/xplt/ctrl_settings.h
+index 1342a29..1430af4 100644
+--- a/mnt/data/psu_input_fixed_inspect/iris_280039c_board/xplt/ctrl_settings.h
++++ b/mnt/data/psu_vsw_epwm_work/iris_280039c_board/xplt/ctrl_settings.h
+@@ -262,10 +262,11 @@
+ #define PSU_VFI_RESULT_BASE                   (ADC_CH3_RESULT_BASE)
+ #define PSU_VFI_SOC                           (ADC_CH3)
+ 
+-// Output relay/MOSF switch: IRIS GPIO2 / GPIO23 / J4-18.
+-#define PSU_OUTPUT_SW_PORT                    (IRIS_GPIO2)
+-#define PSU_OUTPUT_SW_ON_LEVEL                (1U)
+-#define PSU_OUTPUT_SW_OFF_LEVEL               (0U)
++// Output relay/MOSF switch:
++// IRIS_EPWM6_BASE maps to EPWM7A / GPIO28 / J3-17.
++// The ePWM output is forced to a static high or low level; no PWM waveform is used.
++#define PSU_OUTPUT_SW_EPWM_BASE               (IRIS_EPWM6_BASE)
++#define PSU_OUTPUT_SW_EPWM_OUTPUT             (EPWM_AQ_OUTPUT_A)
+ #define PSU_OUTPUT_ON_DELAY_CYCLES            (400U)  // 20 ms at 20 kHz
+ 
+ // Buzzer and status LEDs.
+diff --git a/mnt/data/psu_input_fixed_inspect/iris_280039c_board/xplt/xplt.peripheral.h b/mnt/data/psu_vsw_epwm_work/iris_280039c_board/xplt/xplt.peripheral.h
+index 474779d..70525bd 100644
+--- a/mnt/data/psu_input_fixed_inspect/iris_280039c_board/xplt/xplt.peripheral.h
++++ b/mnt/data/psu_vsw_epwm_work/iris_280039c_board/xplt/xplt.peripheral.h
+@@ -48,6 +48,12 @@ extern adc_gt udc_src;
+ extern ptr_adc_channel_t idc;
+ extern adc_gt idc_src;
+ 
++/**
++ * @brief Drive the PSU output switch through EPWM7A as a static logic output.
++ * @param enable Zero forces J3-17 low; non-zero forces J3-17 high.
++ */
++void psu_write_output_switch(fast_gt enable);
++
+ void reset_controller(void);
+ 
+ uint16_t SPI_readReg(uint16_t addr);
+diff --git a/mnt/data/psu_input_fixed_inspect/iris_280039c_board/xplt/xplt.peripheral.c b/mnt/data/psu_vsw_epwm_work/iris_280039c_board/xplt/xplt.peripheral.c
+index f3c2d64..3e32bc9 100644
+--- a/mnt/data/psu_input_fixed_inspect/iris_280039c_board/xplt/xplt.peripheral.c
++++ b/mnt/data/psu_vsw_epwm_work/iris_280039c_board/xplt/xplt.peripheral.c
+@@ -49,6 +49,23 @@ extern gpio_halt gpio_beep;
+ extern gpio_halt gpio_alarm_led;
+ extern gpio_halt gpio_output_led;
+ 
++/**
++ * @brief Write the physical PSU output-switch command.
++ *
++ * EPWM7A is routed to GPIO28 / J3-17. Continuous software force makes
++ * the ePWM pin behave as a static digital output without changing the
++ * existing output-request, delay, fault, or CV/CC control logic.
++ */
++void psu_write_output_switch(fast_gt enable)
++{
++    EPWM_setActionQualifierContSWForceAction(
++        PSU_OUTPUT_SW_EPWM_BASE,
++        PSU_OUTPUT_SW_EPWM_OUTPUT,
++        (enable != 0) ?
++            EPWM_AQ_SW_OUTPUT_HIGH :
++            EPWM_AQ_SW_OUTPUT_LOW);
++}
++
+ //
+ // Function to configure I2C A in FIFO mode.
+ //
+@@ -89,6 +106,9 @@ void initI2C()
+ // User should setup all the peripheral in this function.
+ void setup_peripheral(void)
+ {
++    // Safe startup state: force J3-17 / EPWM7A low immediately.
++    psu_write_output_switch(0);
++
+     // Setup Debug Uart
+     debug_uart = IRIS_UART_USB_BASE;
+ 
+@@ -122,8 +142,7 @@ void setup_peripheral(void)
+     gpio_alarm_led = PSU_ALARM_LED_PORT;
+     gpio_output_led = PSU_OUTPUT_LED_PORT;
+ 
+-    // Safe startup state: output disconnected and all indicators off.
+-    gmp_hal_gpio_write(PSU_OUTPUT_SW_PORT, PSU_OUTPUT_SW_OFF_LEVEL);
++    // Keep all indicators in their safe startup states.
+     gmp_hal_gpio_write(gpio_beep, PSU_BEEP_OFF_LEVEL);
+     gmp_hal_gpio_write(gpio_alarm_led, PSU_ALARM_LED_OFF_LEVEL);
+     gmp_hal_gpio_write(gpio_output_led, PSU_OUTPUT_LED_OFF_LEVEL);
+diff --git a/mnt/data/psu_input_fixed_inspect/iris_280039c_board/xplt/xplt.ctl_interface.h b/mnt/data/psu_vsw_epwm_work/iris_280039c_board/xplt/xplt.ctl_interface.h
+index c6c6fef..706f924 100644
+--- a/mnt/data/psu_input_fixed_inspect/iris_280039c_board/xplt/xplt.ctl_interface.h
++++ b/mnt/data/psu_vsw_epwm_work/iris_280039c_board/xplt/xplt.ctl_interface.h
+@@ -70,10 +70,8 @@ GMP_STATIC_INLINE void ctl_output_callback(void)
+         IRIS_DACB_BASE,
+         psu_dac_pu_to_code(psu_ctrl.current_dac_pu));
+ 
+-    gmp_hal_gpio_write(
+-        PSU_OUTPUT_SW_PORT,
+-        (psu_ctrl.output_enable != 0) ?
+-            PSU_OUTPUT_SW_ON_LEVEL : PSU_OUTPUT_SW_OFF_LEVEL);
++    psu_write_output_switch(
++        psu_ctrl.output_enable);
+ }
+ 
+ // Compatibility interfaces retained for the GMP controller framework.

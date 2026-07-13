@@ -1,83 +1,121 @@
-//
-// THIS IS A DEMO SOURCE CODE FOR GMP LIBRARY.
-//
-// User should add all declarations of controller objects in this file.
-//
-// User should implement the Main ISR of the controller tasks.
-//
-// User should ensure that all the controller codes here is platform-independent.
-//
-// WARNING: This file must be kept in the include search path during compilation.
-//
-
-#include <xplt.peripheral.h>
-#include <ctl/component/interface/adc_channel.h>
-#include <ctl/component/interface/pwm_channel.h>
+/**
+ * @file xplt.ctl_interface.h
+ * @brief Platform callbacks connecting the PSU controller to ADC, DAC and GPIO peripherals.
+ */
 
 #ifndef _FILE_CTL_INTERFACE_H_
 #define _FILE_CTL_INTERFACE_H_
 
+#include <xplt.peripheral.h>
+#include "ctl_main.h"
+
 #ifdef __cplusplus
 extern "C"
 {
-#endif // __cplusplus
+#endif
 
 //=================================================================================================
 // Controller interface
 
-extern ctrl_gt comp_out;
-extern pwm_channel_t comp_pwm;
+GMP_STATIC_INLINE uint16_t psu_dac_pu_to_code(ctrl_gt command_pu)
+{
+    parameter_gt command = ctrl2float(command_pu);
 
-// Input Callback
+    if (command <= 0.0f)
+    {
+        return 0U;
+    }
+
+    if (command >= 1.0f)
+    {
+        return PSU_DAC_MAX_CODE;
+    }
+
+    return (uint16_t)(command * (parameter_gt)PSU_DAC_MAX_CODE + 0.5f);
+}
+
+// Read ADC samples at the beginning of every control interrupt.
 GMP_STATIC_INLINE void ctl_input_callback(void)
 {
-    ctl_step_adc_channel(&input_wave_adc, ADC_readResult(INPUT_WAVE_RESULT_REG, INPUT_WAVE));
+    adc_gt voltage_raw;
+    adc_gt current_raw;
+
+    voltage_raw = ADC_readResult(
+        PSU_VFU_RESULT_BASE,
+        PSU_VFU_SOC);
+
+    current_raw = ADC_readResult(
+        PSU_VFI_RESULT_BASE,
+        PSU_VFI_SOC);
+
+    psu_ctrl.voltage_meas_v =
+        ctl_step_adc_channel(
+            &psu_voltage_fb_adc,
+            voltage_raw);
+
+    psu_ctrl.current_meas_a =
+        ctl_step_adc_channel(
+            &psu_current_fb_adc,
+            current_raw);
 }
 
-// Output Callback
+// Write the two analog references and the output switch command.
+//
+// The DAC references are enabled only after the user requests output.
+// During the original 20 ms startup delay, output_request is already 1,
+// so DACA/DACB settle first while the physical Vsw signal remains low.
+// On manual shutdown or fault, Vsw is forced low and both DACs are cleared.
 GMP_STATIC_INLINE void ctl_output_callback(void)
 {
-    static uint32_t tick = 0;
-    ctrl_gt dac_b_out;
+    fast_gt reference_enable;
 
-    tick += 1;
+    reference_enable =
+        ((psu_ctrl.output_request != 0) &&
+         (psu_ctrl.fault_latched == 0));
 
-    ctrl_gt output_signal = (tick % 200) / 200.0f;
+    if (reference_enable != 0)
+    {
+        // Establish Vset and Iset before the relay/MOSFET is enabled.
+        DAC_setShadowValue(
+            IRIS_DACA_BASE,
+            psu_dac_pu_to_code(psu_ctrl.voltage_dac_pu));
 
-    DAC_setShadowValue(IRIS_DACA_BASE, (uint16_t)(ctl_sin(output_signal) * 1024.0f + 2048.0f));
+        DAC_setShadowValue(
+            IRIS_DACB_BASE,
+            psu_dac_pu_to_code(psu_ctrl.current_dac_pu));
 
-    dac_b_out = ctl_sat(comp_out, float2ctrl(1.0f), float2ctrl(-1.0f));
-    DAC_setShadowValue(IRIS_DACB_BASE, (uint16_t)(dac_b_out * 1024.0f + 2048.0f));
+        // output_enable becomes 1 only after the existing 20 ms delay.
+        psu_write_output_switch(
+            psu_ctrl.output_enable);
+    }
+    else
+    {
+        // Disconnect the output first, then remove both references.
+        psu_write_output_switch(0);
 
-    EPWM_setCounterCompareValue(IRIS_EPWM1_BASE, EPWM_COUNTER_COMPARE_A, comp_pwm.value);
+        DAC_setShadowValue(
+            IRIS_DACA_BASE,
+            0U);
 
-
+        DAC_setShadowValue(
+            IRIS_DACB_BASE,
+            0U);
+    }
 }
 
-// function prototype
-void GPIO_WritePin(uint16_t gpioNumber, uint16_t outVal);
-
-// Enable Motor Controller
-// Enable Output
-GMP_STATIC_INLINE void ctl_fast_enable_output()
+// Compatibility interfaces retained for the GMP controller framework.
+GMP_STATIC_INLINE void ctl_fast_enable_output(void)
 {
-    // Clear any Trip Zone flag
-    EPWM_clearTripZoneFlag(PHASE_U_BASE, EPWM_TZ_FORCE_EVENT_OST);
-    EPWM_clearTripZoneFlag(PHASE_V_BASE, EPWM_TZ_FORCE_EVENT_OST);
-    EPWM_clearTripZoneFlag(PHASE_W_BASE, EPWM_TZ_FORCE_EVENT_OST);
+    ctl_set_psu_output(&psu_ctrl, 1);
 }
 
-// Disable Output
-GMP_STATIC_INLINE void ctl_fast_disable_output()
+GMP_STATIC_INLINE void ctl_fast_disable_output(void)
 {
-    // Disables the PWM device
-    EPWM_forceTripZoneEvent(PHASE_U_BASE, EPWM_TZ_FORCE_EVENT_OST);
-    EPWM_forceTripZoneEvent(PHASE_V_BASE, EPWM_TZ_FORCE_EVENT_OST);
-    EPWM_forceTripZoneEvent(PHASE_W_BASE, EPWM_TZ_FORCE_EVENT_OST);
+    ctl_set_psu_output(&psu_ctrl, 0);
 }
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif
 
 #endif // _FILE_CTL_INTERFACE_H_
