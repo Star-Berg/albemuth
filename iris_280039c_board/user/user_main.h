@@ -54,6 +54,7 @@ gmp_task_status_t tsk_LED_flush(gmp_task_t* tsk);
 gmp_task_status_t tsk_psu_display(gmp_task_t* tsk);
 gmp_task_status_t tsk_psu_alarm(gmp_task_t* tsk);
 gmp_task_status_t tsk_psu_encoder(gmp_task_t* tsk);
+gmp_task_status_t tsk_psu_persistence(gmp_task_t* tsk);
 
 //=================================================================================================
 // Peripheral helpers

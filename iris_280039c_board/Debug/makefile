@@ -180,12 +180,14 @@ ORDERED_OBJS += \
 "./oled_driver/oled_driver.obj" \
 "./user/ctl_main.obj" \
 "./user/iris_peripheral.obj" \
+"./user/psu_persistence.obj" \
 "./user/user_main.obj" \
 "./xplt/xplt.peripheral.obj" \
 "../device_cmd/28003x_generic_flash_lnk.cmd" \
 "../device_cmd/f28003x_headers_nonBIOS.cmd" \
 $(GEN_CMDS__FLAG) \
 -llibc.a \
+"D:/software/ti/c2000/C2000Ware_5_04_00_00/libraries/flash_api/f28003x/lib/FAPI_F28003x_EABI_v1.58.10.lib" \
 
 -include ../makefile.init
 

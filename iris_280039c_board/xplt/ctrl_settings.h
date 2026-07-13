@@ -344,7 +344,6 @@
 #define PSU_KEY_CLEAR_CANCEL_ID               (21U) // SW10: cancel and clear current entry
 #define PSU_KEY_BACKSPACE_ID                  (8U)  // SW1: delete last input character
 #define PSU_KEY_EDIT_TOGGLE_ID                (3U)  // SW5: select voltage/current
-#define PSU_KEY_STEP_TOGGLE_ID                (20U) // SW18: fine/coarse encoder step
 
 #define PSU_KEY_TASK_PERIOD_MS                (50U)
 #define PSU_KEY_RELEASE_TICKS                 (4U)
@@ -360,6 +359,11 @@
 #define PSU_ENCODER_COUNTS_PER_STEP           (4L)
 #define PSU_ENCODER_REVERSE                   (0U)
 
+// The encoder push switch is wired to the eQEP1 INDEX input (GPIO13).
+#define PSU_ENCODER_BUTTON_PORT               (IRIS_EQEP1_EQEPINDEX_GPIO)
+#define PSU_ENCODER_BUTTON_ACTIVE_LEVEL       (0U)
+#define PSU_ENCODER_BUTTON_RELEASE_TICKS      (2U)
+
 // Fine/coarse adjustment increments. Voltage units are 0.1 V; current units are mA.
 #define PSU_ENCODER_V_FINE_STEP_DV             (1L)
 #define PSU_ENCODER_V_COARSE_STEP_DV           (5L)
@@ -370,6 +374,15 @@
 #define PSU_LED_FLUSH_TASK_PERIOD_MS          (50U)
 #define PSU_DISPLAY_FILTER_ALPHA              (0.25f)
 #define PSU_OLED_LINE_CHAR_COUNT              (16U)
+
+// HT16K33 indicator outputs. Adjust these three RAM locations/masks if the
+// peripheral board routes its CV/CC/AUTO LEDs differently.
+#define PSU_MODE_CV_LED_RAM_INDEX             (1U)
+#define PSU_MODE_CV_LED_MASK                  (0x01U)
+#define PSU_MODE_CC_LED_RAM_INDEX             (3U)
+#define PSU_MODE_CC_LED_MASK                  (0x01U)
+#define PSU_MODE_AUTO_LED_RAM_INDEX           (5U)
+#define PSU_MODE_AUTO_LED_MASK                (0x01U)
 
 #define PSU_ALARM_TASK_PERIOD_MS              (100U)
 #define PSU_ALARM_ON_TICKS                    (2U)

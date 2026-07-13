@@ -2,6 +2,7 @@
 #include <gmp_core.h>
 
 #include "ctl_main.h"
+#include "psu_persistence.h"
 #include "user_main.h"
 
 #include <core/dev/mem_presp.h>
@@ -109,6 +110,7 @@ typedef enum _tag_psu_task_index_t
     PSU_TASK_STARTUP,
     PSU_TASK_ALARM,
     PSU_TASK_ENCODER,
+    PSU_TASK_PERSISTENCE,
     PSU_TASK_COUNT
 } psu_task_index_t;
 
@@ -121,6 +123,7 @@ gmp_task_t tasks[] = {
     {"startup",     tsk_startup,        250,                          0,  1, NULL},
     {"psu_alarm",   tsk_psu_alarm,      PSU_ALARM_TASK_PERIOD_MS,     50, 1, NULL},
     {"psu_encoder", tsk_psu_encoder,    PSU_ENCODER_TASK_PERIOD_MS,   40, 1, NULL},
+    {"psu_save",    tsk_psu_persistence, 100,                        60, 1, NULL},
 };
 
 //=================================================================================================
@@ -184,6 +187,8 @@ gmp_task_status_t tsk_startup(gmp_task_t* tsk)
 
         oled_init();
         oled_clear();
+
+        psu_persistence_init(&psu_ctrl);
 
         flag_init_cmpt = 1U;
 

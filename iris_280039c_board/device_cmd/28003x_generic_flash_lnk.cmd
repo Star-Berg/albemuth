@@ -66,7 +66,9 @@ MEMORY
 //   FLASH_BANK1_SEC15 : origin = 0x09F000, length = 0x001000
 
   /* BANK 2 */
-   FLASH_BANK2       : origin = 0x0A0000, length = 0x00FFF0
+   FLASH_BANK2       : origin = 0x0A0000, length = 0x00F000
+   FLASH_SETTINGS    : origin = 0x0AF000, length = 0x000FF0
+   FLASH_BANK2_RSVD  : origin = 0x0AFFF0, length = 0x000010
 //   FLASH_BANK2_SEC0  : origin = 0x0A0000, length = 0x001000
 //   FLASH_BANK2_SEC1  : origin = 0x0A1000, length = 0x001000
 //   FLASH_BANK2_SEC2  : origin = 0x0A2000, length = 0x001000

@@ -644,10 +644,6 @@ gmp_task_status_t tsk_key_flush(gmp_task_t* tsk)
         psu_ui_handle_output_key();
         break;
 
-    case PSU_KEY_STEP_TOGGLE_ID:
-        psu_ui_toggle_step();
-        break;
-
     case PSU_KEY_CLEAR_CANCEL_ID:
         if (psu_keypad_input.active != 0)
         {
@@ -730,11 +726,14 @@ static void psu_ui_adjust_selected_setting(int32_t step_count)
 gmp_task_status_t tsk_psu_encoder(gmp_task_t* tsk)
 {
     static fast_gt initialized = 0;
+    static fast_gt button_armed = 1;
+    static uint16_t button_release_ticks = 0U;
     static uint32_t previous_position = 0U;
     static int32_t count_accumulator = 0L;
     uint32_t current_position;
     int32_t position_delta;
     int32_t step_count = 0L;
+    fast_gt button_pressed;
 
     GMP_UNUSED_VAR(tsk);
 
@@ -757,6 +756,34 @@ gmp_task_status_t tsk_psu_encoder(gmp_task_t* tsk)
         initialized = 1;
 
         return GMP_TASK_DONE;
+    }
+
+    button_pressed =
+        (GPIO_readPin(PSU_ENCODER_BUTTON_PORT) ==
+         PSU_ENCODER_BUTTON_ACTIVE_LEVEL);
+
+    if (button_pressed != 0)
+    {
+        button_release_ticks = 0U;
+
+        if (button_armed != 0)
+        {
+            button_armed = 0;
+            psu_ui_toggle_step();
+        }
+    }
+    else if (button_armed == 0)
+    {
+        if (button_release_ticks < PSU_ENCODER_BUTTON_RELEASE_TICKS)
+        {
+            button_release_ticks++;
+        }
+
+        if (button_release_ticks >= PSU_ENCODER_BUTTON_RELEASE_TICKS)
+        {
+            button_armed = 1;
+            button_release_ticks = 0U;
+        }
     }
 
     current_position = EQEP_getPosition(PSU_ENCODER_BASE);
@@ -858,6 +885,36 @@ static void psu_ui_write_led_segments(
         segments[5],
         segments[6],
         segments[7]);
+}
+
+static void psu_ui_update_mode_indicators(ht16k33_dev_t* dev)
+{
+    psu_operating_mode_t mode = ctl_get_psu_operating_mode(&psu_ctrl);
+
+    dev->display_ram[PSU_MODE_CV_LED_RAM_INDEX] &=
+        (data_gt)(~PSU_MODE_CV_LED_MASK);
+    dev->display_ram[PSU_MODE_CC_LED_RAM_INDEX] &=
+        (data_gt)(~PSU_MODE_CC_LED_MASK);
+    dev->display_ram[PSU_MODE_AUTO_LED_RAM_INDEX] &=
+        (data_gt)(~PSU_MODE_AUTO_LED_MASK);
+
+    if (mode == PSU_OPERATING_MODE_CV)
+    {
+        dev->display_ram[PSU_MODE_CV_LED_RAM_INDEX] |=
+            PSU_MODE_CV_LED_MASK;
+    }
+    else if (mode == PSU_OPERATING_MODE_CC)
+    {
+        dev->display_ram[PSU_MODE_CC_LED_RAM_INDEX] |=
+            PSU_MODE_CC_LED_MASK;
+    }
+    else
+    {
+        dev->display_ram[PSU_MODE_AUTO_LED_RAM_INDEX] |=
+            PSU_MODE_AUTO_LED_MASK;
+    }
+
+    dev->is_dirty = 1;
 }
 
 static void psu_ui_update_keypad_led(ht16k33_dev_t* dev)
@@ -1023,6 +1080,8 @@ gmp_task_status_t tsk_psu_display(gmp_task_t* tsk)
         return GMP_TASK_DONE;
     }
 
+    psu_ui_update_mode_indicators(dev);
+
     voltage_sample_v = ctrl2float(ctl_get_psu_voltage_measurement(&psu_ctrl));
     current_sample_a = ctrl2float(ctl_get_psu_current_measurement(&psu_ctrl));
 
@@ -1180,7 +1239,10 @@ gmp_task_status_t tsk_psu_display(gmp_task_t* tsk)
             }
             else
             {
-                sprintf(output_line, "SW18:MODE READY");
+                sprintf(
+                    output_line,
+                    "SW9:MODE ENC:%c",
+                    (psu_step_mode == PSU_STEP_FINE) ? 'F' : 'C');
             }
             break;
         }
