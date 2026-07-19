@@ -37,8 +37,18 @@ volatile fast_gt g_fsbb_output_enabled = 0;
 
 // User commands
 ctrl_gt g_v_out_ref_user = float2ctrl(FSBB_DEFAULT_OUTPUT_VOLTAGE / CTRL_VOLTAGE_BASE);
-ctrl_gt g_i_limit_user = float2ctrl(FSBB_DEFAULT_CURRENT_LIMIT / CTRL_CURRENT_BASE);
+ctrl_gt g_i_out_ref_user = float2ctrl(FSBB_DEFAULT_CURRENT_LIMIT / CTRL_CURRENT_BASE);
 ctrl_gt v_req = float2ctrl(0.0f);
+
+volatile fsbb_control_mode_t g_fsbb_mode_request = FSBB_CTRL_CV;
+volatile fsbb_control_mode_t g_fsbb_mode_active = FSBB_CTRL_CV;
+volatile fsbb_regulation_state_t g_fsbb_regulation_state = FSBB_REG_DISABLED;
+
+ctl_pid_t output_current_pid;
+ctl_slope_limiter_t iout_ref_ramp;
+ctrl_gt g_fsbb_i_ref_cv = float2ctrl(0.0f);
+ctrl_gt g_fsbb_i_ref_cc = float2ctrl(0.0f);
+ctrl_gt g_fsbb_i_L_ref_selected = float2ctrl(0.0f);
 
 //=================================================================================================
 // CTL initialize routine
@@ -97,6 +107,26 @@ void ctl_init(void)
     // attach FSBB with ADC peripheral
     ctl_attach_dcdc_core(&dcdc_core, &adc_v_in.control_port, &adc_v_out.control_port, &adc_i_L.control_port,
                          &adc_i_load.control_port);
+
+    {
+        parameter_gt fc_iout = FSBB_OUTPUT_CURRENT_LOOP_BANDWIDTH;
+        parameter_gt iout_kp = CTL_PARAM_CONST_2PI * fc_iout * FSBB_PARAM_RLOAD_MIN * FSBB_PARAM_COUT;
+        parameter_gt iout_ki = CTL_PARAM_CONST_2PI * fc_iout;
+
+        iout_kp *= FSBB_IOUT_LOOP_KP_SCALE;
+        iout_ki *= FSBB_IOUT_LOOP_KI_SCALE;
+        ctl_init_pid(&output_current_pid, iout_kp, iout_ki, 0.0f, CONTROLLER_FREQUENCY);
+        ctl_set_pid_limit(&output_current_pid,
+                          float2ctrl(FSBB_PROTECT_IL_MAX / CTRL_CURRENT_BASE),
+                          float2ctrl(0.0f));
+        ctl_set_pid_int_limit(&output_current_pid,
+                              float2ctrl(FSBB_PROTECT_IL_MAX / CTRL_CURRENT_BASE),
+                              float2ctrl(0.0f));
+        ctl_init_slope_limiter(&iout_ref_ramp,
+                               FSBB_CURRENT_RAMP_PU_S,
+                               -FSBB_CURRENT_RAMP_PU_S,
+                               CONTROLLER_FREQUENCY);
+    }
 
     v_req = float2ctrl(FSBB_OPEN_LOOP_VOLTAGE_COMMAND / CTRL_VOLTAGE_BASE);
 
@@ -234,6 +264,85 @@ fast_gt ctl_exec_adc_calibration(void)
 void clear_all_controllers(void)
 {
     ctl_clear_dcdc_core(&dcdc_core);
+    ctl_clear_pid(&output_current_pid);
+    ctl_clear_slope_limiter(&iout_ref_ramp);
+    g_fsbb_i_ref_cv = float2ctrl(0.0f);
+    g_fsbb_i_ref_cc = float2ctrl(0.0f);
+    g_fsbb_i_L_ref_selected = float2ctrl(0.0f);
+    g_fsbb_regulation_state = FSBB_REG_DISABLED;
+}
+
+fast_gt ctl_request_control_mode(fsbb_control_mode_t mode)
+{
+    if ((mode != FSBB_CTRL_CV) &&
+        (mode != FSBB_CTRL_CC))
+        return 0;
+
+    g_fsbb_mode_request = mode;
+    return 1;
+}
+
+ctrl_gt ctl_step_fsbb_cv_cc(void)
+{
+    ctrl_gt il_max = float2ctrl(FSBB_PROTECT_IL_MAX / CTRL_CURRENT_BASE);
+    ctrl_gt v_max = float2ctrl(FSBB_USER_VSET_MAX / CTRL_VOLTAGE_BASE);
+    ctrl_gt v_min = float2ctrl(FSBB_USER_VSET_MIN / CTRL_VOLTAGE_BASE);
+    ctrl_gt i_max = float2ctrl(FSBB_USER_ISET_MAX / CTRL_CURRENT_BASE);
+    ctrl_gt i_min = float2ctrl(FSBB_USER_ISET_MIN / CTRL_CURRENT_BASE);
+    ctrl_gt voltage_error;
+    ctrl_gt output_current_error;
+    ctrl_gt inductor_current_error;
+
+    ctl_dcdc_internal_ingest_and_filter(&dcdc_core);
+
+    dcdc_core.v_target = ctl_sat(g_v_out_ref_user, v_max, v_min);
+    dcdc_core.i_target = ctl_sat(g_i_out_ref_user, i_max, i_min);
+    dcdc_core.v_ramp_ref = ctl_step_slope_limiter(&dcdc_core.ramp_v, dcdc_core.v_target);
+    dcdc_core.i_ramp_ref = ctl_step_slope_limiter(&iout_ref_ramp, dcdc_core.i_target);
+
+    ctl_set_pid_limit(&dcdc_core.voltage_pid, il_max, float2ctrl(0.0f));
+    ctl_set_pid_int_limit(&dcdc_core.voltage_pid, il_max, float2ctrl(0.0f));
+
+    voltage_error = dcdc_core.v_ramp_ref - dcdc_core.filter_v_out.out;
+    output_current_error = dcdc_core.i_ramp_ref - dcdc_core.filter_i_load.out;
+
+    g_fsbb_i_ref_cv = ctl_step_pid_ser(&dcdc_core.voltage_pid, voltage_error);
+    g_fsbb_i_ref_cc = ctl_step_pid_par(&output_current_pid, output_current_error);
+
+    switch (g_fsbb_mode_request)
+    {
+    case FSBB_CTRL_CC:
+        g_fsbb_mode_active = FSBB_CTRL_CC;
+        g_fsbb_i_L_ref_selected = g_fsbb_i_ref_cc;
+        ctl_pid_clamping_correction_using_real_output(&dcdc_core.voltage_pid,
+                                                      g_fsbb_i_L_ref_selected);
+        g_fsbb_regulation_state = FSBB_REG_CC;
+        break;
+
+    case FSBB_CTRL_CV:
+    default:
+        g_fsbb_mode_request = FSBB_CTRL_CV;
+        g_fsbb_mode_active = FSBB_CTRL_CV;
+        g_fsbb_i_L_ref_selected = g_fsbb_i_ref_cv;
+        ctl_pid_clamping_correction_using_real_output(&output_current_pid,
+                                                      g_fsbb_i_L_ref_selected);
+        g_fsbb_regulation_state = FSBB_REG_CV;
+        break;
+    }
+
+    g_fsbb_i_L_ref_selected = ctl_sat(g_fsbb_i_L_ref_selected,
+                                      il_max,
+                                      float2ctrl(0.0f));
+    inductor_current_error = g_fsbb_i_L_ref_selected - dcdc_core.filter_i_L.out;
+    dcdc_core.v_out_formal = ctl_step_pid_ser(&dcdc_core.current_pid,
+                                              inductor_current_error);
+    dcdc_core.v_out_formal = ctl_sat(dcdc_core.v_out_formal,
+                                     dcdc_core.out_max,
+                                     dcdc_core.out_min);
+    dcdc_core.is_current_dominant =
+        (g_fsbb_regulation_state == FSBB_REG_CC) ? 1 : 0;
+
+    return dcdc_core.v_out_formal;
 }
 
 fast_gt ctl_request_fault_reset(void)

@@ -4,9 +4,8 @@
  *
  * Key IDs, task periods, release debounce, display addressing and I2C error
  * handling are migrated from D:\Github\albemuth\iris_280039c_board.
- * This first-stage UI deliberately changes only the existing voltage command
- * and current-limit command. AUTO/CV/CC mode selection remains reserved until
- * the three-mode controller interface is present.
+ * The panel owns the voltage/current setpoints, output command and CV/CC
+ * mode request. The real-time controller applies these requests in the ISR.
  *
  * Buzzer control is intentionally not migrated. IRIS_GPIO1/GPIO58 is reserved
  * by the FSBB target for the power-stage Enable_uC signal and must not also be
@@ -55,18 +54,16 @@
 
 // Encoder increments are stored in hundredths of the physical unit so the
 // user setting remains deterministic after repeated clockwise/counter-clockwise
-// adjustments. Voltage: 0.10/0.50 V; current limit: 0.01/0.10 A.
+// adjustments. Voltage: 0.10/0.50 V; output current: 0.01/0.10 A.
 #define FSBB_UI_ENCODER_V_FINE_STEP_CV   (10L)
 #define FSBB_UI_ENCODER_V_COARSE_STEP_CV (50L)
 #define FSBB_UI_ENCODER_I_FINE_STEP_CA   (1L)
 #define FSBB_UI_ENCODER_I_COARSE_STEP_CA (10L)
 
-// The physical user ranges come from the converter specification. They are
-// kept in this UI-only stage until the guide's SDPE user-range macros exist.
-#define FSBB_UI_VSET_MIN_V (10.0f)
-#define FSBB_UI_VSET_MAX_V (50.0f)
-#define FSBB_UI_ISET_MIN_A (1.0f)
-#define FSBB_UI_ISET_MAX_A (5.0f)
+#define FSBB_UI_VSET_MIN_V (FSBB_USER_VSET_MIN)
+#define FSBB_UI_VSET_MAX_V (FSBB_USER_VSET_MAX)
+#define FSBB_UI_ISET_MIN_A (FSBB_USER_ISET_MIN)
+#define FSBB_UI_ISET_MAX_A (FSBB_USER_ISET_MAX)
 
 #define FSBB_UI_FILTER_ALPHA (0.25f)
 #define FSBB_UI_VOUT_DISPLAY_ZERO_V (0.5f)
@@ -338,12 +335,17 @@ static void fsbb_oled_pad_line(char* line)
     line[FSBB_OLED_LINE_CHARS] = '\0';
 }
 
+static const char* fsbb_ui_control_state_text(void)
+{
+    return (g_fsbb_mode_active == FSBB_CTRL_CC) ? "CC" : "CV";
+}
+
 static void fsbb_oled_build_line(uint16_t line_index, char line[FSBB_OLED_LINE_CHARS + 1U])
 {
     float display_vout = fsbb_ui_vout_filtered;
     float display_iout = fsbb_ui_iout_filtered;
     uint16_t vset_tenths = (uint16_t)(ctrl2float(g_v_out_ref_user) * CTRL_VOLTAGE_BASE * 10.0f + 0.5f);
-    uint16_t iset_hundredths = (uint16_t)(ctrl2float(g_i_limit_user) * CTRL_CURRENT_BASE * 100.0f + 0.5f);
+    uint16_t iset_hundredths = (uint16_t)(ctrl2float(g_i_out_ref_user) * CTRL_CURRENT_BASE * 100.0f + 0.5f);
     uint16_t vout_tenths;
     uint16_t iout_hundredths;
 
@@ -392,7 +394,9 @@ static void fsbb_oled_build_line(uint16_t line_index, char line[FSBB_OLED_LINE_C
         switch (line_index)
         {
         case 0U:
-            sprintf(line, "FSBB CV     OUT:%s", (g_fsbb_output_enabled != 0) ? "ON" : "OFF");
+            sprintf(line, "%s OUT:%s",
+                fsbb_ui_control_state_text(),
+                (g_fsbb_output_enabled != 0) ? "ON" : "OFF");
             break;
         case 1U:
             sprintf(line, "SET %02u.%uV %u.%02uA",
@@ -560,7 +564,7 @@ static void fsbb_ui_compose_display(void)
     }
     else
     {
-        setpoint = ctrl2float(g_i_limit_user) * CTRL_CURRENT_BASE;
+        setpoint = ctrl2float(g_i_out_ref_user) * CTRL_CURRENT_BASE;
         segments[0] = fsbb_ui_digit_lut[10U];
         fsbb_ui_render_current(&segments[1], setpoint);
         fsbb_ui_render_current(&segments[5], fsbb_ui_iout_filtered);
@@ -741,10 +745,8 @@ static void fsbb_ui_commit_input(void)
             return;
         }
 
-        // The present BUILD_LEVEL 3 controller consumes this as the inductor
-        // current limit. It will be remapped to g_i_out_ref_user with the CC loop.
-        g_i_limit_user = float2ctrl(value / CTRL_CURRENT_BASE);
-        gmp_base_print("Current limit accepted: %u.%02u A\r\n", hundredths / 100U, hundredths % 100U);
+        g_i_out_ref_user = float2ctrl(value / CTRL_CURRENT_BASE);
+        gmp_base_print("Iset accepted: %u.%02u A\r\n", hundredths / 100U, hundredths % 100U);
     }
 
     fsbb_ui_reset_input();
@@ -766,6 +768,15 @@ static fast_gt fsbb_ui_key_to_digit(fast_gt key_id, uint16_t* digit)
     case FSBB_UI_KEY_DIGIT_9_ID: *digit = 9U; return 1;
     default: *digit = 0U; return 0;
     }
+}
+
+static void fsbb_ui_cycle_control_mode(void)
+{
+    fsbb_control_mode_t next_mode =
+        (g_fsbb_mode_request == FSBB_CTRL_CV) ? FSBB_CTRL_CC : FSBB_CTRL_CV;
+
+    if (ctl_request_control_mode(next_mode) != 0)
+        gmp_base_print("Control mode request: %u\r\n", (uint16_t)next_mode);
 }
 
 static void fsbb_ui_handle_output_key(void)
@@ -923,7 +934,7 @@ gmp_task_status_t tsk_fsbb_ui_key(gmp_task_t* tsk)
         break;
     case FSBB_UI_KEY_MODE_ID:
         fsbb_ui_reset_input();
-        gmp_base_print(TEXT_STRING("Mode key reserved until AUTO/CV/CC control is connected.\r\n"));
+        fsbb_ui_cycle_control_mode();
         break;
     case FSBB_UI_KEY_OUTPUT_ID:
         fsbb_ui_handle_output_key();
@@ -991,7 +1002,7 @@ static void fsbb_ui_adjust_selected_setting(int32_t step_count)
     else
     {
         setting_hundredths = (int32_t)(
-            ctrl2float(g_i_limit_user) * CTRL_CURRENT_BASE * 100.0f + 0.5f);
+            ctrl2float(g_i_out_ref_user) * CTRL_CURRENT_BASE * 100.0f + 0.5f);
         unit_step = (fsbb_ui_step_mode == FSBB_UI_STEP_FINE) ?
             FSBB_UI_ENCODER_I_FINE_STEP_CA : FSBB_UI_ENCODER_I_COARSE_STEP_CA;
         minimum = (int32_t)(FSBB_UI_ISET_MIN_A * 100.0f + 0.5f);
@@ -1003,7 +1014,7 @@ static void fsbb_ui_adjust_selected_setting(int32_t step_count)
         if (setting_hundredths > maximum)
             setting_hundredths = maximum;
 
-        g_i_limit_user = float2ctrl(
+        g_i_out_ref_user = float2ctrl(
             ((float)setting_hundredths / 100.0f) / CTRL_CURRENT_BASE);
     }
 }
