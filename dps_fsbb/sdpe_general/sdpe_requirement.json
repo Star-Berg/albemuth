@@ -5,7 +5,7 @@
   "description": "Platform-independent FSBB topology, sensing, protection and control contract shared by all hardware and SIL targets.",
   "suite": "dps_fsbb",
   "version": "1.0.0",
-  "updated_at": "2026-07-18",
+  "updated_at": "2026-07-19",
   "output_header": "sdpe_dps_fsbb_common_settings.h",
   "hardware": [
     {
@@ -131,7 +131,7 @@
       "enabled": true,
       "weak": false,
       "binding": {
-        "float": "0.01454"
+        "float": "0.00204136"
       },
       "description": "QuadSensor AMC1350 input-voltage sensitivity in V/V; theoretical value pending bench calibration."
     },
@@ -141,7 +141,7 @@
       "enabled": true,
       "weak": false,
       "binding": {
-        "float": "1.65"
+        "float": "1.656445"
       },
       "description": "QuadSensor input-voltage channel midpoint bias in V; theoretical value pending bench calibration."
     },

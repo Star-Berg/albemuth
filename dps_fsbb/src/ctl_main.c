@@ -244,6 +244,19 @@ fast_gt ctl_request_fault_reset(void)
     if (ctl_fsbb_active_faults() != FSBB_FAULT_NONE)
         return 0;
 
+    // The panel/CAN reset request may arrive before the 10 ms protection task
+    // has converted the latched FSBB fault into the CiA402 FAULT state. Enter
+    // the normal fault path here so that the standard recovery callback, PWM
+    // shutdown and status-word transition are still used.
+    if ((cia402_sm.current_state != CIA402_SM_FAULT_REACTION) &&
+        (cia402_sm.current_state != CIA402_SM_FAULT))
+    {
+        if (g_fsbb_faults == FSBB_FAULT_NONE)
+            return 0;
+
+        cia402_fault_request(&cia402_sm);
+    }
+
     if ((cia402_sm.current_state != CIA402_SM_FAULT_REACTION) &&
         (cia402_sm.current_state != CIA402_SM_FAULT))
         return 0;

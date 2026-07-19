@@ -95,7 +95,7 @@
     {
       "group": "Optional Sampling Channels",
       "macro": "FSBB_ENABLE_IOUT_SAMPLE",
-      "enabled": false,
+      "enabled": true,
       "weak": false,
       "value": "",
       "description": "Enable output/load current sampling path."
@@ -103,7 +103,7 @@
     {
       "group": "Optional Sampling Channels",
       "macro": "FSBB_ENABLE_VIN_SAMPLE",
-      "enabled": false,
+      "enabled": true,
       "weak": false,
       "value": "",
       "description": "Enable input voltage sampling path."
@@ -129,7 +129,7 @@
       "macro": "PWM_ENABLE_PORT",
       "enabled": true,
       "weak": false,
-      "value": "IRIS_GPIO1",
+      "value": "IRIS_GPIO5",
       "options_preset": "iris_f280039c_node.IRIS_GPIO",
       "options": [
         "IRIS_GPIO1",

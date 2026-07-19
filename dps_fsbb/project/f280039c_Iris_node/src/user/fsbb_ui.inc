@@ -897,6 +897,10 @@ gmp_task_status_t tsk_fsbb_ui_key(gmp_task_t* tsk)
     key_armed = 0;
     key_quiet_ticks = 0U;
 
+    // Keep the verified panel project's one-shot key log. This is especially
+    // useful on hardware to confirm that SW14 is decoded as key ID 16.
+    gmp_base_print(TEXT_STRING("Key ID: %d\r\n"), key_id);
+
     if (fsbb_ui_key_to_digit(key_id, &digit) != 0)
     {
         fsbb_ui_append_digit(digit);

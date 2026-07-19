@@ -25,7 +25,7 @@ extern "C"
 #define DPS_FSBB_COMMON_SDPE_PROJECT_ID "dps_fsbb_common"
 #define DPS_FSBB_COMMON_SDPE_PROJECT_SUITE "dps_fsbb"
 #define DPS_FSBB_COMMON_SDPE_PROJECT_VERSION "1.0.0"
-#define DPS_FSBB_COMMON_SDPE_PROJECT_UPDATED_AT "2026-07-18"
+#define DPS_FSBB_COMMON_SDPE_PROJECT_UPDATED_AT "2026-07-19"
 
 //=================================================================================================
 /**
@@ -90,12 +90,12 @@ extern "C"
 /**
  * @brief QuadSensor AMC1350 input-voltage sensitivity in V/V; theoretical value pending bench calibration.
  */
-#define CTRL_FSBB_VIN_SENSITIVITY (0.01454f)
+#define CTRL_FSBB_VIN_SENSITIVITY (0.00204136f)
 
 /**
  * @brief QuadSensor input-voltage channel midpoint bias in V; theoretical value pending bench calibration.
  */
-#define CTRL_FSBB_VIN_BIAS (1.65f)
+#define CTRL_FSBB_VIN_BIAS (1.656445f)
 
 /**
  * @brief Output-voltage sensor sensitivity in V/V.

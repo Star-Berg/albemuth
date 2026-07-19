@@ -44,12 +44,19 @@ extern "C"
 
 #include <core/dev/datalink.h>
 
-// Number of raw VOUT ADC conversions used by the trimmed moving average that
-// feeds the voltage-control path. With the default 8-point window, one maximum
-// and one minimum sample are rejected and the remaining six are averaged.
-// Set to 1 to compile without averaging.
+// Number of raw VIN/VOUT ADC conversions used by the trimmed moving averages.
+// One maximum and one minimum sample are rejected before averaging. Set either
+// value to 1 to compile that channel without averaging.
+#ifndef FSBB_VIN_ADC_AVERAGE_SAMPLES
+#define FSBB_VIN_ADC_AVERAGE_SAMPLES (64U)
+#endif
+
 #ifndef FSBB_VOUT_ADC_AVERAGE_SAMPLES
-#define FSBB_VOUT_ADC_AVERAGE_SAMPLES (8U)
+#define FSBB_VOUT_ADC_AVERAGE_SAMPLES (32U)
+#endif
+
+#if (FSBB_VIN_ADC_AVERAGE_SAMPLES < 1U) || (FSBB_VIN_ADC_AVERAGE_SAMPLES > 256U)
+#error "FSBB_VIN_ADC_AVERAGE_SAMPLES must be in the range 1..256"
 #endif
 
 #if (FSBB_VOUT_ADC_AVERAGE_SAMPLES < 1U) || (FSBB_VOUT_ADC_AVERAGE_SAMPLES > 256U)
@@ -64,6 +71,15 @@ extern adc_channel_t adc_v_out;
 extern adc_channel_t adc_i_L;
 extern adc_channel_t adc_i_load;
 
+// VIN ADC moving-average diagnostics. These can be added directly to the
+// CCS Expressions/Graph views without using calculated expressions.
+extern volatile uint16_t g_fsbb_vin_adc_raw;
+extern volatile uint16_t g_fsbb_vin_adc_average;
+extern volatile uint16_t g_fsbb_vin_adc_window_min;
+extern volatile uint16_t g_fsbb_vin_adc_window_max;
+extern volatile fast_gt g_fsbb_vin_adc_average_enable;
+extern volatile fast_gt g_fsbb_vin_adc_trim_enable;
+
 // VOUT ADC moving-average diagnostics. These can be added directly to the
 // CCS Expressions/Graph views without using calculated expressions.
 extern volatile uint16_t g_fsbb_vout_adc_raw;
@@ -73,6 +89,7 @@ extern volatile uint16_t g_fsbb_vout_adc_window_max;
 extern volatile fast_gt g_fsbb_vout_adc_average_enable;
 extern volatile fast_gt g_fsbb_vout_adc_trim_enable;
 
+uint16_t fsbb_average_vin_adc_sample(uint16_t sample);
 uint16_t fsbb_average_vout_adc_sample(uint16_t sample);
 
 // dlog DSA objects

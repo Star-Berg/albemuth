@@ -29,7 +29,19 @@
 extern gpio_halt user_led;
 
 //=================================================================================================
-// VOUT ADC moving average
+// VIN/VOUT ADC moving averages
+
+volatile uint16_t g_fsbb_vin_adc_raw = 0U;
+volatile uint16_t g_fsbb_vin_adc_average = 0U;
+volatile uint16_t g_fsbb_vin_adc_window_min = 0U;
+volatile uint16_t g_fsbb_vin_adc_window_max = 0U;
+volatile fast_gt g_fsbb_vin_adc_average_enable = 1;
+volatile fast_gt g_fsbb_vin_adc_trim_enable = 1;
+
+static uint16_t vin_adc_average_buffer[FSBB_VIN_ADC_AVERAGE_SAMPLES];
+static uint32_t vin_adc_average_sum = 0UL;
+static uint16_t vin_adc_average_index = 0U;
+static fast_gt vin_adc_average_primed = 0;
 
 volatile uint16_t g_fsbb_vout_adc_raw = 0U;
 volatile uint16_t g_fsbb_vout_adc_average = 0U;
@@ -42,6 +54,73 @@ static uint16_t vout_adc_average_buffer[FSBB_VOUT_ADC_AVERAGE_SAMPLES];
 static uint32_t vout_adc_average_sum = 0UL;
 static uint16_t vout_adc_average_index = 0U;
 static fast_gt vout_adc_average_primed = 0;
+
+uint16_t fsbb_average_vin_adc_sample(uint16_t sample)
+{
+    uint16_t i;
+    uint16_t average_divisor;
+    uint16_t window_min;
+    uint16_t window_max;
+    uint32_t average_sum;
+
+    g_fsbb_vin_adc_raw = sample;
+
+    if ((!g_fsbb_vin_adc_average_enable) || (FSBB_VIN_ADC_AVERAGE_SAMPLES == 1U))
+    {
+        vin_adc_average_primed = 0;
+        g_fsbb_vin_adc_window_min = sample;
+        g_fsbb_vin_adc_window_max = sample;
+        g_fsbb_vin_adc_average = sample;
+        return sample;
+    }
+
+    if (!vin_adc_average_primed)
+    {
+        for (i = 0U; i < FSBB_VIN_ADC_AVERAGE_SAMPLES; ++i)
+            vin_adc_average_buffer[i] = sample;
+
+        vin_adc_average_sum = (uint32_t)sample * FSBB_VIN_ADC_AVERAGE_SAMPLES;
+        vin_adc_average_index = 0U;
+        vin_adc_average_primed = 1;
+        g_fsbb_vin_adc_window_min = sample;
+        g_fsbb_vin_adc_window_max = sample;
+        g_fsbb_vin_adc_average = sample;
+        return sample;
+    }
+
+    vin_adc_average_sum -= vin_adc_average_buffer[vin_adc_average_index];
+    vin_adc_average_buffer[vin_adc_average_index] = sample;
+    vin_adc_average_sum += sample;
+
+    if (++vin_adc_average_index >= FSBB_VIN_ADC_AVERAGE_SAMPLES)
+        vin_adc_average_index = 0U;
+
+    average_sum = vin_adc_average_sum;
+    average_divisor = FSBB_VIN_ADC_AVERAGE_SAMPLES;
+
+    window_min = vin_adc_average_buffer[0];
+    window_max = vin_adc_average_buffer[0];
+    for (i = 1U; i < FSBB_VIN_ADC_AVERAGE_SAMPLES; ++i)
+    {
+        if (vin_adc_average_buffer[i] < window_min)
+            window_min = vin_adc_average_buffer[i];
+        if (vin_adc_average_buffer[i] > window_max)
+            window_max = vin_adc_average_buffer[i];
+    }
+
+    g_fsbb_vin_adc_window_min = window_min;
+    g_fsbb_vin_adc_window_max = window_max;
+
+    if (g_fsbb_vin_adc_trim_enable && (FSBB_VIN_ADC_AVERAGE_SAMPLES >= 3U))
+    {
+        average_sum -= (uint32_t)window_min + (uint32_t)window_max;
+        average_divisor -= 2U;
+    }
+
+    g_fsbb_vin_adc_average = (uint16_t)((average_sum + (average_divisor / 2U)) / average_divisor);
+
+    return g_fsbb_vin_adc_average;
+}
 
 uint16_t fsbb_average_vout_adc_sample(uint16_t sample)
 {

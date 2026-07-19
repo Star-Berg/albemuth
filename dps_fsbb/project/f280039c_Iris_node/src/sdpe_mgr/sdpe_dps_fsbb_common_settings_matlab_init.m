@@ -12,7 +12,7 @@ DPS_FSBB_COMMON_SDPE_PROJECT_SUITE = 'dps_fsbb';
 
 DPS_FSBB_COMMON_SDPE_PROJECT_VERSION = '1.0.0';
 
-DPS_FSBB_COMMON_SDPE_PROJECT_UPDATED_AT = '2026-07-18';
+DPS_FSBB_COMMON_SDPE_PROJECT_UPDATED_AT = '2026-07-19';
 
 %% Hardware macros
 BSC093N15NS5_ID = 'bsc093n15ns5';
@@ -224,10 +224,10 @@ FSBB_PARAM_L = 1.5e-3;
 FSBB_PARAM_L_ESR = 0.05;
 
 % QuadSensor AMC1350 input-voltage sensitivity in V/V; theoretical value pending bench calibration.
-CTRL_FSBB_VIN_SENSITIVITY = 0.01454;
+CTRL_FSBB_VIN_SENSITIVITY = 0.00204136;
 
 % QuadSensor input-voltage channel midpoint bias in V; theoretical value pending bench calibration.
-CTRL_FSBB_VIN_BIAS = 1.65;
+CTRL_FSBB_VIN_BIAS = 1.656445;
 
 % Output-voltage sensor sensitivity in V/V.
 CTRL_FSBB_VOUT_SENSITIVITY = GMP_LVFB_VOLTAGE_SENSITIVITY;
