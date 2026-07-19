@@ -1,0 +1,245 @@
+{
+  "id": "dps_fsbb_simulate",
+  "display_name": "DPS FSBB MATLAB/Simulink SIL",
+  "suite": "dps_fsbb",
+  "version": "1.0.0",
+  "output_header": "sdpe_dps_fsbb_simulate_settings.h",
+  "hardware": [],
+  "requirements": [
+    {
+      "role": "PWM Depth",
+      "macro": "CTRL_PWM_CMP_MAX",
+      "enabled": true,
+      "weak": false,
+      "binding": {
+        "number": "3000 - 1"
+      },
+      "description": "PWM compare maximum shared by controller and plant model."
+    },
+    {
+      "role": "PWM Deadband Width",
+      "macro": "CTRL_PWM_DEADBAND_CMP",
+      "enabled": true,
+      "weak": false,
+      "binding": {
+        "number": "50"
+      },
+      "description": "Symmetric PWM deadband in compare counts."
+    },
+    {
+      "role": "ADC Resolution",
+      "macro": "CTRL_ADC_RESOLUTION",
+      "enabled": true,
+      "weak": false,
+      "binding": {
+        "number": "12"
+      },
+      "description": "ADC resolution used by all simulated sensor channels."
+    },
+    {
+      "role": "Input Capacitor ESR",
+      "macro": "FSBB_PARAM_CIN_ESR",
+      "enabled": true,
+      "weak": false,
+      "binding": {
+        "float": "0.1"
+      },
+      "description": "Input capacitor ESR used by the plant."
+    },
+    {
+      "role": "Input Current Sensitivity",
+      "macro": "CTRL_FSBB_IIN_SENSITIVITY",
+      "enabled": true,
+      "weak": false,
+      "binding": {
+        "export": "gmp_lvfb_150_2ph_v2.current_sensitivity"
+      },
+      "description": "Buck-side input-current sensor sensitivity in V/A."
+    },
+    {
+      "role": "Input Current Bias",
+      "macro": "CTRL_FSBB_IIN_BIAS",
+      "enabled": true,
+      "weak": false,
+      "binding": {
+        "export": "gmp_lvfb_150_2ph_v2.current_bias_v"
+      },
+      "description": "Buck-side input-current sensor bias in V."
+    },
+    {
+      "role": "MOSFET On Resistance",
+      "macro": "FSBB_MODEL_MOSFET_RON",
+      "enabled": true,
+      "weak": false,
+      "binding": {
+        "float": "9.3e-3"
+      },
+      "description": "BSC093N15NS5 nominal on resistance used by the plant."
+    },
+    {
+      "role": "MOSFET Snubber Resistance",
+      "macro": "FSBB_MODEL_SNUBBER_R",
+      "enabled": true,
+      "weak": false,
+      "binding": {
+        "float": "1e5"
+      },
+      "description": "Plant-model snubber resistance."
+    },
+    {
+      "role": "MOSFET Snubber Capacitance",
+      "macro": "FSBB_MODEL_SNUBBER_C",
+      "enabled": true,
+      "weak": false,
+      "binding": {
+        "float": "1e12"
+      },
+      "description": "Large plant-model snubber capacitance approximating an open capacitive branch."
+    },
+    {
+      "role": "Diode Forward Voltage",
+      "macro": "FSBB_MODEL_DIODE_VF",
+      "enabled": true,
+      "weak": false,
+      "binding": {
+        "float": "0.8"
+      },
+      "description": "MOSFET body-diode forward voltage."
+    },
+    {
+      "role": "Diode On Resistance",
+      "macro": "FSBB_MODEL_DIODE_RON",
+      "enabled": true,
+      "weak": false,
+      "binding": {
+        "float": "1e-3"
+      },
+      "description": "MOSFET body-diode on resistance."
+    },
+    {
+      "role": "Switch Inductance",
+      "macro": "FSBB_MODEL_SWITCH_LON",
+      "enabled": true,
+      "weak": false,
+      "binding": {
+        "float": "0"
+      },
+      "description": "Ideal-switch series inductance."
+    }
+  ],
+  "feature_macros": [
+    {
+      "group": "SIL",
+      "macro": "SPECIFY_ENABLE_ADC_CALIBRATE",
+      "enabled": false,
+      "weak": false,
+      "value": "",
+      "description": "The simulated ADC already includes the configured sensor bias."
+    },
+    {
+      "group": "SIL",
+      "macro": "ENABLE_GMP_DL_PIL_SIM",
+      "enabled": false,
+      "weak": false,
+      "value": "",
+      "description": "Use the native ASIO SIL path instead of datalink PIL."
+    },
+    {
+      "group": "SIL",
+      "macro": "CIA402_CONFIG_ENABLE_SEQUENCE_SWITCH",
+      "enabled": true,
+      "weak": false,
+      "value": "",
+      "description": "Allow ENABLE_OPERATION to advance through the complete CiA402 startup sequence."
+    },
+    {
+      "group": "Sampling",
+      "macro": "FSBB_ENABLE_VIN_SAMPLE",
+      "enabled": true,
+      "weak": false,
+      "value": "",
+      "description": "Use the simulated input-voltage ADC channel."
+    },
+    {
+      "group": "Sampling",
+      "macro": "FSBB_ENABLE_IOUT_SAMPLE",
+      "enabled": true,
+      "weak": false,
+      "value": "",
+      "description": "Use the simulated Boost-side output-current ADC channel."
+    },
+    {
+      "group": "PWM",
+      "macro": "PWM_MODULATOR_USING_NEGATIVE_LOGIC",
+      "enabled": false,
+      "weak": false,
+      "value": "1",
+      "description": "The Simulink phase model uses compare-proportional duty; Boost Q4 complementing is handled by xplt."
+    },
+    {
+      "group": "Controller Settings",
+      "macro": "DISABLE_FSBB_PROTECTION_FAULT_LOGIC",
+      "enabled": false,
+      "weak": false,
+      "value": "",
+      "description": "This macro will disable the fault request of the controller. That's dangerous."
+    }
+  ],
+  "option_macros": [
+    {
+      "group": "Controller",
+      "macro": "BUILD_LEVEL",
+      "enabled": true,
+      "weak": false,
+      "value": "(3)",
+      "options_preset": "",
+      "options": [
+        "(1)",
+        "(2)",
+        "(3)"
+      ],
+      "description": "1: open loop, 2: current loop, 3: voltage/current cascade."
+    }
+  ],
+  "code_sections": {
+    "after_extern_open": "#include <sdpe_dps_fsbb_common_settings.h>\n/* MATLAB/Simulink SIL project settings. */",
+    "before_footer": "#if (BUILD_LEVEL < 1) || (BUILD_LEVEL > 3)\n#error \"BUILD_LEVEL must be 1, 2, or 3.\"\n#endif"
+  },
+  "requirement_groups": [
+    {
+      "name": "Peripheral Parameters",
+      "requirements": [
+        "PWM Depth",
+        "PWM Deadband Width",
+        "ADC Resolution"
+      ]
+    },
+    {
+      "name": "Main Element Parameters",
+      "requirements": [
+        "Input Capacitor ESR"
+      ]
+    },
+    {
+      "name": "Input Current Sensor",
+      "requirements": [
+        "Input Current Sensitivity",
+        "Input Current Bias"
+      ]
+    },
+    {
+      "name": "MOSFET Parameters",
+      "requirements": [
+        "MOSFET On Resistance",
+        "MOSFET Snubber Resistance",
+        "MOSFET Snubber Capacitance",
+        "Diode Forward Voltage",
+        "Diode On Resistance",
+        "Switch Inductance"
+      ]
+    }
+  ],
+  "macro_prefix": "DPS_FSBB_SIM",
+  "description": "",
+  "updated_at": "2026-07-18"
+}

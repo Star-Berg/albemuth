@@ -145,6 +145,8 @@ void setup_peripheral(void)
     gmp_hal_gpio_write(gpio_beep, PSU_BEEP_OFF_LEVEL);
     gmp_hal_gpio_write(gpio_alarm_led, PSU_ALARM_LED_OFF_LEVEL);
     gmp_hal_gpio_write(gpio_output_led, PSU_OUTPUT_LED_OFF_LEVEL);
+    gmp_hal_gpio_write(PSU_CV_MODE_LED_PORT, PSU_MODE_LED_OFF_LEVEL);
+    gmp_hal_gpio_write(PSU_CC_MODE_LED_PORT, PSU_MODE_LED_OFF_LEVEL);
 
 }
 

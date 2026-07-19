@@ -50,6 +50,24 @@ void output_led_off(void)
     gmp_hal_gpio_write(gpio_output_led, PSU_OUTPUT_LED_OFF_LEVEL);
 }
 
+static void psu_update_mode_leds(void)
+{
+    psu_operating_mode_t operating_mode =
+        ctl_get_psu_operating_mode(&psu_ctrl);
+
+    gmp_hal_gpio_write(
+        PSU_CV_MODE_LED_PORT,
+        ((operating_mode == PSU_OPERATING_MODE_CV) ||
+         (operating_mode == PSU_OPERATING_MODE_AUTO)) ?
+            PSU_MODE_LED_ON_LEVEL : PSU_MODE_LED_OFF_LEVEL);
+
+    gmp_hal_gpio_write(
+        PSU_CC_MODE_LED_PORT,
+        ((operating_mode == PSU_OPERATING_MODE_CC) ||
+         (operating_mode == PSU_OPERATING_MODE_AUTO)) ?
+            PSU_MODE_LED_ON_LEVEL : PSU_MODE_LED_OFF_LEVEL);
+}
+
 //=================================================================================================
 // HT16K33 display and keypad devices
 
@@ -1242,6 +1260,8 @@ gmp_task_status_t tsk_psu_alarm(gmp_task_t* tsk)
     {
         return GMP_TASK_DONE;
     }
+
+    psu_update_mode_leds();
 
     if (ctl_get_psu_output_state(&psu_ctrl) != 0)
     {

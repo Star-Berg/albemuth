@@ -246,26 +246,28 @@
 #define PSU_DAC_REF_V                         (3.3f)
 #define PSU_DAC_MAX_CODE                      (4095U)
 
-// Output-command inverse fits, excluding the 0 V / 0 A measurements.
-// The voltage coefficients include the follow-up measured residual model:
-// Vactual = 1.0034483 * Vset + 0.1400000 V. The two affine mappings are
-// composed here so the real-time path still applies one calibration only.
-#define PSU_VOLTAGE_OUTPUT_CAL_SLOPE          (0.9832997f)
-#define PSU_VOLTAGE_OUTPUT_CAL_BIAS_V         (-0.1139542f)
+// Output-command calibration is independent of ADC measurement calibration.
+// Keep the current command unmodified: CC/CV protection detects a violation
+// and shuts the output down; it must not reduce the requested current in software.
+#define PSU_VOLTAGE_OUTPUT_CAL_SLOPE          (1.0f)
+#define PSU_VOLTAGE_OUTPUT_CAL_BIAS_V         (-0.15f)
+#define PSU_CURRENT_OUTPUT_CAL_SLOPE          (0.95038f)
+#define PSU_CURRENT_OUTPUT_CAL_BIAS_A         (0.0f)
 
-// Iactual = 0.9970769 * Icommand + 0.0037433 A.
-#define PSU_CURRENT_OUTPUT_CAL_SLOPE          (1.0029316f)
-#define PSU_CURRENT_OUTPUT_CAL_BIAS_A         (-0.0037542f)
+// In a fixed mode, force the unused analog loop reference to DAC full scale so
+// it cannot regulate the output. Limit violations are handled only by alarm
+// and shutdown; normal dual-loop handover is exclusive to AUTO mode.
+#define PSU_INACTIVE_LOOP_DAC_PU              (1.0f)
 
 // Output voltage feedback: Vfu = Vo * 100k / (300k + 100k) = Vo / 4.
 #define PSU_VOLTAGE_FB_RATIO                  (0.25f)
 
-// ADC measurement correction: physical value = raw value * slope + bias.
-// A zero raw sample remains zero; the bias is applied only to positive samples.
-#define PSU_VOLTAGE_MEAS_CAL_SLOPE            (1.0621702f)
-#define PSU_VOLTAGE_MEAS_CAL_BIAS_V           (0.0414826f)
-#define PSU_CURRENT_MEAS_CAL_SLOPE            (0.9970769f)
-#define PSU_CURRENT_MEAS_CAL_BIAS_A            (0.0037433f)
+// ADC measurement correction, fitted through the origin from the supplied
+// non-zero DMM/display data: physical value = raw value * slope.
+#define PSU_VOLTAGE_MEAS_CAL_SLOPE            (1.0681840f)
+#define PSU_VOLTAGE_MEAS_CAL_BIAS_V           (0.0f)
+#define PSU_CURRENT_MEAS_CAL_SLOPE            (0.9551006f)
+#define PSU_CURRENT_MEAS_CAL_BIAS_A           (0.0f)
 
 // Current feedback: Vfi = Io * Rshunt * amplifier gain.
 #define PSU_CURRENT_SHUNT_OHM                 (1.0f)
@@ -304,6 +306,13 @@
 #define PSU_ALARM_LED_ON_LEVEL                (0U)
 #define PSU_ALARM_LED_OFF_LEVEL               (1U)
 
+// Main-board mode LEDs. LED7/GPIO23 indicates CV and LED6/GPIO44 indicates
+// CC. Both are active-high; lighting both indicates AUTO mode.
+#define PSU_CV_MODE_LED_PORT                  (IRIS_GPIO2)
+#define PSU_CC_MODE_LED_PORT                  (IRIS_GPIO4)
+#define PSU_MODE_LED_ON_LEVEL                 (1U)
+#define PSU_MODE_LED_OFF_LEVEL                (0U)
+
 //=================================================================================================
 // User settings and three-mode CV/CC operation
 
@@ -321,16 +330,19 @@
 // AUTO is the default so the original CV/CC transition behavior is preserved.
 #define PSU_DEFAULT_OPERATING_MODE            (2U)
 
-// The analog minimum-selector performs the physical CV/CC handover in all modes.
-// Software detects the active loop and decides whether the handover is normal or a fault.
+// Automatic CV/CC state detection is used only in AUTO mode. Fixed CV and
+// fixed CC keep their selected software state and use direct limit alarms.
 #define PSU_MODE_CC_ENTER_CURRENT_MARGIN_A    (0.002f)
 #define PSU_MODE_CC_EXIT_CURRENT_MARGIN_A     (0.005f)
 #define PSU_MODE_CC_ENTER_VOLTAGE_DROP_V      (0.10f)
 #define PSU_MODE_CC_EXIT_VOLTAGE_DROP_V       (0.03f)
 #define PSU_MODE_DETECT_CYCLES                (20U)
 
-// In fixed CV or fixed CC mode, require a sustained 200 ms handover before
-// latching a mode-limit fault.  This tolerates live setpoint edits and analog
+#define PSU_CV_OVERCURRENT_MARGIN_A            (0.002f)
+#define PSU_CC_OVERVOLT_MARGIN_V               (0.10f)
+
+// In fixed CV or fixed CC mode, require a sustained 200 ms limit violation
+// before latching a fault. This tolerates live setpoint edits and analog
 // settling; the independent 103 mA hard-OCP path remains at its fast setting.
 #define PSU_MODE_LIMIT_TRIP_CYCLES            (4000U) // 200 ms at 20 kHz
 

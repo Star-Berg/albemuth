@@ -435,6 +435,24 @@ GMP_STATIC_INLINE void ctl_step_psu_mode_detection(ctl_psu_t* hpsu)
     ctrl_gt enter_voltage_threshold;
     ctrl_gt exit_voltage_threshold;
 
+    // Fixed modes never enter the automatic CV/CC state machine. Their
+    // opposite limits are monitored independently by the fault logic.
+    if (hpsu->operating_mode == PSU_OPERATING_MODE_CV)
+    {
+        hpsu->mode = PSU_MODE_CV;
+        hpsu->mode_enter_cc_counter = 0U;
+        hpsu->mode_exit_cc_counter = 0U;
+        return;
+    }
+
+    if (hpsu->operating_mode == PSU_OPERATING_MODE_CC)
+    {
+        hpsu->mode = PSU_MODE_CC;
+        hpsu->mode_enter_cc_counter = 0U;
+        hpsu->mode_exit_cc_counter = 0U;
+        return;
+    }
+
     if ((hpsu->output_enable == 0) ||
         (hpsu->fault_latched != 0) ||
         (hpsu->voltage_set_decivolt == 0U) ||
@@ -536,9 +554,8 @@ GMP_STATIC_INLINE void ctl_step_psu_mode_limit_protection(ctl_psu_t* hpsu)
         return;
     }
 
-    // The active-loop detector starts in CV.  In fixed CC mode, observe the
-    // complete startup interval before arming mode-limit protection; otherwise
-    // an early CC indication followed by a startup spike can cause a false trip.
+    // Fixed CC gets a startup settling interval before its voltage-limit alarm
+    // is armed. This is a delay only; it does not run automatic mode detection.
     if ((hpsu->operating_mode == PSU_OPERATING_MODE_CC) &&
         (hpsu->cc_mode_armed == 0))
     {
@@ -549,13 +566,10 @@ GMP_STATIC_INLINE void ctl_step_psu_mode_limit_protection(ctl_psu_t* hpsu)
             return;
         }
 
-        if (hpsu->mode == PSU_MODE_CC)
-        {
-            hpsu->cc_mode_armed = 1;
-            hpsu->cc_acquire_counter = 0U;
-            hpsu->mode_violation_counter = 0U;
-            return;
-        }
+        hpsu->cc_mode_armed = 1;
+        hpsu->cc_acquire_counter = 0U;
+        hpsu->mode_violation_counter = 0U;
+        return;
     }
 
     // Fixed CV and an already-established fixed CC do not use acquisition state.
@@ -565,16 +579,23 @@ GMP_STATIC_INLINE void ctl_step_psu_mode_limit_protection(ctl_psu_t* hpsu)
         hpsu->cc_acquire_counter = 0U;
     }
 
-    // The analog minimum-selector remains active in every operating mode.
-    // In fixed CV/CC modes, a loop handover is treated as a protection event.
+    // Fixed CV never changes its software mode. A sustained measured-current
+    // violation is latched as an alarm instead of switching to CC.
     if ((hpsu->operating_mode == PSU_OPERATING_MODE_CV) &&
-        (hpsu->mode == PSU_MODE_CC))
+        (hpsu->current_meas_a >
+         (hpsu->current_set_a +
+          float2ctrl(PSU_CV_OVERCURRENT_MARGIN_A))))
     {
         mode_violation = 1;
         fault_code = PSU_FAULT_CV_OVERCURRENT;
     }
+    // In fixed CC, entering CV can simply mean an open or light load. Allow
+    // that compliance condition and trip only if the measured voltage exceeds
+    // the configured voltage limit by the permitted margin.
     else if ((hpsu->operating_mode == PSU_OPERATING_MODE_CC) &&
-             (hpsu->mode == PSU_MODE_CV))
+             (hpsu->voltage_meas_v >
+              (hpsu->voltage_set_v +
+               float2ctrl(PSU_CC_OVERVOLT_MARGIN_V))))
     {
         mode_violation = 1;
         fault_code = PSU_FAULT_CC_OVERVOLTAGE;
@@ -689,6 +710,18 @@ GMP_STATIC_INLINE void ctl_step_psu(ctl_psu_t* hpsu)
             ctl_mul(current_command_a, hpsu->current_to_dac_pu),
             float2ctrl(1.0f),
             float2ctrl(0.0f));
+
+    // Only AUTO uses both user references for analog CV/CC handover. In a
+    // fixed mode, force the unused loop to DAC full scale so it cannot regulate
+    // the output; a measured limit violation causes alarm and shutdown only.
+    if (hpsu->operating_mode == PSU_OPERATING_MODE_CV)
+    {
+        current_target_pu = float2ctrl(PSU_INACTIVE_LOOP_DAC_PU);
+    }
+    else if (hpsu->operating_mode == PSU_OPERATING_MODE_CC)
+    {
+        voltage_target_pu = float2ctrl(PSU_INACTIVE_LOOP_DAC_PU);
+    }
 
     ctl_step_psu_overcurrent_protection(hpsu);
     ctl_step_psu_mode_detection(hpsu);
