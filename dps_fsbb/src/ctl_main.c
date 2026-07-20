@@ -285,6 +285,7 @@ fast_gt ctl_request_control_mode(fsbb_control_mode_t mode)
 ctrl_gt ctl_step_fsbb_cv_cc(void)
 {
     ctrl_gt il_max = float2ctrl(FSBB_PROTECT_IL_MAX / CTRL_CURRENT_BASE);
+    ctrl_gt cv_il_max = float2ctrl(FSBB_CV_IL_REF_MAX / CTRL_CURRENT_BASE);
     ctrl_gt v_max = float2ctrl(FSBB_USER_VSET_MAX / CTRL_VOLTAGE_BASE);
     ctrl_gt v_min = float2ctrl(FSBB_USER_VSET_MIN / CTRL_VOLTAGE_BASE);
     ctrl_gt i_max = float2ctrl(FSBB_USER_ISET_MAX / CTRL_CURRENT_BASE);
@@ -293,56 +294,67 @@ ctrl_gt ctl_step_fsbb_cv_cc(void)
     ctrl_gt output_current_error;
     ctrl_gt inductor_current_error;
 
-    ctl_dcdc_internal_ingest_and_filter(&dcdc_core);
-
     dcdc_core.v_target = ctl_sat(g_v_out_ref_user, v_max, v_min);
     dcdc_core.i_target = ctl_sat(g_i_out_ref_user, i_max, i_min);
-    dcdc_core.v_ramp_ref = ctl_step_slope_limiter(&dcdc_core.ramp_v, dcdc_core.v_target);
-    dcdc_core.i_ramp_ref = ctl_step_slope_limiter(&iout_ref_ramp, dcdc_core.i_target);
 
-    ctl_set_pid_limit(&dcdc_core.voltage_pid, il_max, float2ctrl(0.0f));
-    ctl_set_pid_int_limit(&dcdc_core.voltage_pid, il_max, float2ctrl(0.0f));
-
-    voltage_error = dcdc_core.v_ramp_ref - dcdc_core.filter_v_out.out;
-    output_current_error = dcdc_core.i_ramp_ref - dcdc_core.filter_i_load.out;
-
-    g_fsbb_i_ref_cv = ctl_step_pid_ser(&dcdc_core.voltage_pid, voltage_error);
-    g_fsbb_i_ref_cc = ctl_step_pid_par(&output_current_pid, output_current_error);
+    ctl_set_pid_limit(&dcdc_core.voltage_pid, cv_il_max, float2ctrl(0.0f));
+    ctl_set_pid_int_limit(&dcdc_core.voltage_pid, cv_il_max, float2ctrl(0.0f));
 
     switch (g_fsbb_mode_request)
     {
     case FSBB_CTRL_CC:
+        // CC retains the added output-current outer loop. Run the voltage
+        // loop in the background so a later return to CV remains bumpless.
+        ctl_dcdc_internal_ingest_and_filter(&dcdc_core);
+        dcdc_core.v_ramp_ref = ctl_step_slope_limiter(&dcdc_core.ramp_v, dcdc_core.v_target);
+        dcdc_core.i_ramp_ref = ctl_step_slope_limiter(&iout_ref_ramp, dcdc_core.i_target);
+
+        voltage_error = dcdc_core.v_ramp_ref - dcdc_core.filter_v_out.out;
+        output_current_error = dcdc_core.i_ramp_ref - dcdc_core.filter_i_load.out;
+        g_fsbb_i_ref_cv = ctl_sat(
+            ctl_step_pid_ser(&dcdc_core.voltage_pid, voltage_error),
+            cv_il_max,
+            float2ctrl(0.0f));
+        g_fsbb_i_ref_cc = ctl_step_pid_par(&output_current_pid, output_current_error);
+
         g_fsbb_mode_active = FSBB_CTRL_CC;
-        g_fsbb_i_L_ref_selected = g_fsbb_i_ref_cc;
+        g_fsbb_i_L_ref_selected = ctl_sat(g_fsbb_i_ref_cc,
+                                          il_max,
+                                          float2ctrl(0.0f));
         ctl_pid_clamping_correction_using_real_output(&dcdc_core.voltage_pid,
                                                       g_fsbb_i_L_ref_selected);
         g_fsbb_regulation_state = FSBB_REG_CC;
-        break;
+        inductor_current_error = g_fsbb_i_L_ref_selected - dcdc_core.filter_i_L.out;
+        dcdc_core.v_out_formal = ctl_step_pid_ser(&dcdc_core.current_pid,
+                                                  inductor_current_error);
+        dcdc_core.v_out_formal = ctl_sat(dcdc_core.v_out_formal,
+                                         dcdc_core.out_max,
+                                         dcdc_core.out_min);
+        dcdc_core.is_current_dominant = 1;
+        return dcdc_core.v_out_formal;
 
     case FSBB_CTRL_CV:
     default:
+        // CV follows the original GMP cascade path. The only project-specific
+        // change is the configured CV current-reference ceiling above.
         g_fsbb_mode_request = FSBB_CTRL_CV;
         g_fsbb_mode_active = FSBB_CTRL_CV;
+        dcdc_core.v_out_formal = ctl_step_dcdc_cascade(&dcdc_core);
+        g_fsbb_i_ref_cv = ctl_sat(
+            ctl_get_pid_output(&dcdc_core.voltage_pid),
+            cv_il_max,
+            float2ctrl(0.0f));
         g_fsbb_i_L_ref_selected = g_fsbb_i_ref_cv;
+        // Keep the CC controller synchronized without executing it in CV.
         ctl_pid_clamping_correction_using_real_output(&output_current_pid,
                                                       g_fsbb_i_L_ref_selected);
+        g_fsbb_i_ref_cc = g_fsbb_i_L_ref_selected;
         g_fsbb_regulation_state = FSBB_REG_CV;
-        break;
+        dcdc_core.is_current_dominant = 0;
+        return dcdc_core.v_out_formal;
     }
 
-    g_fsbb_i_L_ref_selected = ctl_sat(g_fsbb_i_L_ref_selected,
-                                      il_max,
-                                      float2ctrl(0.0f));
-    inductor_current_error = g_fsbb_i_L_ref_selected - dcdc_core.filter_i_L.out;
-    dcdc_core.v_out_formal = ctl_step_pid_ser(&dcdc_core.current_pid,
-                                              inductor_current_error);
-    dcdc_core.v_out_formal = ctl_sat(dcdc_core.v_out_formal,
-                                     dcdc_core.out_max,
-                                     dcdc_core.out_min);
-    dcdc_core.is_current_dominant =
-        (g_fsbb_regulation_state == FSBB_REG_CC) ? 1 : 0;
-
-    return dcdc_core.v_out_formal;
+    return float2ctrl(0.0f);
 }
 
 fast_gt ctl_request_fault_reset(void)
