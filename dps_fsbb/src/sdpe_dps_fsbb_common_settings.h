@@ -60,7 +60,7 @@ extern "C"
 /**
  * @brief Minimum load resistance.
  */
-#define FSBB_PARAM_RLOAD_MIN (100.0f)
+#define FSBB_PARAM_RLOAD_MIN (2.0f)
 
 /**
  * @brief Input capacitance.
@@ -165,7 +165,7 @@ extern "C"
 /**
  * @brief Default current limit.
  */
-#define FSBB_DEFAULT_CURRENT_LIMIT (0.4f)
+#define FSBB_DEFAULT_CURRENT_LIMIT (2.0f)
 
 /**
  * @brief Maximum leg duty.
@@ -245,7 +245,7 @@ extern "C"
 /**
  * @brief Initial output-current outer-loop crossover frequency in Hz.
  */
-#define FSBB_OUTPUT_CURRENT_LOOP_BANDWIDTH (10.0f)
+#define FSBB_OUTPUT_CURRENT_LOOP_BANDWIDTH (5.0f)
 
 /**
  * @brief Dimensionless output-current PI proportional-gain scale.
@@ -270,7 +270,7 @@ extern "C"
 /**
  * @brief Current command ramp in pu/s.
  */
-#define FSBB_CURRENT_RAMP_PU_S (1.0f)
+#define FSBB_CURRENT_RAMP_PU_S (0.1f)
 
 // User project tail code
 /* FSBB common extension point. */

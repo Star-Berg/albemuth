@@ -209,7 +209,7 @@ CTRL_VOLTAGE_BASE = 34.0;
 CTRL_CURRENT_BASE = 14.14;
 
 % Minimum load resistance.
-FSBB_PARAM_RLOAD_MIN = 100.0;
+FSBB_PARAM_RLOAD_MIN = 2.0;
 
 % Input capacitance.
 FSBB_PARAM_CIN = 440e-6;
@@ -272,7 +272,7 @@ FSBB_OUTPUT_CURRENT_LIM = 10.0;
 FSBB_DEFAULT_OUTPUT_VOLTAGE = 40.0;
 
 % Default current limit.
-FSBB_DEFAULT_CURRENT_LIMIT = 0.4;
+FSBB_DEFAULT_CURRENT_LIMIT = 2.0;
 
 % Maximum leg duty.
 FSBB_DUTY_MAX = 1.0;
@@ -320,7 +320,7 @@ FSBB_USER_ISET_MIN = 0.0;
 FSBB_USER_ISET_MAX = 5.0;
 
 % Initial output-current outer-loop crossover frequency in Hz.
-FSBB_OUTPUT_CURRENT_LOOP_BANDWIDTH = 10.0;
+FSBB_OUTPUT_CURRENT_LOOP_BANDWIDTH = 5.0;
 
 % Dimensionless output-current PI proportional-gain scale.
 FSBB_IOUT_LOOP_KP_SCALE = 1.0;
@@ -335,7 +335,7 @@ FSBB_CV_IL_REF_MAX = 3.0;
 FSBB_VOLTAGE_RAMP_PU_S = 1.0;
 
 % Current command ramp in pu/s.
-FSBB_CURRENT_RAMP_PU_S = 1.0;
+FSBB_CURRENT_RAMP_PU_S = 0.1;
 
 %% Local helpers
 function value = sdpe_select(condition, true_value, false_value)

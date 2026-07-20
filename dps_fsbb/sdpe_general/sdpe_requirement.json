@@ -71,7 +71,7 @@
       "enabled": true,
       "weak": false,
       "binding": {
-        "float": "100.0"
+        "float": "2.0"
       },
       "description": "Minimum load resistance."
     },
@@ -281,7 +281,7 @@
       "enabled": true,
       "weak": false,
       "binding": {
-        "float": "0.4"
+        "float": "2.0"
       },
       "description": "Default current limit."
     },
@@ -441,7 +441,7 @@
       "enabled": true,
       "weak": false,
       "binding": {
-        "float": "10.0"
+        "float": "5.0"
       },
       "description": "Initial output-current outer-loop crossover frequency in Hz."
     },
@@ -491,7 +491,7 @@
       "enabled": true,
       "weak": false,
       "binding": {
-        "float": "1.0"
+        "float": "0.1"
       },
       "description": "Current command ramp in pu/s."
     }
