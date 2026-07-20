@@ -12,7 +12,7 @@ DPS_FSBB_COMMON_SDPE_PROJECT_SUITE = 'dps_fsbb';
 
 DPS_FSBB_COMMON_SDPE_PROJECT_VERSION = '1.0.0';
 
-DPS_FSBB_COMMON_SDPE_PROJECT_UPDATED_AT = '2026-07-18';
+DPS_FSBB_COMMON_SDPE_PROJECT_UPDATED_AT = '2026-07-19';
 
 %% Hardware macros
 BSC093N15NS5_ID = 'bsc093n15ns5';
@@ -224,10 +224,10 @@ FSBB_PARAM_L = 1.5e-3;
 FSBB_PARAM_L_ESR = 0.05;
 
 % QuadSensor AMC1350 input-voltage sensitivity in V/V; theoretical value pending bench calibration.
-CTRL_FSBB_VIN_SENSITIVITY = 0.01454;
+CTRL_FSBB_VIN_SENSITIVITY = 0.00204136;
 
 % QuadSensor input-voltage channel midpoint bias in V; theoretical value pending bench calibration.
-CTRL_FSBB_VIN_BIAS = 1.65;
+CTRL_FSBB_VIN_BIAS = 1.656445;
 
 % Output-voltage sensor sensitivity in V/V.
 CTRL_FSBB_VOUT_SENSITIVITY = GMP_LVFB_VOLTAGE_SENSITIVITY;
@@ -303,6 +303,27 @@ CTRL_SPLL_EPSILON = 0.005;
 
 % ADC calibration timeout.
 TIMEOUT_ADC_CALIB_MS = 3000;
+
+% Minimum front-panel voltage setpoint in V.
+FSBB_USER_VSET_MIN = 10.0;
+
+% Maximum front-panel voltage setpoint in V.
+FSBB_USER_VSET_MAX = 50.0;
+
+% Minimum front-panel output-current setpoint in A.
+FSBB_USER_ISET_MIN = 1.0;
+
+% Maximum front-panel output-current setpoint in A.
+FSBB_USER_ISET_MAX = 5.0;
+
+% Initial output-current outer-loop crossover frequency in Hz.
+FSBB_OUTPUT_CURRENT_LOOP_BANDWIDTH = 10.0;
+
+% Dimensionless output-current PI proportional-gain scale.
+FSBB_IOUT_LOOP_KP_SCALE = 1.0;
+
+% Dimensionless output-current PI integral-gain scale.
+FSBB_IOUT_LOOP_KI_SCALE = 1.0;
 
 % Voltage command ramp in pu/s.
 FSBB_VOLTAGE_RAMP_PU_S = 1.0;

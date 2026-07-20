@@ -25,7 +25,7 @@ extern "C"
 #define DPS_FSBB_COMMON_SDPE_PROJECT_ID "dps_fsbb_common"
 #define DPS_FSBB_COMMON_SDPE_PROJECT_SUITE "dps_fsbb"
 #define DPS_FSBB_COMMON_SDPE_PROJECT_VERSION "1.0.0"
-#define DPS_FSBB_COMMON_SDPE_PROJECT_UPDATED_AT "2026-07-18"
+#define DPS_FSBB_COMMON_SDPE_PROJECT_UPDATED_AT "2026-07-19"
 
 //=================================================================================================
 /**
@@ -90,12 +90,12 @@ extern "C"
 /**
  * @brief QuadSensor AMC1350 input-voltage sensitivity in V/V; theoretical value pending bench calibration.
  */
-#define CTRL_FSBB_VIN_SENSITIVITY (0.01454f)
+#define CTRL_FSBB_VIN_SENSITIVITY (0.00204136f)
 
 /**
  * @brief QuadSensor input-voltage channel midpoint bias in V; theoretical value pending bench calibration.
  */
-#define CTRL_FSBB_VIN_BIAS (1.65f)
+#define CTRL_FSBB_VIN_BIAS (1.656445f)
 
 /**
  * @brief Output-voltage sensor sensitivity in V/V.
@@ -221,6 +221,41 @@ extern "C"
  * @brief ADC calibration timeout.
  */
 #define TIMEOUT_ADC_CALIB_MS (3000)
+
+/**
+ * @brief Minimum front-panel voltage setpoint in V.
+ */
+#define FSBB_USER_VSET_MIN (10.0f)
+
+/**
+ * @brief Maximum front-panel voltage setpoint in V.
+ */
+#define FSBB_USER_VSET_MAX (50.0f)
+
+/**
+ * @brief Minimum front-panel output-current setpoint in A.
+ */
+#define FSBB_USER_ISET_MIN (1.0f)
+
+/**
+ * @brief Maximum front-panel output-current setpoint in A.
+ */
+#define FSBB_USER_ISET_MAX (5.0f)
+
+/**
+ * @brief Initial output-current outer-loop crossover frequency in Hz.
+ */
+#define FSBB_OUTPUT_CURRENT_LOOP_BANDWIDTH (10.0f)
+
+/**
+ * @brief Dimensionless output-current PI proportional-gain scale.
+ */
+#define FSBB_IOUT_LOOP_KP_SCALE (1.0f)
+
+/**
+ * @brief Dimensionless output-current PI integral-gain scale.
+ */
+#define FSBB_IOUT_LOOP_KI_SCALE (1.0f)
 
 /**
  * @brief Voltage command ramp in pu/s.

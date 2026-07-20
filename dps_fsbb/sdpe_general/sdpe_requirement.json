@@ -396,6 +396,76 @@
       "description": "ADC calibration timeout."
     },
     {
+      "role": "Minimum User Voltage Setpoint",
+      "macro": "FSBB_USER_VSET_MIN",
+      "enabled": true,
+      "weak": false,
+      "binding": {
+        "float": "10.0"
+      },
+      "description": "Minimum front-panel voltage setpoint in V."
+    },
+    {
+      "role": "Maximum User Voltage Setpoint",
+      "macro": "FSBB_USER_VSET_MAX",
+      "enabled": true,
+      "weak": false,
+      "binding": {
+        "float": "50.0"
+      },
+      "description": "Maximum front-panel voltage setpoint in V."
+    },
+    {
+      "role": "Minimum User Current Setpoint",
+      "macro": "FSBB_USER_ISET_MIN",
+      "enabled": true,
+      "weak": false,
+      "binding": {
+        "float": "1.0"
+      },
+      "description": "Minimum front-panel output-current setpoint in A."
+    },
+    {
+      "role": "Maximum User Current Setpoint",
+      "macro": "FSBB_USER_ISET_MAX",
+      "enabled": true,
+      "weak": false,
+      "binding": {
+        "float": "5.0"
+      },
+      "description": "Maximum front-panel output-current setpoint in A."
+    },
+    {
+      "role": "Output Current-loop Bandwidth",
+      "macro": "FSBB_OUTPUT_CURRENT_LOOP_BANDWIDTH",
+      "enabled": true,
+      "weak": false,
+      "binding": {
+        "float": "10.0"
+      },
+      "description": "Initial output-current outer-loop crossover frequency in Hz."
+    },
+    {
+      "role": "Output Current-loop Kp Scale",
+      "macro": "FSBB_IOUT_LOOP_KP_SCALE",
+      "enabled": true,
+      "weak": false,
+      "binding": {
+        "float": "1.0"
+      },
+      "description": "Dimensionless output-current PI proportional-gain scale."
+    },
+    {
+      "role": "Output Current-loop Ki Scale",
+      "macro": "FSBB_IOUT_LOOP_KI_SCALE",
+      "enabled": true,
+      "weak": false,
+      "binding": {
+        "float": "1.0"
+      },
+      "description": "Dimensionless output-current PI integral-gain scale."
+    },
+    {
       "role": "Voltage Ramp Rate",
       "macro": "FSBB_VOLTAGE_RAMP_PU_S",
       "enabled": true,
@@ -503,6 +573,18 @@
       "name": "Runtime Parameters",
       "requirements": [
         "ADC Calibration Timeout"
+      ]
+    },
+    {
+      "name": "CCCV Control Parameters",
+      "requirements": [
+        "Minimum User Voltage Setpoint",
+        "Maximum User Voltage Setpoint",
+        "Minimum User Current Setpoint",
+        "Maximum User Current Setpoint",
+        "Output Current-loop Bandwidth",
+        "Output Current-loop Kp Scale",
+        "Output Current-loop Ki Scale"
       ]
     },
     {

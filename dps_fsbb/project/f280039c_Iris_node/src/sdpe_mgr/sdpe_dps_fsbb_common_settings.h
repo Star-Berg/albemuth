@@ -223,6 +223,41 @@ extern "C"
 #define TIMEOUT_ADC_CALIB_MS (3000)
 
 /**
+ * @brief Minimum front-panel voltage setpoint in V.
+ */
+#define FSBB_USER_VSET_MIN (10.0f)
+
+/**
+ * @brief Maximum front-panel voltage setpoint in V.
+ */
+#define FSBB_USER_VSET_MAX (50.0f)
+
+/**
+ * @brief Minimum front-panel output-current setpoint in A.
+ */
+#define FSBB_USER_ISET_MIN (1.0f)
+
+/**
+ * @brief Maximum front-panel output-current setpoint in A.
+ */
+#define FSBB_USER_ISET_MAX (5.0f)
+
+/**
+ * @brief Initial output-current outer-loop crossover frequency in Hz.
+ */
+#define FSBB_OUTPUT_CURRENT_LOOP_BANDWIDTH (10.0f)
+
+/**
+ * @brief Dimensionless output-current PI proportional-gain scale.
+ */
+#define FSBB_IOUT_LOOP_KP_SCALE (1.0f)
+
+/**
+ * @brief Dimensionless output-current PI integral-gain scale.
+ */
+#define FSBB_IOUT_LOOP_KI_SCALE (1.0f)
+
+/**
  * @brief Voltage command ramp in pu/s.
  */
 #define FSBB_VOLTAGE_RAMP_PU_S (1.0f)

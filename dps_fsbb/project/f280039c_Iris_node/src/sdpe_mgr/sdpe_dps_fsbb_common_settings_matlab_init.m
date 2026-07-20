@@ -12,7 +12,7 @@ DPS_FSBB_COMMON_SDPE_PROJECT_SUITE = 'dps_fsbb';
 
 DPS_FSBB_COMMON_SDPE_PROJECT_VERSION = '1.0.0';
 
-DPS_FSBB_COMMON_SDPE_PROJECT_UPDATED_AT = '2026-07-19';
+DPS_FSBB_COMMON_SDPE_PROJECT_UPDATED_AT = '2026-07-18';
 
 %% Hardware macros
 BSC093N15NS5_ID = 'bsc093n15ns5';
@@ -223,29 +223,29 @@ FSBB_PARAM_L = 1.5e-3;
 % Main inductor ESR.
 FSBB_PARAM_L_ESR = 0.05;
 
-% QuadSensor AMC1350 input-voltage sensitivity in V/V; theoretical value pending bench calibration.
-CTRL_FSBB_VIN_SENSITIVITY = 0.00204136;
+% Input-voltage sensor sensitivity in V/V.
+CTRL_FSBB_VIN_SENSITIVITY = GMP_LVFB_VOLTAGE_SENSITIVITY;
 
-% QuadSensor input-voltage channel midpoint bias in V; theoretical value pending bench calibration.
-CTRL_FSBB_VIN_BIAS = 1.656445;
+% Input-voltage sensor bias in V.
+CTRL_FSBB_VIN_BIAS = GMP_LVFB_VOLTAGE_BIAS_V;
 
 % Output-voltage sensor sensitivity in V/V.
-CTRL_FSBB_VOUT_SENSITIVITY = GMP_LVFB_VOLTAGE_SENSITIVITY;
+CTRL_FSBB_VOUT_SENSITIVITY = 0.02662933;
 
 % Output-voltage sensor bias in V.
-CTRL_FSBB_VOUT_BIAS = GMP_LVFB_VOLTAGE_BIAS_V;
+CTRL_FSBB_VOUT_BIAS = -0.00667446;
 
-% QuadSensor TMCS1133B1A output-current sensitivity in V/A; theoretical value pending bench calibration.
-CTRL_FSBB_IOUT_SENSITIVITY = 0.025;
+% Boost-side output-current sensor sensitivity in V/A.
+CTRL_FSBB_IOUT_SENSITIVITY = GMP_LVFB_CURRENT_SENSITIVITY;
 
-% QuadSensor TMCS1133B1A zero-current output bias in V; startup ADC calibration removes board offset.
-CTRL_FSBB_IOUT_BIAS = 1.65;
+% Boost-side output-current sensor bias in V.
+CTRL_FSBB_IOUT_BIAS = GMP_LVFB_CURRENT_BIAS_V;
 
 % Inductor-current sensor sensitivity in V/A.
-CTRL_FSBB_IL_SENSITIVITY = GMP_LVFB_CURRENT_SENSITIVITY;
+CTRL_FSBB_IL_SENSITIVITY = 0.1482485;
 
 % Inductor-current sensor bias in V.
-CTRL_FSBB_IL_BIAS = GMP_LVFB_CURRENT_BIAS_V;
+CTRL_FSBB_IL_BIAS = 1.6145818;
 
 % Maximum input voltage.
 FSBB_INPUT_VOLTAGE_MAX = 60.0;
@@ -266,7 +266,7 @@ FSBB_OUTPUT_VOLTAGE_MIN = 3.0;
 FSBB_OUTPUT_CURRENT_LIM = 10.0;
 
 % Default voltage-loop command.
-FSBB_DEFAULT_OUTPUT_VOLTAGE = 20.0;
+FSBB_DEFAULT_OUTPUT_VOLTAGE = 25.0;
 
 % Default current limit.
 FSBB_DEFAULT_CURRENT_LIMIT = 3.0;
@@ -287,10 +287,10 @@ FSBB_PROTECT_IL_MIN = -2.0;
 FSBB_OPEN_LOOP_VOLTAGE_COMMAND = 12.0;
 
 % Current-loop crossover frequency.
-FSBB_CURRENT_LOOP_BANDWIDTH = 200.0;
+FSBB_CURRENT_LOOP_BANDWIDTH = 800.0;
 
 % Voltage-loop crossover frequency.
-FSBB_VOLTAGE_LOOP_BANDWIDTH = 20.0;
+FSBB_VOLTAGE_LOOP_BANDWIDTH = 40.0;
 
 % Buck-to-transition boundary.
 FSBB_TRANSITION_RATIO_LOW = 0.90;
