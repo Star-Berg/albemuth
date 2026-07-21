@@ -48,7 +48,7 @@ const gmp_param_item_t dict_m1[] = {
     {&cia402_sm.current_cmd, GMP_PARAM_TYPE_U16, GMP_PARAM_PERM_RW},
     {&cia402_sm.current_state, GMP_PARAM_TYPE_U16, GMP_PARAM_PERM_RO},
     {&g_v_out_ref_user, GMP_PARAM_TYPE_F32, GMP_PARAM_PERM_RW},
-    {&g_i_limit_user, GMP_PARAM_TYPE_F32, GMP_PARAM_PERM_RW},
+    {&g_i_out_ref_user, GMP_PARAM_TYPE_F32, GMP_PARAM_PERM_RW},
 
     // Feedback and controller state
     {&adc_v_in.control_port.value, GMP_PARAM_TYPE_F32, GMP_PARAM_PERM_RO},
@@ -62,6 +62,12 @@ const gmp_param_item_t dict_m1[] = {
     {&dcdc_core.v_out_formal, GMP_PARAM_TYPE_F32, GMP_PARAM_PERM_RO},
     {&v_req, GMP_PARAM_TYPE_F32, GMP_PARAM_PERM_RO},
     {(void*)&g_fsbb_faults, GMP_PARAM_TYPE_U16, GMP_PARAM_PERM_RO},
+    {(void*)&g_fsbb_mode_request, GMP_PARAM_TYPE_U16, GMP_PARAM_PERM_RW},
+    {(void*)&g_fsbb_mode_active, GMP_PARAM_TYPE_U16, GMP_PARAM_PERM_RO},
+    {(void*)&g_fsbb_regulation_state, GMP_PARAM_TYPE_U16, GMP_PARAM_PERM_RO},
+    {&g_fsbb_i_ref_cv, GMP_PARAM_TYPE_F32, GMP_PARAM_PERM_RO},
+    {&g_fsbb_i_ref_cc, GMP_PARAM_TYPE_F32, GMP_PARAM_PERM_RO},
+    {&g_fsbb_i_L_ref_selected, GMP_PARAM_TYPE_F32, GMP_PARAM_PERM_RO},
 };
 const uint16_t var_tunable_count = sizeof(dict_m1) / sizeof(dict_m1[0]);
 gmp_param_tunable_t tunable;

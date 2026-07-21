@@ -58,6 +58,7 @@ static fast_gt vout_adc_average_primed = 0;
 uint16_t fsbb_average_vin_adc_sample(uint16_t sample)
 {
     uint16_t i;
+    uint16_t old_sample;
     uint16_t average_divisor;
     uint16_t window_min;
     uint16_t window_max;
@@ -88,7 +89,8 @@ uint16_t fsbb_average_vin_adc_sample(uint16_t sample)
         return sample;
     }
 
-    vin_adc_average_sum -= vin_adc_average_buffer[vin_adc_average_index];
+    old_sample = vin_adc_average_buffer[vin_adc_average_index];
+    vin_adc_average_sum -= old_sample;
     vin_adc_average_buffer[vin_adc_average_index] = sample;
     vin_adc_average_sum += sample;
 
@@ -98,14 +100,29 @@ uint16_t fsbb_average_vin_adc_sample(uint16_t sample)
     average_sum = vin_adc_average_sum;
     average_divisor = FSBB_VIN_ADC_AVERAGE_SAMPLES;
 
-    window_min = vin_adc_average_buffer[0];
-    window_max = vin_adc_average_buffer[0];
-    for (i = 1U; i < FSBB_VIN_ADC_AVERAGE_SAMPLES; ++i)
+    window_min = g_fsbb_vin_adc_window_min;
+    window_max = g_fsbb_vin_adc_window_max;
+
+    /* Rescan only when replacing an extremum can invalidate the cached value. */
+    if (((old_sample == window_min) && (sample > window_min)) ||
+        ((old_sample == window_max) && (sample < window_max)))
     {
-        if (vin_adc_average_buffer[i] < window_min)
-            window_min = vin_adc_average_buffer[i];
-        if (vin_adc_average_buffer[i] > window_max)
-            window_max = vin_adc_average_buffer[i];
+        window_min = vin_adc_average_buffer[0];
+        window_max = vin_adc_average_buffer[0];
+        for (i = 1U; i < FSBB_VIN_ADC_AVERAGE_SAMPLES; ++i)
+        {
+            if (vin_adc_average_buffer[i] < window_min)
+                window_min = vin_adc_average_buffer[i];
+            if (vin_adc_average_buffer[i] > window_max)
+                window_max = vin_adc_average_buffer[i];
+        }
+    }
+    else
+    {
+        if (sample < window_min)
+            window_min = sample;
+        if (sample > window_max)
+            window_max = sample;
     }
 
     g_fsbb_vin_adc_window_min = window_min;
@@ -125,6 +142,7 @@ uint16_t fsbb_average_vin_adc_sample(uint16_t sample)
 uint16_t fsbb_average_vout_adc_sample(uint16_t sample)
 {
     uint16_t i;
+    uint16_t old_sample;
     uint16_t average_divisor;
     uint16_t window_min;
     uint16_t window_max;
@@ -159,7 +177,8 @@ uint16_t fsbb_average_vout_adc_sample(uint16_t sample)
         return sample;
     }
 
-    vout_adc_average_sum -= vout_adc_average_buffer[vout_adc_average_index];
+    old_sample = vout_adc_average_buffer[vout_adc_average_index];
+    vout_adc_average_sum -= old_sample;
     vout_adc_average_buffer[vout_adc_average_index] = sample;
     vout_adc_average_sum += sample;
 
@@ -169,14 +188,29 @@ uint16_t fsbb_average_vout_adc_sample(uint16_t sample)
     average_sum = vout_adc_average_sum;
     average_divisor = FSBB_VOUT_ADC_AVERAGE_SAMPLES;
 
-    window_min = vout_adc_average_buffer[0];
-    window_max = vout_adc_average_buffer[0];
-    for (i = 1U; i < FSBB_VOUT_ADC_AVERAGE_SAMPLES; ++i)
+    window_min = g_fsbb_vout_adc_window_min;
+    window_max = g_fsbb_vout_adc_window_max;
+
+    /* Rescan only when replacing an extremum can invalidate the cached value. */
+    if (((old_sample == window_min) && (sample > window_min)) ||
+        ((old_sample == window_max) && (sample < window_max)))
     {
-        if (vout_adc_average_buffer[i] < window_min)
-            window_min = vout_adc_average_buffer[i];
-        if (vout_adc_average_buffer[i] > window_max)
-            window_max = vout_adc_average_buffer[i];
+        window_min = vout_adc_average_buffer[0];
+        window_max = vout_adc_average_buffer[0];
+        for (i = 1U; i < FSBB_VOUT_ADC_AVERAGE_SAMPLES; ++i)
+        {
+            if (vout_adc_average_buffer[i] < window_min)
+                window_min = vout_adc_average_buffer[i];
+            if (vout_adc_average_buffer[i] > window_max)
+                window_max = vout_adc_average_buffer[i];
+        }
+    }
+    else
+    {
+        if (sample < window_min)
+            window_min = sample;
+        if (sample > window_max)
+            window_max = sample;
     }
 
     g_fsbb_vout_adc_window_min = window_min;
@@ -211,6 +245,11 @@ uint16_t fsbb_average_vout_adc_sample(uint16_t sample)
  */
 static void fsbb_init_panel_i2c(void)
 {
+    GPIO_setPadConfig(IRIS_IIC_I2CSDA_GPIO, GPIO_PIN_TYPE_PULLUP);
+    GPIO_setQualificationMode(IRIS_IIC_I2CSDA_GPIO, GPIO_QUAL_ASYNC);
+    GPIO_setPadConfig(IRIS_IIC_I2CSCL_GPIO, GPIO_PIN_TYPE_PULLUP);
+    GPIO_setQualificationMode(IRIS_IIC_I2CSCL_GPIO, GPIO_QUAL_ASYNC);
+
     I2C_disableModule(IRIS_IIC_BASE);
 
     I2C_initController(
